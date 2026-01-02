@@ -37,6 +37,7 @@ jobs:
           server-dir: ${{ secrets.FTP_REMOTE_PATH }}/
           security: loose
           dry-run: false
+          dangerous-clean-slate: false
           exclude: |
             .git/**
             .github/**
