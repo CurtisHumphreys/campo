@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" translate="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Campo - Campsite Map</title>
+    <meta name="google" content="notranslate">
+    <link rel="stylesheet" href="/campo/public/css/style.css?v=22">
+    <link rel="manifest" href="/campo/public/manifest.json">
+    <meta name="theme-color" content="#2563eb">
+    <link rel="icon" type="image/x-icon" href="/campo/public/icons/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Specific overrides for public map */
+        body { background: #f1f5f9; padding: 0; margin: 0; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+        #app { display: flex; flex-direction: column; flex: 1; height: 100%; overflow: hidden; }
+        .header-actions { padding: 1rem; background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1); z-index: 20; flex-shrink: 0; }
+        
+        /* The scroll wrapper takes remaining space */
+        #map-scroll-wrapper { 
+            flex: 1; 
+            overflow: hidden; /* We will handle pan/zoom manually */
+            position: relative;
+            background: #e2e8f0;
+            touch-action: none; /* Disable browser handling of gestures */
+        }
+
+        /* Override map container for transformation */
+        .map-container {
+            display: inline-block;
+            min-width: 800px;
+            transform-origin: 0 0; /* Zoom from top-left */
+            /* Will be transformed via JS */
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- Header -->
+        <div class="header-actions">
+            <h1 style="margin:0; font-size:1.25rem;">Campsite Map</h1>
+            <div class="actions-group">
+                <input type="text" id="map-search" placeholder="Search..." class="search-input" style="max-width: 200px;">
+            </div>
+        </div>
+
+        <!-- Scrollable Wrapper -->
+        <div id="map-scroll-wrapper">
+            <!-- The Actual Map Container (Image + Pins) -->
+            <div class="map-container" id="map-wrapper">
+                <img src="/campo/public/img/map.jpg" id="camp-map-img" alt="Campsite Map">
+                <div id="pins-layer"></div>
+            </div>
+        </div>
+        
+        <!-- Details Modal -->
+        <div id="details-modal" class="modal hidden">
+            <div class="modal-content">
+                <h2 id="dm-site-number">Site -</h2>
+                <p><strong>Status:</strong> <span id="dm-status">-</span></p>
+                <p><strong>Occupants:</strong> <span id="dm-occupants">-</span></p>
+                <div class="form-actions">
+                    <button type="button" class="secondary" id="close-details">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load simplified public map script -->
+    <script type="module" src="/campo/public/js/public-map.js?v=22"></script>
+</body>
+</html>

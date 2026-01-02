@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" translate="no">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Campo - Camp Management</title>
+    <meta name="google" content="notranslate">
+    
+    <link rel="stylesheet" href="/campo/public/css/style.css?v=35">
+    
+    <link rel="manifest" href="/campo/public/manifest.json">
+    <meta name="theme-color" content="#2563eb">
+    <link rel="icon" type="image/x-icon" href="/campo/public/icons/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div id="app">
+        <!-- Mobile Top Bar -->
+        <header id="mobile-header">
+            <div class="mobile-brand">Campo</div>
+            <button id="mobile-menu-btn" class="icon-btn">☰</button>
+        </header>
+
+        <nav id="sidebar" class="hidden">
+            <div class="brand-desktop">
+                Campo <span class="version">v1.115</span>
+            </div>
+            
+            <ul class="nav-links">
+                <li><a href="/campo/payments" class="nav-btn-green" data-link>Take Payments</a></li>
+                <li><a href="/campo/dashboard" data-link>Dashboard</a></li>
+                <li><a href="/campo/map" data-link>Camp Map</a></li>
+                <li><a href="/campo/payment-records" data-link>Payment Records</a></li>
+                <li><a href="/campo/members" data-link>Members</a></li>
+                <li><a href="/campo/sites" data-link>Sites</a></li>
+                <li><a href="/campo/camps" data-link>Camps</a></li>
+                <li><a href="/campo/rates" data-link>Camp Rates</a></li>
+                <li><a href="/campo/prepayments" data-link>Pre-payments</a></li>
+                <li><a href="/campo/import" data-link class="admin-only">Import Legacy</a></li>
+                <li><a href="#" id="logout-btn">Logout</a></li>
+            </ul>
+            
+            <div class="sidebar-footer">
+                <label class="theme-switch">
+                    <input type="checkbox" id="theme-toggle"> 
+                    <span>Dark Mode</span>
+                </label>
+            </div>
+        </nav>
+        
+        <main id="main-content">
+            <div class="loader">Loading...</div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="module" src="/campo/public/js/app.js?v=35"></script>
+    
+    <script>
+        const toggle = document.getElementById('theme-toggle');
+        const root = document.documentElement; 
+        
+        if (localStorage.getItem('theme') === 'dark') {
+            root.classList.add('dark-mode');
+            if(toggle) toggle.checked = true;
+        }
+
+        if(toggle) {
+            toggle.addEventListener('change', () => {
+                if (toggle.checked) {
+                    root.classList.add('dark-mode');
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    root.classList.remove('dark-mode');
+                    localStorage.setItem('theme', 'light');
+                }
+            });
+        }
+        
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/campo/service-worker.js')
+                    .catch(err => console.error('SW fail:', err));
+            });
+        }
+    </script>
+</body>
+</html>

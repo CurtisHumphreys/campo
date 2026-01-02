@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campsite Waitlist Application</title>
+    <link rel="stylesheet" href="/campo/public/css/style.css?v=32">
+    <style>
+        body { background: #f1f5f9; display: flex; justify-content: center; padding: 20px; min-height: 100vh; align-items: flex-start; }
+        .form-container { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 100%; max-width: 600px; margin-top: 2rem; }
+        h1 { text-align: center; color: #2563eb; margin-bottom: 0.5rem; }
+        p { text-align: center; color: #64748b; margin-bottom: 2rem; }
+        .form-group { margin-bottom: 1rem; }
+        label { font-weight: 600; display: block; margin-bottom: 0.25rem; color: #0f172a; }
+        button { width: 100%; padding: 1rem; font-size: 1.1rem; background: #2563eb; color: white; border: none; border-radius: 0.5rem; cursor: pointer; font-weight: 600; }
+        button:hover { background: #1d4ed8; }
+        .success-message { text-align: center; padding: 2rem; display: none; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        @media(max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+        textarea, select, input { width: 100%; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 0.5rem; }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <div id="form-content">
+            <h1>Campsite Application</h1>
+            <p>Join the priority waitlist for available sites.</p>
+            <form id="waitlist-form">
+                <div class="grid-2">
+                    <div class="form-group"><label>First Name</label><input type="text" name="first_name" required></div>
+                    <div class="form-group"><label>Last Name</label><input type="text" name="last_name" required></div>
+                </div>
+                <div class="grid-2">
+                    <div class="form-group"><label>Preferred Site Type</label>
+                        <select name="site_type">
+                            <option>Powered</option><option>Unpowered</option><option>Casual</option><option>Cabin</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label>Home Assembly</label><input type="text" name="home_assembly"></div>
+                </div>
+                <div class="grid-2">
+                    <div class="form-group"><label>Adults</label><input type="number" name="adults" value="1" min="1"></div>
+                    <div class="form-group"><label>Kids (Max next 3yrs)</label><input type="number" name="kids" value="0" min="0"></div>
+                </div>
+                <div class="form-group">
+                    <label>Special Considerations</label>
+                    <small style="display:block; color:#666; margin-bottom:0.25rem;">e.g. toilet proximity, mobility issues, near playground</small>
+                    <textarea name="special_considerations" rows="2"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Annual Intended Days</label>
+                    <input type="number" name="intended_days" placeholder="Total days (e.g. 15)" min="0">
+                </div>
+                <div class="form-group">
+                    <label>Are you willing to let your caravan be used for overflow at camps you are not able to attend?</label>
+                    <select name="overflow_willing"><option>No</option><option>Yes</option></select>
+                </div>
+                <div class="form-group">
+                    <label>Willing to pay via Subscription?</label>
+                    <select name="subscription_willing">
+                        <option value="No">No</option>
+                        <option value="Annually">Annually</option>
+                        <option value="Quarterly">Quarterly</option>
+                        <option value="Monthly">Monthly</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Additional Comments</label>
+                    <textarea name="additional_comments" rows="2"></textarea>
+                </div>
+                <button type="submit">Submit Application</button>
+            </form>
+        </div>
+        <div id="success-message" class="success-message">
+            <h2 style="color:#10b981;">Application Received!</h2>
+            <p>Thank you. We have added you to the waitlist and will contact you if a site becomes available.</p>
+        </div>
+    </div>
+
+    <!-- Load script -->
+    <script type="module" src="/campo/public/js/public-waitlist.js?v=32"></script>
+</body>
+</html>
