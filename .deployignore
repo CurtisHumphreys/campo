@@ -1,0 +1,15 @@
+# Never deploy git or GitHub workflow files
+.git/**
+.github/**
+
+# Local/editor junk
+.vscode/**
+.idea/**
+.DS_Store
+Thumbs.db
+*.log
+
+# Secrets / env
+config.php
+config.local.*
+.env*
