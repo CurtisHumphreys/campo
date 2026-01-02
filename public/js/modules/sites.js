@@ -101,6 +101,7 @@ export async function render(container) {
                                 <th class="sortable" data-sort="score">Score</th>
                                 <th class="sortable" data-sort="priority">Priority</th>
                                 <th class="sortable" data-sort="created_at">Submission Date</th>
+                                <th>Phone</th>
                                 <th class="sortable" data-sort="name">Name</th>
                                 <th class="sortable" data-sort="site_type">Type</th>
                                 <th>Details</th>
@@ -400,6 +401,7 @@ function setupModals(container) {
                         </select>
                     </td>
                     <td>${new Date(w.created_at).toLocaleDateString()}</td>
+                    <td>${w.phone || '-'}</td>
                     <td>
                         <strong>${w.first_name} ${w.last_name}</strong><br>
                         <small style="color:var(--text-muted);">${w.home_assembly || ''}</small>
