@@ -28,3 +28,5 @@ logs/
 # Common local config files
 config.local.php
 config.local.json
+config.php
+
