@@ -1,0 +1,30 @@
+# OS / editor junk
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Node (if you ever use it)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Build outputs
+dist/
+build/
+.cache/
+
+# Logs
+logs/
+*.log
+
+# Env / secrets (do NOT commit these)
+.env
+.env.*
+*.key
+*.pem
+
+# Common local config files
+config.local.php
+config.local.json
