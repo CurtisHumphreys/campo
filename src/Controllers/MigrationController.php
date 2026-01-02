@@ -47,6 +47,10 @@ class MigrationController {
             $this->safeAddColumn($db, 'sites', 'map_x', 'DECIMAL(5,2) NULL');
             $this->safeAddColumn($db, 'sites', 'map_y', 'DECIMAL(5,2) NULL');
 
+            // 5. Waitlist (Phone)
+            echo "Checking waitlist table...\n";
+            $this->safeAddColumn($db, 'waitlist', 'phone', 'VARCHAR(50) AFTER last_name');
+
             echo "Migration Complete.\n</pre>";
 
         } catch (Exception $e) {
