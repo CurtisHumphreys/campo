@@ -25,6 +25,8 @@ jobs:
           port: ${{ secrets.FTP_PORT }}
           protocol: ftps
           server-dir: ${{ secrets.FTP_REMOTE_PATH }}/
+          security: loose
+          dry-run: false
           exclude: |
             .git/**
             .github/**
@@ -40,4 +42,6 @@ jobs:
             config.local.*
             .env*
             **/.env*
+            .ftp-deploy-sync-state.json
+
 
