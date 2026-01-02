@@ -174,10 +174,13 @@ class SiteController {
     public function storeWaitlist() {
         $data = json_decode(file_get_contents('php://input'), true);
         $db = Database::connect();
-        $stmt = $db->prepare("INSERT INTO waitlist (first_name, last_name, site_type, adults, kids, special_considerations, intended_days, home_assembly, overflow_willing, subscription_willing, additional_comments) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        
+        // ADDED phone column and value
+        $stmt = $db->prepare("INSERT INTO waitlist (first_name, last_name, phone, site_type, adults, kids, special_considerations, intended_days, home_assembly, overflow_willing, subscription_willing, additional_comments) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->execute([
             $data['first_name'],
             $data['last_name'],
+            $data['phone'] ?? '',
             $data['site_type'],
             $data['adults'],
             $data['kids'],
