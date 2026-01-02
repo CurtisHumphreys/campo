@@ -3,7 +3,12 @@ name: Deploy to Hostinger (FTP)
 on:
   push:
     branches: [ "main" ]
+    paths-ignore:
+      - "**/*.md"
+      - ".github/**"
+      - ".gitignore"
   workflow_dispatch:
+
 
 concurrency:
   group: deploy-to-hostinger
