@@ -41,6 +41,14 @@ class MigrationController {
             $this->safeAddColumn($db, 'payments', 'total', 'DECIMAL(10,2)');
             $this->safeAddColumn($db, 'payments', 'arrival_date', 'DATE NULL');
             $this->safeAddColumn($db, 'payments', 'departure_date', 'DATE NULL');
+            
+            // New Tender Columns
+            $this->safeAddColumn($db, 'payments', 'tender_eftpos', 'DECIMAL(10,2) DEFAULT 0.00');
+            $this->safeAddColumn($db, 'payments', 'tender_cash', 'DECIMAL(10,2) DEFAULT 0.00');
+            $this->safeAddColumn($db, 'payments', 'tender_cheque', 'DECIMAL(10,2) DEFAULT 0.00');
+
+            // New Site Type Column
+            $this->safeAddColumn($db, 'payments', 'site_type', 'VARCHAR(50) DEFAULT NULL');
 
             // 4. sites (Map Coordinates)
             echo "Checking sites table for map coordinates...\n";
