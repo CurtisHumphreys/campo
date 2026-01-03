@@ -15,10 +15,11 @@ export async function render(container) {
         financialChart = null;
     }
 
+    // Removed inline background styles to allow CSS dark mode overrides
     container.innerHTML = `
         <h1>Dashboard</h1>
         <div class="dashboard-controls" style="margin-bottom:1rem; display:flex; flex-wrap:wrap; align-items:center; gap:1rem;">
-            <select id="dash-camp-select" style="padding:0.5rem; border-radius:0.5rem; border:1px solid #ddd;">
+            <select id="dash-camp-select" style="padding:0.5rem; border-radius:0.5rem; border:1px solid var(--border); background:var(--surface); color:var(--text-main);">
                 <option value="">Loading...</option>
             </select>
             <button id="refresh-btn" class="small secondary">Refresh</button>
@@ -41,43 +42,46 @@ export async function render(container) {
 
                 <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:1rem; text-align:center;">
                     <!-- Overall Total -->
-                    <div style="padding:0.5rem; background:#eff6ff; border-radius:8px;">
-                        <h4 style="margin:0 0 0.5rem 0; font-size:0.9rem; color:#1e40af;">Total Taken</h4>
+                    <div class="dashboard-summary-box" id="box-total">
+                        <h4 style="margin:0 0 0.5rem 0; font-size:0.9rem;">Total Taken</h4>
                         <strong id="total-revenue" style="display:block; font-size:1.2rem; margin-bottom:0.5rem;">$0.00</strong>
-                        <div style="font-size:0.75rem; text-align:left; padding-bottom:0.5rem; border-bottom:1px dashed #bfdbfe;">
+                        <div style="font-size:0.75rem; text-align:left; padding-bottom:0.5rem; border-bottom:1px dashed var(--border);">
                             <div>EFTPOS: <span id="total-eftpos">$0.00</span></div>
                             <div>Cash: <span id="total-cash">$0.00</span></div>
                             <div>Cheque: <span id="total-cheque">$0.00</span></div>
+                            <div>Pre-Paid: <span id="total-prepaid">$0.00</span></div>
                         </div>
                         <div id="total-daily-breakdown" style="font-size:0.7rem; text-align:left; margin-top:0.5rem; max-height:150px; overflow-y:auto;"></div>
                     </div>
                     
                     <!-- Camp Fees -->
-                    <div style="padding:0.5rem; background:#ecfdf5; border-radius:8px;">
-                        <h4 style="margin:0 0 0.5rem 0; font-size:0.9rem; color:#065f46;">Camp Fees</h4>
+                    <div class="dashboard-summary-box" id="box-camp">
+                        <h4 style="margin:0 0 0.5rem 0; font-size:0.9rem;">Camp Fees</h4>
                         <strong id="camp-revenue" style="display:block; font-size:1.2rem; margin-bottom:0.5rem;">$0.00</strong>
-                        <div style="font-size:0.75rem; text-align:left; padding-bottom:0.5rem; border-bottom:1px dashed #a7f3d0;">
+                        <div style="font-size:0.75rem; text-align:left; padding-bottom:0.5rem; border-bottom:1px dashed var(--border);">
                             <div>EFTPOS: <span id="camp-eftpos">$0.00</span></div>
                             <div>Cash: <span id="camp-cash">$0.00</span></div>
                             <div>Cheque: <span id="camp-cheque">$0.00</span></div>
+                            <div>Pre-Paid: <span id="camp-prepaid">$0.00</span></div>
                         </div>
                         <div id="camp-daily-breakdown" style="font-size:0.7rem; text-align:left; margin-top:0.5rem; max-height:150px; overflow-y:auto;"></div>
                     </div>
                     
                     <!-- Site Fees -->
-                    <div style="padding:0.5rem; background:#fff7ed; border-radius:8px;">
-                        <h4 style="margin:0 0 0.5rem 0; font-size:0.9rem; color:#9a3412;">Site Fees</h4>
+                    <div class="dashboard-summary-box" id="box-site">
+                        <h4 style="margin:0 0 0.5rem 0; font-size:0.9rem;">Site Fees</h4>
                         <strong id="site-revenue" style="display:block; font-size:1.2rem; margin-bottom:0.5rem;">$0.00</strong>
-                        <div style="font-size:0.75rem; text-align:left; padding-bottom:0.5rem; border-bottom:1px dashed #fed7aa;">
+                        <div style="font-size:0.75rem; text-align:left; padding-bottom:0.5rem; border-bottom:1px dashed var(--border);">
                             <div>EFTPOS: <span id="site-eftpos">$0.00</span></div>
                             <div>Cash: <span id="site-cash">$0.00</span></div>
                             <div>Cheque: <span id="site-cheque">$0.00</span></div>
+                            <div>Pre-Paid: <span id="site-prepaid">$0.00</span></div>
                         </div>
                          <div id="site-daily-breakdown" style="font-size:0.7rem; text-align:left; margin-top:0.5rem; max-height:150px; overflow-y:auto;"></div>
                     </div>
                 </div>
                 
-                <div style="text-align:right; margin-top:1rem; font-size:0.8rem; color:#64748b;">
+                <div style="text-align:right; margin-top:1rem; font-size:0.8rem; color:var(--text-muted);">
                     Transactions: <span id="payment-count">0</span>
                 </div>
             </div>
@@ -85,19 +89,19 @@ export async function render(container) {
             <!-- Right Column: Current Status -->
             <div class="card">
                 <h2>In Camp Now</h2>
-                <p class="text-muted" style="font-size:0.85rem; margin-bottom:0.5rem;">Based on payment dates for selected camp.</p>
-                <div class="stat-row" style="background:#eff6ff; padding:0.5rem; border-radius:0.5rem; margin-bottom:1rem;">
+                <p class="text-muted" style="font-size:0.85rem; margin-bottom:0.5rem; color:var(--text-muted);">Based on payment dates for selected camp.</p>
+                <div class="stat-row" style="padding:0.5rem; border-radius:0.5rem; margin-bottom:1rem; border:1px solid var(--border);">
                     <span>Total Headcount:</span>
-                    <strong id="current-total-headcount" style="color:#2563eb; font-size:1.2rem;">0</strong>
+                    <strong id="current-total-headcount" style="color:var(--primary); font-size:1.2rem;">0</strong>
                 </div>
-                <div style="max-height:300px; overflow-y:auto; border:1px solid #f1f5f9; border-radius:0.5rem;">
+                <div style="max-height:300px; overflow-y:auto; border:1px solid var(--border); border-radius:0.5rem;">
                     <table class="data-table" style="font-size:0.85rem;">
                         <thead>
                             <tr>
-                                <th style="position:sticky; top:0; background:#f8fafc;">Site</th>
-                                <th style="position:sticky; top:0; background:#f8fafc;">Name</th>
-                                <th style="position:sticky; top:0; background:#f8fafc; text-align:center;">Count</th>
-                                <th style="position:sticky; top:0; background:#f8fafc;">Until</th>
+                                <th style="position:sticky; top:0; background:var(--background-soft);">Site</th>
+                                <th style="position:sticky; top:0; background:var(--background-soft);">Name</th>
+                                <th style="position:sticky; top:0; background:var(--background-soft); text-align:center;">Count</th>
+                                <th style="position:sticky; top:0; background:var(--background-soft);">Until</th>
                             </tr>
                         </thead>
                         <tbody id="in-camp-list">
@@ -124,6 +128,15 @@ export async function render(container) {
             </div>
         </div>
     `;
+
+    // Apply inline styles specifically for light mode, relying on CSS class overrides for dark mode
+    // (See style.css updates for .dashboard-summary-box)
+    document.getElementById('box-total').style.backgroundColor = '#eff6ff';
+    document.getElementById('box-camp').style.backgroundColor = '#ecfdf5';
+    document.getElementById('box-site').style.backgroundColor = '#fff7ed';
+    
+    // For Dark mode compatibility, we should remove these inline styles if dark mode is active? 
+    // Actually, best to set them via class in style.css, but since I am editing JS here I will just rely on CSS !important overrides.
 
     // Initialize Date Inputs
     const today = new Date();
@@ -200,8 +213,6 @@ export async function render(container) {
             
             // Render Daily Breakdown
             if (data.daily && Object.keys(data.daily).length > 0) {
-                // If it's just today, maybe skip rendering detailed list? Or render anyway.
-                // Request implied render "if I select a date range".
                 renderDailyBreakdown(data.daily);
             }
 
@@ -211,11 +222,12 @@ export async function render(container) {
     }
 
     function updateSection(prefix, data) {
-        // data contains total, eftpos, cash, cheque
+        // data contains total, eftpos, cash, cheque, prepaid
         document.getElementById(`${prefix}-revenue`).textContent = formatMoney(data.total || data.revenue); // Total key varies
         document.getElementById(`${prefix}-eftpos`).textContent = formatMoney(data.eftpos);
         document.getElementById(`${prefix}-cash`).textContent = formatMoney(data.cash);
         document.getElementById(`${prefix}-cheque`).textContent = formatMoney(data.cheque);
+        document.getElementById(`${prefix}-prepaid`).textContent = formatMoney(data.prepaid);
     }
     
     function renderDailyBreakdown(dailyData) {
@@ -231,12 +243,13 @@ export async function render(container) {
             const dateStr = new Date(date).toLocaleDateString('en-AU', { day:'numeric', month:'numeric', year:'2-digit'});
             
             const makeBlock = (title, s) => `
-                <div style="margin-top:0.5rem; padding-top:0.25rem; border-top:1px solid #ddd;">
-                    <strong>${dateStr} - Total</strong><br>
+                <div style="margin-top:0.5rem; padding-top:0.25rem; border-top:1px solid var(--border);">
+                    <strong>${dateStr}</strong><br>
                     <strong>${formatMoney(s.total || s.revenue)}</strong><br>
                     EFTPOS: ${formatMoney(s.eftpos)}<br>
                     Cash: ${formatMoney(s.cash)}<br>
-                    Cheque: ${formatMoney(s.cheque)}
+                    Cheque: ${formatMoney(s.cheque)}<br>
+                    Pre-Paid: ${formatMoney(s.prepaid)}
                 </div>
             `;
             
@@ -285,7 +298,7 @@ export async function render(container) {
         const totalEl = document.getElementById('current-total-headcount');
         
         if (!guests || guests.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:1rem; color:#666;">No guests found in camp for today\'s date.</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:1rem; color:var(--text-muted);">No guests found in camp for today\'s date.</td></tr>';
             totalEl.textContent = '0';
             return;
         }
@@ -309,7 +322,7 @@ export async function render(container) {
                     <td style="font-weight:bold;">${g.site}</td>
                     <td>${g.name}</td>
                     <td style="text-align:center;">${g.headcount}</td>
-                    <td style="color:#666;">${until}</td>
+                    <td style="color:var(--text-muted);">${until}</td>
                 </tr>
             `;
         }).join('');
@@ -322,6 +335,10 @@ export async function render(container) {
         
         if (!data || !data.labels || data.labels.length === 0) return;
         
+        const isDark = document.documentElement.classList.contains('dark-mode');
+        const textColor = isDark ? '#cbd5e1' : '#64748b';
+        const gridColor = isDark ? '#334155' : '#e2e8f0';
+
         const ctx = canvas.getContext('2d');
         financialChart = new Chart(ctx, {
             type: 'line',
@@ -359,7 +376,19 @@ export async function render(container) {
                 responsive: true,
                 maintainAspectRatio: false,
                 scales: {
-                    y: { beginAtZero: true, title: { display: true, text: 'Amount ($)' } }
+                    y: { 
+                        beginAtZero: true, 
+                        title: { display: true, text: 'Amount ($)', color: textColor },
+                        grid: { color: gridColor },
+                        ticks: { color: textColor }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: textColor }
+                    }
+                },
+                plugins: {
+                    legend: { labels: { color: textColor } }
                 }
             }
         });
@@ -376,6 +405,9 @@ export async function render(container) {
         }
 
         const ctx = canvas.getContext('2d');
+        const isDark = document.documentElement.classList.contains('dark-mode');
+        const textColor = isDark ? '#cbd5e1' : '#64748b';
+        const gridColor = isDark ? '#334155' : '#e2e8f0';
 
         // Check if we have data
         if (!chartData || !chartData.labels || chartData.labels.length === 0) {
@@ -395,7 +427,6 @@ export async function render(container) {
                         order: 2,
                         yAxisID: 'y'
                     }
-                    // Removed Avg per Site dataset
                 ]
             },
             options: {
@@ -406,7 +437,7 @@ export async function render(container) {
                     intersect: false,
                 },
                 plugins: {
-                    legend: { display: true, position: 'top' },
+                    legend: { display: true, position: 'top', labels: { color: textColor } },
                     tooltip: {
                         callbacks: {
                             label: function(context) {
@@ -425,11 +456,13 @@ export async function render(container) {
                 scales: {
                     y: {
                         beginAtZero: true,
-                        title: { display: true, text: 'Total People' },
-                        grid: { color: '#f1f5f9' }
+                        title: { display: true, text: 'Total People', color: textColor },
+                        grid: { color: gridColor },
+                        ticks: { color: textColor }
                     },
                     x: {
-                        grid: { display: false }
+                        grid: { display: false },
+                        ticks: { color: textColor }
                     }
                 }
             }
