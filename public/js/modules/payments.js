@@ -12,6 +12,7 @@ function memberMatchesQuery(member, query) {
 
 export async function render(container) {
     const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Australia/Adelaide' });
+    let isRefundMode = false;
     
     // Global helper for counters
     window.adjustCount = (id, delta) => {
@@ -27,6 +28,7 @@ export async function render(container) {
         <div class="header-actions" style="justify-content: space-between; align-items: center;">
             <h1>Take Payments</h1>
             <div style="display:flex; gap:0.5rem;">
+                <button id="refund-toggle-btn" class="secondary small">Refund Mode: OFF</button>
                 <button id="hold-payment-btn" class="secondary small">Hold</button>
                 <button id="restore-payment-btn" class="secondary small hidden">Restore</button>
                 <button id="reset-form-btn" class="danger small">Reset</button>
@@ -272,6 +274,16 @@ export async function render(container) {
 
     // Attach listeners
     Promise.resolve().then(() => {
+        // Refund Toggle
+        document.getElementById('refund-toggle-btn').addEventListener('click', (e) => {
+            isRefundMode = !isRefundMode;
+            const btn = e.target;
+            btn.textContent = isRefundMode ? "Refund Mode: ON" : "Refund Mode: OFF";
+            btn.classList.toggle('danger', isRefundMode);
+            btn.classList.toggle('secondary', !isRefundMode);
+            calculate();
+        });
+
         // "All" Buttons
         document.querySelectorAll('.btn-all').forEach(btn => {
             btn.addEventListener('click', () => {
@@ -285,7 +297,7 @@ export async function render(container) {
                 calculate(); // Updates totals first
                 const total = parseFloat(document.getElementById('total-fees').textContent.replace('$','')) || 0;
                 const prepaid = parseFloat(document.getElementById('deducted-prepaid').textContent.replace('-$','')) || 0;
-                const remaining = Math.max(0, total - prepaid);
+                const remaining = total - prepaid; // Allow negative for refund mode
                 
                 targetInput.value = remaining.toFixed(2);
                 targetInput.dispatchEvent(new Event('input')); 
@@ -717,6 +729,11 @@ export async function render(container) {
             total -= discount;
             breakdown.push(`Discount: -$${discount.toFixed(2)}`);
         }
+        
+        // REFUND MODE Logic
+        if (isRefundMode) {
+             total = total * -1; // Invert the total bill
+        }
 
         list.innerHTML = breakdown.join('<br>') || 'Select options...';
         document.getElementById('calculation-total').textContent = `$${total.toFixed(2)}`;
@@ -731,26 +748,24 @@ export async function render(container) {
         const tendered = cash + chq + eft;
         document.getElementById('total-tendered').textContent = `-$${tendered.toFixed(2)}`;
         
-        // Calculate due logic
-        // Use a small epsilon to handle floating point issues
         const due = total - prepaid - tendered;
-        const isBalanced = Math.abs(due) < 0.01;
-
+        
         const dueEl = document.getElementById('balance-due');
-        dueEl.textContent = `$${Math.max(0, due).toFixed(2)}`;
+        dueEl.textContent = `$${Math.abs(due).toFixed(2)}`; // Show absolute value for display, but logic uses real
         
         const submitBtn = document.getElementById('submit-payment');
-        if (isBalanced) {
+        if (Math.abs(due) < 0.01) {
             submitBtn.disabled = false;
             dueEl.style.color = 'var(--success)';
+            dueEl.textContent = "$0.00";
         } else {
             submitBtn.disabled = true;
             dueEl.style.color = 'var(--danger)';
         }
 
-        container.dataset.campFee = campFee;
-        container.dataset.siteFee = siteFee;
-        container.dataset.otherAmount = other;
+        container.dataset.campFee = isRefundMode ? -campFee : campFee;
+        container.dataset.siteFee = isRefundMode ? -siteFee : siteFee;
+        container.dataset.otherAmount = isRefundMode ? -other : other;
         container.dataset.total = total;
     }
 
@@ -841,10 +856,8 @@ export async function render(container) {
     // --- Submit ---
     document.getElementById('submit-payment').onclick = async () => {
         const btn = document.getElementById('submit-payment');
-        // Validate balance before allowing submit
-        const dueEl = document.getElementById('balance-due');
+        
         // Double check balance here to prevent race conditions or inspect element hacks
-        // Get raw values again
         const total = parseFloat(container.dataset.total) || 0;
         const prepaid = parseFloat(document.getElementById('prepaid-input').value)||0;
         const cash = parseFloat(document.getElementById('pay-cash').value)||0;
@@ -876,6 +889,7 @@ export async function render(container) {
                 prepayment_ids: (memberPrepaymentRecords && memberPrepaymentRecords.length > 0) ? memberPrepaymentRecords.map(p=>p.id) : [],
                 headcount: (parseInt(document.getElementById('calc-adults').value)||0) + (parseInt(document.getElementById('calc-kids').value)||0),
                 site_type: document.getElementById('calc-site-type').value, // Add Site Type
+                concession: document.getElementById('calc-concession').value, // Add Concession
                 tenders: [
                     { method: 'EFTPOS', amount: parseFloat(document.getElementById('pay-eftpos').value)||0 },
                     { method: 'Cash', amount: parseFloat(document.getElementById('pay-cash').value)||0 },
@@ -889,6 +903,10 @@ export async function render(container) {
             } else {
                 payload.arrival_date = document.getElementById('arrival-date').value;
                 payload.departure_date = document.getElementById('departure-date').value;
+            }
+            
+            if (isRefundMode) {
+                 payload.notes += "\n[REFUND]";
             }
 
             await API.post('/payments', payload);
