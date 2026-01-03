@@ -37,7 +37,8 @@ class PaymentController {
             // Normalize numeric inputs with safe defaults
             $headcount = isset($data['headcount']) ? $data['headcount'] : null;
             $notesIn = isset($data['notes']) ? trim($data['notes']) : '';
-            $siteType = isset($data['site_type']) ? $data['site_type'] : null; // Capture Site Type
+            // Fix: Capture site_type safely. Default to null if missing or empty string.
+            $siteType = (isset($data['site_type']) && $data['site_type'] !== '') ? $data['site_type'] : null; 
 
             // Determine payment date (client provided or now)
             $clientDate = (isset($data['payment_date']) && !empty($data['payment_date'])) ? $data['payment_date'] : null;
@@ -131,10 +132,10 @@ class PaymentController {
                 $finalNotes,
                 $arrivalDate,
                 $departureDate,
-                $siteType,        // New
-                $tenderEftpos,    // New
-                $tenderCash,      // New
-                $tenderCheque     // New
+                $siteType,        // Fixed: Ensure site_type is passed
+                $tenderEftpos,    
+                $tenderCash,      
+                $tenderCheque     
             ]);
 
             $paymentId = $db->lastInsertId();
@@ -233,7 +234,9 @@ class PaymentController {
         $stmt->execute($params);
         echo json_encode($stmt->fetchAll());
     }
-
+    
+    // ... rest of the controller (update, summary, dashboardStats, delete) remains unchanged ...
+    
     public function update($id) {
         $data = json_decode(file_get_contents('php://input'), true);
         $db = Database::connect();
