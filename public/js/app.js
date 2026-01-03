@@ -18,43 +18,86 @@ const routes = {
 // Prevent duplicate event bindings if init() runs more than once
 let navSetupDone = false;
 
+// Track auth state across client-side navigations
+let isAuthenticated = false;
+
+export function setAuthState(state) {
+    isAuthenticated = !!state;
+
+    const sidebar = document.getElementById('sidebar');
+    const mobileHeader = document.getElementById('mobile-header');
+
+    // Keep UI consistent with auth state (prevents sidebar/hamburger bypassing login)
+    if (!isAuthenticated) {
+        if (sidebar) sidebar.classList.add('hidden');
+        if (mobileHeader) mobileHeader.style.display = 'none';
+        document.body.classList.remove('mobile-menu-open');
+    } else {
+        if (sidebar) sidebar.classList.remove('hidden');
+        if (mobileHeader && window.innerWidth <= 900) mobileHeader.style.display = 'flex';
+    }
+}
+
+function isPublicRoute(path) {
+    return path === '/campo/map' || path.endsWith('/map');
+}
+
+function isLoginRoute(path) {
+    return path === '/campo/login';
+}
+
+function enforceAuthForPath(path) {
+    // Public route (map) is always allowed
+    if (isPublicRoute(path)) return path;
+
+    // If not authed, only login route is allowed
+    if (!isAuthenticated && !isLoginRoute(path)) {
+        return '/campo/login';
+    }
+
+    // If authed and user hits root or login, send them to dashboard
+    if (isAuthenticated && (path === '/campo' || path === '/campo/' || path === '/campo/login')) {
+        return '/campo/dashboard';
+    }
+
+    return path;
+}
+
 async function init() {
     // ✅ Always bind navigation handlers up-front (fixes hamburger not working after login redirect)
     setupNavigation();
 
     let path = window.location.pathname.replace(/\/$/, "");
 
-    if (path === '/campo/map' || path.endsWith('/map')) {
+    if (isPublicRoute(path)) {
         document.getElementById('sidebar').classList.add('hidden');
         document.getElementById('mobile-header').style.display = 'none';
         document.body.classList.add('public-view');
         handleRoute(path);
-        return; 
-    }
-
-    let isAuthenticated = false;
-    try {
-        const { authenticated } = await API.get('/check-auth');
-        isAuthenticated = authenticated;
-    } catch (e) {
-        console.error('Auth check failed', e);
-    }
-
-    if (!isAuthenticated && path !== '/campo/login') {
-        navigateTo('/campo/login');
         return;
     }
 
-    if (isAuthenticated) {
-        document.getElementById('sidebar').classList.remove('hidden');
-        if (window.innerWidth <= 900) {
-            document.getElementById('mobile-header').style.display = 'flex';
-        }
-        
-        if (path === '/campo/login' || path === '/campo/' || path === '/campo') {
-            navigateTo('/campo/dashboard');
-            return;
-        }
+    // Determine auth state once on load
+    try {
+        const { authenticated } = await API.get('/check-auth');
+        setAuthState(authenticated);
+    } catch (e) {
+        console.error('Auth check failed', e);
+        setAuthState(false);
+    }
+
+    const enforced = enforceAuthForPath(path);
+    if (enforced !== path) {
+        // Use replaceState to avoid back-button loop to protected route
+        history.replaceState(null, null, enforced);
+        path = enforced;
+    }
+
+    // Login route should not show the mobile header
+    if (isLoginRoute(path)) {
+        const mh = document.getElementById('mobile-header');
+        if (mh) mh.style.display = 'none';
+        document.getElementById('sidebar').classList.add('hidden');
     }
 
     handleRoute(path);
@@ -77,7 +120,7 @@ function setupNavigation() {
         logoutBtn.addEventListener('click', async (e) => {
             e.preventDefault();
             await API.post('/logout', {});
-            document.getElementById('sidebar').classList.add('hidden');
+            setAuthState(false);
             navigateTo('/campo/login');
         });
     }
@@ -87,6 +130,14 @@ function setupNavigation() {
     if (mobileMenuBtn) {
         mobileMenuBtn.addEventListener('click', (e) => {
             e.stopPropagation();
+            // Don't allow hamburger to open a menu on login/unauth pages
+            if (!isAuthenticated) return;
+
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar && sidebar.classList.contains('hidden')) {
+                // Ensure sidebar is visible before sliding it in
+                sidebar.classList.remove('hidden');
+            }
             document.body.classList.toggle('mobile-menu-open');
         });
     }
@@ -96,7 +147,7 @@ function setupNavigation() {
         if (document.body.classList.contains('mobile-menu-open')) {
             const sidebar = document.getElementById('sidebar');
             const header = document.getElementById('mobile-header');
-            
+
             // If click is NOT inside sidebar and NOT inside header, close it
             if (!sidebar.contains(e.target) && !header.contains(e.target)) {
                 document.body.classList.remove('mobile-menu-open');
@@ -107,20 +158,32 @@ function setupNavigation() {
 
 export function navigateTo(url) {
     history.pushState(null, null, url);
-    const path = url.replace(/\/$/, "");
-    
-    if (path === '/campo/map') {
+    let path = url.replace(/\/$/, "");
+
+    // Enforce auth on client-side navigations too
+    path = enforceAuthForPath(path);
+    if (window.location.pathname.replace(/\/$/, "") !== path) {
+        history.replaceState(null, null, path);
+    }
+
+    if (isPublicRoute(path)) {
         document.getElementById('sidebar').classList.add('hidden');
         document.getElementById('mobile-header').style.display = 'none';
         document.body.classList.add('public-view');
     } else {
-        document.getElementById('sidebar').classList.remove('hidden');
-        if (window.innerWidth <= 900) {
-            document.getElementById('mobile-header').style.display = 'flex';
+        // Login route should not show nav
+        if (isLoginRoute(path) || !isAuthenticated) {
+            document.getElementById('sidebar').classList.add('hidden');
+            document.getElementById('mobile-header').style.display = 'none';
+        } else {
+            document.getElementById('sidebar').classList.remove('hidden');
+            if (window.innerWidth <= 900) {
+                document.getElementById('mobile-header').style.display = 'flex';
+            }
         }
         document.body.classList.remove('public-view');
     }
-    
+
     document.body.classList.remove('mobile-menu-open');
     handleRoute(path);
 }
@@ -128,7 +191,13 @@ export function navigateTo(url) {
 async function handleRoute(path) {
     const main = document.getElementById('main-content');
     path = path.replace(/\/$/, "");
-    if (path === '/campo') path = '/campo/dashboard'; 
+    if (path === '/campo') path = '/campo/dashboard';
+
+    // Safety net: never render protected pages if not authed
+    if (!isAuthenticated && !isLoginRoute(path) && !isPublicRoute(path)) {
+        history.replaceState(null, null, '/campo/login');
+        path = '/campo/login';
+    }
 
     const renderer = routes[path];
 
