@@ -3,6 +3,8 @@
 require_once __DIR__ . '/../Database.php';
 
 class PaymentController {
+    // ... (store, index, update, delete, dashboardStats methods remain unchanged) ...
+
     public function store() {
         $data = json_decode(file_get_contents('php://input'), true);
         $db = Database::connect();
@@ -290,33 +292,123 @@ class PaymentController {
             $endDate   = $today->format('Y-m-d') . ' 23:59:59';
         }
 
-        // Aggregate totals for the selected date range
+        // Fetch Individual Transaction Rows to apply "Cash First" logic
         $stmt = $db->prepare(
             "SELECT 
-                SUM(pt.amount) AS total_revenue,
-                SUM(CASE WHEN pt.method = 'EFTPOS' THEN pt.amount ELSE 0 END) AS eftpos,
-                SUM(CASE WHEN pt.method = 'Cash' THEN pt.amount ELSE 0 END) AS cash,
-                SUM(CASE WHEN pt.method = 'Cheque' THEN pt.amount ELSE 0 END) AS cheque,
-                SUM(p.site_fee) AS site_contribution_total,
-                SUM(p.camp_fee) AS camp_fee_total,
-                COUNT(DISTINCT p.id) AS payment_count,
-                SUM(p.headcount) AS headcount_total
-            FROM payments p
-            LEFT JOIN payment_tenders pt ON p.id = pt.payment_id
-            WHERE p.payment_date BETWEEN ? AND ?"
+                tender_eftpos, tender_cash, tender_cheque,
+                camp_fee, site_fee, other_amount, total, id
+            FROM payments
+            WHERE payment_date BETWEEN ? AND ?"
         );
         $stmt->execute([$startDate, $endDate]);
-        $stats = $stmt->fetch(\PDO::FETCH_ASSOC);
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Initialize Aggregates
+        $totals = [
+            'revenue' => 0.0,
+            'eftpos' => 0.0,
+            'cash' => 0.0,
+            'cheque' => 0.0,
+            'count' => count($rows)
+        ];
+        
+        $camp = [
+            'total' => 0.0,
+            'eftpos' => 0.0,
+            'cash' => 0.0,
+            'cheque' => 0.0
+        ];
+
+        $site = [
+            'total' => 0.0,
+            'eftpos' => 0.0,
+            'cash' => 0.0,
+            'cheque' => 0.0
+        ];
+
+        // Process line by line
+        foreach ($rows as $row) {
+            $tCash = floatval($row['tender_cash']);
+            $tEft = floatval($row['tender_eftpos']);
+            $tChq = floatval($row['tender_cheque']);
+            
+            $cFee = floatval($row['camp_fee']);
+            $sFee = floatval($row['site_fee']);
+            // Note: We ignore other_amount/prepaid logic here for simplicity of breakdown display
+            // unless we want 'Other' column too. 
+            
+            // Global totals
+            $totals['revenue'] += floatval($row['total']);
+            $totals['eftpos'] += $tEft;
+            $totals['cash'] += $tCash;
+            $totals['cheque'] += $tChq;
+
+            // Category Totals
+            $camp['total'] += $cFee;
+            $site['total'] += $sFee;
+
+            // --- ALLOCATION LOGIC (Cash First to Camp) ---
+            
+            // 1. Allocate Cash to Camp
+            $cashToCamp = 0;
+            if ($cFee > 0) {
+                // If refund (negative fee), logic is inverted/messy. Assuming payments are mostly positive.
+                // Simple Min: Use up to available cash for camp fee
+                $cashToCamp = min($cFee, $tCash);
+                $camp['cash'] += $cashToCamp;
+                
+                // Reduce available
+                $tCash -= $cashToCamp;
+                $cFee -= $cashToCamp;
+            }
+
+            // 2. Allocate Remaining Cash to Site
+            $cashToSite = 0;
+            if ($sFee > 0 && $tCash > 0) {
+                $cashToSite = min($sFee, $tCash);
+                $site['cash'] += $cashToSite;
+                $tCash -= $cashToSite;
+                $sFee -= $cashToSite;
+            }
+            
+            // 3. Allocate Other Tenders (Proportional or Waterfall? Let's use Waterfall: Camp then Site)
+            // Camp Remainder
+            if ($cFee > 0) {
+                // Use EFTPOS first
+                $eftToCamp = min($cFee, $tEft);
+                $camp['eftpos'] += $eftToCamp;
+                $tEft -= $eftToCamp;
+                $cFee -= $eftToCamp;
+            }
+            if ($cFee > 0) {
+                // Use Cheque next
+                $chqToCamp = min($cFee, $tChq);
+                $camp['cheque'] += $chqToCamp;
+                $tChq -= $chqToCamp;
+                $cFee -= $chqToCamp;
+            }
+
+            // Site Remainder
+            if ($sFee > 0) {
+                 // Use Remaining EFTPOS
+                $eftToSite = min($sFee, $tEft);
+                $site['eftpos'] += $eftToSite;
+                $tEft -= $eftToSite;
+                $sFee -= $eftToSite;
+            }
+            if ($sFee > 0) {
+                 // Use Remaining Cheque
+                $chqToSite = min($sFee, $tChq);
+                $site['cheque'] += $chqToSite;
+                $tChq -= $chqToSite;
+                $sFee -= $chqToSite;
+            }
+        }
 
         echo json_encode([
-            'total_revenue'          => $stats['total_revenue'] ?? 0,
-            'eftpos'                => $stats['eftpos'] ?? 0,
-            'cash'                  => $stats['cash'] ?? 0,
-            'cheque'                => $stats['cheque'] ?? 0,
-            'site_contribution_total' => $stats['site_contribution_total'] ?? 0,
-            'camp_fee_total'        => $stats['camp_fee_total'] ?? 0,
-            'payment_count'         => $stats['payment_count'] ?? 0,
-            'headcount_total'       => $stats['headcount_total'] ?? 0
+            'total' => $totals,
+            'camp_fees' => $camp,
+            'site_fees' => $site
         ]);
     }
 
