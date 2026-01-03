@@ -204,7 +204,7 @@ export async function render(container) {
                     
                     <textarea id="notes" rows="2" placeholder="Notes..." style="width:100%; margin-bottom:1rem; font-size:0.85rem;" tabindex="17"></textarea>
                     
-                    <button id="submit-payment" style="width:100%; padding:0.75rem; font-size:1.1rem; margin-top:auto;" tabindex="18">Submit Payment</button>
+                    <button id="submit-payment" style="width:100%; padding:0.75rem; font-size:1.1rem; margin-top:auto;" tabindex="18" disabled>Submit Payment</button>
                 </div>
 
             </div>
@@ -731,8 +731,19 @@ export async function render(container) {
         const tendered = cash + chq + eft;
         document.getElementById('total-tendered').textContent = `-$${tendered.toFixed(2)}`;
         
-        const due = Math.max(0, total - prepaid - tendered);
-        document.getElementById('balance-due').textContent = `$${due.toFixed(2)}`;
+        const due = total - prepaid - tendered;
+        
+        const dueEl = document.getElementById('balance-due');
+        dueEl.textContent = `$${Math.max(0, due).toFixed(2)}`;
+        
+        const submitBtn = document.getElementById('submit-payment');
+        if (Math.abs(due) < 0.01) {
+            submitBtn.disabled = false;
+            dueEl.style.color = 'var(--success)';
+        } else {
+            submitBtn.disabled = true;
+            dueEl.style.color = 'var(--danger)';
+        }
 
         container.dataset.campFee = campFee;
         container.dataset.siteFee = siteFee;
@@ -845,6 +856,7 @@ export async function render(container) {
                 site_fee_paid_until: container.dataset.newPaidUntilIso,
                 prepayment_ids: (memberPrepaymentRecords && memberPrepaymentRecords.length > 0) ? memberPrepaymentRecords.map(p=>p.id) : [],
                 headcount: (parseInt(document.getElementById('calc-adults').value)||0) + (parseInt(document.getElementById('calc-kids').value)||0),
+                site_type: document.getElementById('calc-site-type').value, // Add Site Type
                 tenders: [
                     { method: 'EFTPOS', amount: parseFloat(document.getElementById('pay-eftpos').value)||0 },
                     { method: 'Cash', amount: parseFloat(document.getElementById('pay-cash').value)||0 },
