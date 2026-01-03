@@ -37,8 +37,11 @@ class PaymentController {
             // Normalize numeric inputs with safe defaults
             $headcount = isset($data['headcount']) ? $data['headcount'] : null;
             $notesIn = isset($data['notes']) ? trim($data['notes']) : '';
-            // Fix: Capture site_type safely. Default to null if missing or empty string.
+            // Capture site_type safely. Default to null if missing or empty string.
             $siteType = (isset($data['site_type']) && $data['site_type'] !== '') ? $data['site_type'] : null; 
+            
+            // Capture concession (boolean 1/0 for DB)
+            $concession = (isset($data['concession']) && ($data['concession'] === 'Yes' || $data['concession'] === true || $data['concession'] == 1)) ? 1 : 0;
 
             // Determine payment date (client provided or now)
             $clientDate = (isset($data['payment_date']) && !empty($data['payment_date'])) ? $data['payment_date'] : null;
@@ -63,6 +66,7 @@ class PaymentController {
             }
 
             // Compute new site fee expiry and audit note if a site contribution is being made
+            // Only calculate expiry extension if site fee is POSITIVE. Refunds shouldn't extend expiry.
             $newPaidUntilISO = null;
             $auditNote = '';
             if ($siteFee > 0) {
@@ -98,14 +102,14 @@ class PaymentController {
                 $finalNotes .= ($finalNotes !== '' ? "\n" : '') . $auditNote;
             }
 
-            // 1. Create Payment Record with Tenders and Site Type
+            // 1. Create Payment Record with Tenders and Site Type and Concession
             $stmt = $db->prepare(
                 "INSERT INTO payments (
                     member_id, camp_id, site_id, payment_date,
                     camp_fee, site_fee, prepaid_applied, other_amount,
                     total, headcount, notes, arrival_date, departure_date,
-                    site_type, tender_eftpos, tender_cash, tender_cheque
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+                    site_type, tender_eftpos, tender_cash, tender_cheque, concession
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
             );
             
             $siteIdToStore = $data['site_id'] ?? null;
@@ -132,10 +136,11 @@ class PaymentController {
                 $finalNotes,
                 $arrivalDate,
                 $departureDate,
-                $siteType,        // Fixed: Ensure site_type is passed
+                $siteType,        
                 $tenderEftpos,    
                 $tenderCash,      
-                $tenderCheque     
+                $tenderCheque,
+                $concession
             ]);
 
             $paymentId = $db->lastInsertId();
@@ -144,7 +149,8 @@ class PaymentController {
             if (isset($data['tenders']) && is_array($data['tenders'])) {
                 $stmtTender = $db->prepare("INSERT INTO payment_tenders (payment_id, method, amount, reference) VALUES (?, ?, ?, ?)");
                 foreach ($data['tenders'] as $tender) {
-                    if (isset($tender['amount']) && $tender['amount'] > 0) {
+                    // Allow negative amounts for refunds
+                    if (isset($tender['amount']) && $tender['amount'] != 0) {
                         $stmtTender->execute([
                             $paymentId,
                             $tender['method'],
@@ -155,7 +161,7 @@ class PaymentController {
                 }
             }
 
-            // 3. Update Site Fee Account
+            // 3. Update Site Fee Account (Only if positive fee, handled above)
             if ($siteFee > 0 && $newPaidUntilISO !== null) {
                 if ($accountRow) {
                     $stmtUpdate = $db->prepare("UPDATE site_fee_accounts SET paid_until = ?, status = 'Paid' WHERE id = ?");
@@ -168,7 +174,7 @@ class PaymentController {
                 $stmtMem->execute([$data['member_id']]);
             }
 
-            // 4. Update Prepayments
+            // 4. Update Prepayments (Only if positive usage)
             if ($prepaidApplied > 0 && isset($data['prepayment_ids']) && is_array($data['prepayment_ids'])) {
                 $remaining = floatval($prepaidApplied);
                 foreach ($data['prepayment_ids'] as $pid) {
@@ -234,8 +240,6 @@ class PaymentController {
         $stmt->execute($params);
         echo json_encode($stmt->fetchAll());
     }
-    
-    // ... rest of the controller (update, summary, dashboardStats, delete) remains unchanged ...
     
     public function update($id) {
         $data = json_decode(file_get_contents('php://input'), true);
