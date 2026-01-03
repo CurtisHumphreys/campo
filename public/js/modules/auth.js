@@ -1,5 +1,5 @@
 import * as API from '../api.js';
-import { navigateTo } from '../app.js';
+import { navigateTo, setAuthState } from '../app.js';
 
 export function renderLogin(container) {
     container.innerHTML = `
@@ -25,7 +25,8 @@ export function renderLogin(container) {
         try {
             const result = await API.post('/login', { username, password });
             if (result.success) {
-                document.getElementById('sidebar').classList.remove('hidden');
+                // Update app-level auth state so client-side routing + hamburger work correctly
+                setAuthState(true);
                 navigateTo('/campo/dashboard');
             }
         } catch (err) {
