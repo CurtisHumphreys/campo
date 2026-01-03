@@ -2,14 +2,17 @@ import * as API from '../api.js';
 
 // Global variable to hold the chart instance across renders
 let headcountChart = null;
+let financialChart = null;
 
 export async function render(container) {
-    // DESTROY EXISTING CHART TO PREVENT CRASH
-    // If we re-render the HTML, the old canvas is removed from DOM.
-    // The old Chart.js instance loses its context but tries to resize, causing a loop.
+    // DESTROY EXISTING CHARTS TO PREVENT CRASH
     if (headcountChart) {
         headcountChart.destroy();
         headcountChart = null;
+    }
+    if (financialChart) {
+        financialChart.destroy();
+        financialChart = null;
     }
 
     container.innerHTML = `
@@ -41,33 +44,36 @@ export async function render(container) {
                     <div style="padding:0.5rem; background:#eff6ff; border-radius:8px;">
                         <h4 style="margin:0 0 0.5rem 0; font-size:0.9rem; color:#1e40af;">Total Taken</h4>
                         <strong id="total-revenue" style="display:block; font-size:1.2rem; margin-bottom:0.5rem;">$0.00</strong>
-                        <div style="font-size:0.75rem; text-align:left;">
+                        <div style="font-size:0.75rem; text-align:left; padding-bottom:0.5rem; border-bottom:1px dashed #bfdbfe;">
                             <div>EFTPOS: <span id="total-eftpos">$0.00</span></div>
                             <div>Cash: <span id="total-cash">$0.00</span></div>
                             <div>Cheque: <span id="total-cheque">$0.00</span></div>
                         </div>
+                        <div id="total-daily-breakdown" style="font-size:0.7rem; text-align:left; margin-top:0.5rem; max-height:150px; overflow-y:auto;"></div>
                     </div>
                     
                     <!-- Camp Fees -->
                     <div style="padding:0.5rem; background:#ecfdf5; border-radius:8px;">
                         <h4 style="margin:0 0 0.5rem 0; font-size:0.9rem; color:#065f46;">Camp Fees</h4>
                         <strong id="camp-revenue" style="display:block; font-size:1.2rem; margin-bottom:0.5rem;">$0.00</strong>
-                        <div style="font-size:0.75rem; text-align:left;">
+                        <div style="font-size:0.75rem; text-align:left; padding-bottom:0.5rem; border-bottom:1px dashed #a7f3d0;">
                             <div>EFTPOS: <span id="camp-eftpos">$0.00</span></div>
                             <div>Cash: <span id="camp-cash">$0.00</span></div>
                             <div>Cheque: <span id="camp-cheque">$0.00</span></div>
                         </div>
+                        <div id="camp-daily-breakdown" style="font-size:0.7rem; text-align:left; margin-top:0.5rem; max-height:150px; overflow-y:auto;"></div>
                     </div>
                     
                     <!-- Site Fees -->
                     <div style="padding:0.5rem; background:#fff7ed; border-radius:8px;">
                         <h4 style="margin:0 0 0.5rem 0; font-size:0.9rem; color:#9a3412;">Site Fees</h4>
                         <strong id="site-revenue" style="display:block; font-size:1.2rem; margin-bottom:0.5rem;">$0.00</strong>
-                        <div style="font-size:0.75rem; text-align:left;">
+                        <div style="font-size:0.75rem; text-align:left; padding-bottom:0.5rem; border-bottom:1px dashed #fed7aa;">
                             <div>EFTPOS: <span id="site-eftpos">$0.00</span></div>
                             <div>Cash: <span id="site-cash">$0.00</span></div>
                             <div>Cheque: <span id="site-cheque">$0.00</span></div>
                         </div>
+                         <div id="site-daily-breakdown" style="font-size:0.7rem; text-align:left; margin-top:0.5rem; max-height:150px; overflow-y:auto;"></div>
                     </div>
                 </div>
                 
@@ -99,6 +105,14 @@ export async function render(container) {
                         </tbody>
                     </table>
                 </div>
+            </div>
+        </div>
+
+        <!-- Financial Chart -->
+        <div class="card" style="margin-top:1.5rem;">
+            <h2>Daily Financial Takings (Camp Duration)</h2>
+            <div class="chart-wrap" style="height:350px;">
+                <canvas id="financial-chart"></canvas>
             </div>
         </div>
 
@@ -168,7 +182,10 @@ export async function render(container) {
         
         // Visual loading state
         document.getElementById('total-revenue').textContent = '...';
-        
+        document.getElementById('total-daily-breakdown').innerHTML = '';
+        document.getElementById('camp-daily-breakdown').innerHTML = '';
+        document.getElementById('site-daily-breakdown').innerHTML = '';
+
         try {
             const data = await API.get(`/payments/summary${params}`); 
             
@@ -180,10 +197,16 @@ export async function render(container) {
             updateSection('site', data.site_fees);
 
             document.getElementById('payment-count').textContent = data.total.count || 0;
+            
+            // Render Daily Breakdown
+            if (data.daily && Object.keys(data.daily).length > 0) {
+                // If it's just today, maybe skip rendering detailed list? Or render anyway.
+                // Request implied render "if I select a date range".
+                renderDailyBreakdown(data.daily);
+            }
 
         } catch (e) { 
             console.error('Financial fetch failed', e);
-            document.getElementById('total-revenue').textContent = '-';
         }
     }
 
@@ -193,6 +216,38 @@ export async function render(container) {
         document.getElementById(`${prefix}-eftpos`).textContent = formatMoney(data.eftpos);
         document.getElementById(`${prefix}-cash`).textContent = formatMoney(data.cash);
         document.getElementById(`${prefix}-cheque`).textContent = formatMoney(data.cheque);
+    }
+    
+    function renderDailyBreakdown(dailyData) {
+        const totalBox = document.getElementById('total-daily-breakdown');
+        const campBox = document.getElementById('camp-daily-breakdown');
+        const siteBox = document.getElementById('site-daily-breakdown');
+        
+        let totalHtml = '';
+        let campHtml = '';
+        let siteHtml = '';
+        
+        for (const [date, stats] of Object.entries(dailyData)) {
+            const dateStr = new Date(date).toLocaleDateString('en-AU', { day:'numeric', month:'numeric', year:'2-digit'});
+            
+            const makeBlock = (title, s) => `
+                <div style="margin-top:0.5rem; padding-top:0.25rem; border-top:1px solid #ddd;">
+                    <strong>${dateStr} - Total</strong><br>
+                    <strong>${formatMoney(s.total || s.revenue)}</strong><br>
+                    EFTPOS: ${formatMoney(s.eftpos)}<br>
+                    Cash: ${formatMoney(s.cash)}<br>
+                    Cheque: ${formatMoney(s.cheque)}
+                </div>
+            `;
+            
+            if (stats.total && (stats.total.revenue > 0 || stats.total.total > 0)) totalHtml += makeBlock('Total', stats.total);
+            if (stats.camp && stats.camp.total > 0) campHtml += makeBlock('Camp', stats.camp);
+            if (stats.site && stats.site.total > 0) siteHtml += makeBlock('Site', stats.site);
+        }
+        
+        totalBox.innerHTML = totalHtml;
+        campBox.innerHTML = campHtml;
+        siteBox.innerHTML = siteHtml;
     }
 
     async function fetchAndRender(campId) {
@@ -211,7 +266,8 @@ export async function render(container) {
             }
 
             renderInCampList(stats.current_guests);
-            updateChart(stats.chart);
+            updateHeadcountChart(stats.chart);
+            updateFinancialChart(stats.financial_chart);
 
         } catch (err) {
             console.error('Failed to fetch dashboard stats:', err);
@@ -258,8 +314,58 @@ export async function render(container) {
             `;
         }).join('');
     }
+    
+    function updateFinancialChart(data) {
+        const canvas = document.getElementById('financial-chart');
+        if (!canvas) return;
+        if (financialChart) financialChart.destroy();
+        
+        if (!data || !data.labels || data.labels.length === 0) return;
+        
+        const ctx = canvas.getContext('2d');
+        financialChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: data.labels,
+                datasets: [
+                    {
+                        label: 'Total Taken',
+                        data: data.total,
+                        borderColor: '#2563eb', // Blue
+                        backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.3,
+                        fill: true
+                    },
+                    {
+                        label: 'Camp Fees',
+                        data: data.camp,
+                        borderColor: '#059669', // Green
+                        backgroundColor: 'rgba(5, 150, 105, 0.05)',
+                        borderWidth: 2,
+                        tension: 0.3
+                    },
+                    {
+                        label: 'Site Fees',
+                        data: data.site,
+                        borderColor: '#ea580c', // Orange
+                        backgroundColor: 'rgba(234, 88, 12, 0.05)',
+                        borderWidth: 2,
+                        tension: 0.3
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { beginAtZero: true, title: { display: true, text: 'Amount ($)' } }
+                }
+            }
+        });
+    }
 
-    function updateChart(chartData) {
+    function updateHeadcountChart(chartData) {
         const canvas = document.getElementById('headcount-chart');
         if (!canvas) return;
         
@@ -273,7 +379,6 @@ export async function render(container) {
 
         // Check if we have data
         if (!chartData || !chartData.labels || chartData.labels.length === 0) {
-            // Draw text on canvas saying "No Data" or handle UI
             return;
         }
 
@@ -289,19 +394,8 @@ export async function render(container) {
                         borderRadius: 4,
                         order: 2,
                         yAxisID: 'y'
-                    },
-                    {
-                        type: 'line',
-                        label: 'Avg per Site',
-                        data: chartData.average,
-                        borderColor: '#10b981', // Emerald
-                        backgroundColor: '#10b981',
-                        borderWidth: 2,
-                        pointRadius: 3,
-                        tension: 0.3,
-                        order: 1,
-                        yAxisID: 'y1'
                     }
+                    // Removed Avg per Site dataset
                 ]
             },
             options: {
@@ -333,12 +427,6 @@ export async function render(container) {
                         beginAtZero: true,
                         title: { display: true, text: 'Total People' },
                         grid: { color: '#f1f5f9' }
-                    },
-                    y1: {
-                        beginAtZero: true,
-                        position: 'right',
-                        title: { display: true, text: 'Avg per Site' },
-                        grid: { drawOnChartArea: false } 
                     },
                     x: {
                         grid: { display: false }
