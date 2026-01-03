@@ -220,6 +220,10 @@ function renderTable(payments) {
             nights = Math.max(0, Math.round((d2 - d1) / (1000 * 60 * 60 * 24)));
         }
 
+        const isRefund = parseFloat(p.total) < 0;
+        const totalStyle = isRefund ? 'color:var(--danger);' : '';
+        const concessionDisplay = (p.concession == 1 || p.concession === '1') ? 'Yes' : 'No';
+
         return `
         <tr>
             <td>${p.camp_name || '-'}</td>
@@ -234,12 +238,12 @@ function renderTable(payments) {
             <td>$${parseFloat(p.prepaid_applied||0).toFixed(2)}</td>
             <td>$${parseFloat(p.camp_fee||0).toFixed(2)}</td>
             <td>$${parseFloat(p.site_fee||0).toFixed(2)}</td>
-            <td><strong>$${parseFloat(p.total||0).toFixed(2)}</strong></td>
+            <td><strong style="${totalStyle}">$${parseFloat(p.total||0).toFixed(2)}</strong></td>
             <td>$${parseFloat(p.tender_eftpos||0).toFixed(2)}</td>
             <td>$${parseFloat(p.tender_cash||0).toFixed(2)}</td>
             <td>$${parseFloat(p.tender_cheque||0).toFixed(2)}</td>
             <td>$${parseFloat(p.other_amount||0).toFixed(2)}</td>
-            <td>-</td> <!-- Concession status -->
+            <td>${concessionDisplay}</td> <!-- Concession status -->
             <td>${new Date(p.payment_date).toLocaleDateString('en-AU')}</td>
             <td>-</td> <!-- Site Fee Paid Until -->
             <td>${p.headcount || 0}</td>
@@ -280,6 +284,7 @@ function exportToCSV(data) {
         // Safe helpers
         const safe = (str) => `"${(str || '').replace(/"/g, '""')}"`;
         const money = (val) => parseFloat(val || 0).toFixed(2);
+        const concession = (p.concession == 1 || p.concession === '1') ? 'Yes' : 'No';
 
         const row = [
             safe(p.camp_name),
@@ -299,7 +304,7 @@ function exportToCSV(data) {
             money(p.tender_cash),   // Export Cash
             money(p.tender_cheque), // Export Cheque
             money(p.other_amount),
-            safe(""), // Concession
+            safe(concession), // Concession
             safe(payDate),
             safe(""), // Site Fee Year
             p.headcount || 0
