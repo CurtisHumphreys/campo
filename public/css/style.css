@@ -23,8 +23,8 @@
 
 /* Dark Mode Overrides */
 :root.dark-mode {
-    --primary: #3b82f6;       /* Lighter blue for dark bg */
-    --primary-hover: #60a5fa;
+    --primary: #60a5fa;       /* Lighter blue for dark bg */
+    --primary-hover: #93c5fd;
     --secondary: #94a3b8;
     --background: #0f172a;    /* Slate-900 */
     --background-soft: #1e293b; /* Slate-800 */
@@ -114,11 +114,11 @@ body {
     transition: transform 0.3s ease, background-color 0.3s;
 }
 
-.brand {
+.brand-desktop {
     font-size: 1.5rem;
     font-weight: 700;
     color: var(--primary);
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -126,7 +126,7 @@ body {
     gap: 0.5rem;
 }
 
-.brand .version {
+.brand-desktop .version {
     font-size: 0.75rem;
     font-weight: 500;
     color: var(--text-muted);
@@ -140,6 +140,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    flex: 1; /* Push footer down */
 }
 
 .nav-links a {
@@ -164,30 +165,22 @@ body {
 }
 
 /* Highlight "Take Payments" button */
-.nav-links a#take-payments-btn {
+.nav-links a.nav-btn-green {
     background: var(--primary);
-    color: white;
-    box-shadow: var(--shadow-sm);
+    color: white; /* Always white text on primary button */
     justify-content: center;
     margin-bottom: 1rem;
 }
-
-.nav-links a#take-payments-btn:hover {
+.nav-links a.nav-btn-green:hover {
     background: var(--primary-hover);
-}
-
-.nav-links a.nav-btn-green { /* Alias for compatibility */
-    background: var(--primary);
     color: white;
-    justify-content: center;
-    margin-bottom: 1rem;
 }
-.nav-links a.nav-btn-green:hover { background: var(--primary-hover); }
 
 /* Typography */
 h1 { font-size: 1.875rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-main); letter-spacing: -0.025em; }
 h2 { font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem; color: var(--text-main); }
 h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-main); }
+h4 { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-main); }
 
 /* Cards & Containers */
 .card, .glass-card {
@@ -198,6 +191,12 @@ h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text
     padding: 1.5rem;
     margin-bottom: 1.5rem;
     color: var(--text-main);
+}
+
+/* Dashboard Specific Dark Mode Fixes */
+:root.dark-mode .card {
+    background-color: var(--surface);
+    border-color: var(--border);
 }
 
 /* Section Cards (Payments Page) */
@@ -218,24 +217,26 @@ h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text
 :root:not(.dark-mode) .sec-occupants { background: rgba(216, 180, 254, 0.1); border-color: rgba(216, 180, 254, 0.3); }
 :root:not(.dark-mode) .sec-payment { background: rgba(254, 202, 202, 0.1); border-color: rgba(254, 202, 202, 0.3); }
 
-/* Z-Index for Dropdowns */
-.sec-camp { z-index: 50; }
-.sec-dates { z-index: 40; }
-.sec-occupants { z-index: 30; }
-.sec-payment { z-index: 20; }
+/* Dark Mode Section Tints - darker/subtle */
+:root.dark-mode .sec-camp { background: rgba(59, 130, 246, 0.1); border-color: var(--border); }
+:root.dark-mode .sec-dates { background: rgba(16, 185, 129, 0.1); border-color: var(--border); }
+:root.dark-mode .sec-occupants { background: rgba(168, 85, 247, 0.1); border-color: var(--border); }
+:root.dark-mode .sec-payment { background: rgba(239, 68, 68, 0.1); border-color: var(--border); }
 
-.section-number {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 24px;
-    height: 24px;
-    background: var(--primary);
-    color: white;
-    border-radius: 50%;
-    font-size: 0.85rem;
-    margin-right: 0.5rem;
+/* Dashboard Summary Boxes - Dark Mode Overrides */
+/* These inline styles from JS need CSS counterparts for dark mode control */
+.dashboard-summary-box {
+    padding: 0.5rem;
+    border-radius: 8px;
+    background: #eff6ff; /* Light default */
 }
+.dashboard-summary-box h4 { color: #1e40af; }
+
+:root.dark-mode .dashboard-summary-box {
+    background: rgba(59, 130, 246, 0.15) !important; /* Force override inline styles via class if needed, or update JS */
+    border: 1px solid var(--border);
+}
+:root.dark-mode .dashboard-summary-box h4 { color: #93c5fd !important; }
 
 /* Grid Systems */
 .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
@@ -265,7 +266,7 @@ textarea {
     font-size: 0.95rem;
     border: 1px solid var(--border);
     border-radius: 0.5rem;
-    background-color: var(--surface);
+    background-color: var(--background); /* Use background instead of surface for contrast in inputs */
     color: var(--text-main);
     transition: border-color 0.15s, box-shadow 0.15s;
     font-family: inherit;
@@ -276,6 +277,16 @@ input:focus, select:focus, textarea:focus {
     border-color: var(--primary);
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
+
+/* Dark mode inputs specific */
+:root.dark-mode input, 
+:root.dark-mode select, 
+:root.dark-mode textarea {
+    background-color: var(--surface); /* Darker input background */
+    border-color: var(--border);
+    color: var(--text-main);
+}
+:root.dark-mode input::placeholder { color: var(--text-muted); }
 
 .flex-fill { flex: 1; }
 
@@ -291,31 +302,13 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 
 button.secondary { background-color: var(--surface); border-color: var(--border); color: var(--text-main); }
 button.secondary:hover { background-color: var(--background); }
+:root.dark-mode button.secondary:hover { background-color: rgba(255,255,255,0.05); }
+
 button.danger { background-color: #fee2e2; color: var(--danger); }
 button.danger:hover { background-color: #fecaca; }
-:root.dark-mode button.danger { background-color: #7f1d1d; color: #fca5a5; }
+:root.dark-mode button.danger { background-color: rgba(239, 68, 68, 0.2); color: #fca5a5; }
 
 button.small { padding: 0.35rem 0.75rem; font-size: 0.75rem; }
-
-/* Counters */
-.occupant-row { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; }
-.counter-btn { width: 36px; height: 36px; padding: 0; border-radius: 50%; font-size: 1.2rem; background: var(--background); color: var(--text-main); border: 1px solid var(--border); }
-.counter-btn:hover { background: var(--background-soft); }
-
-/* Search Box & Dropdowns */
-.search-box { position: relative; width: 100%; overflow: visible; }
-.dropdown-results {
-    position: absolute; top: calc(100% + 4px); left: 0; right: 0;
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 0.5rem; box-shadow: var(--shadow-lg);
-    max-height: 250px; overflow-y: auto; z-index: 2000;
-}
-.result-item {
-    padding: 0.75rem 1rem; cursor: pointer; font-size: 0.9rem;
-    border-bottom: 1px solid var(--border); color: var(--text-main);
-}
-.result-item:last-child { border-bottom: none; }
-.result-item:hover { background-color: var(--background-soft); }
 
 /* Tables */
 .data-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
@@ -329,7 +322,7 @@ button.small { padding: 0.35rem 0.75rem; font-size: 0.75rem; }
     color: var(--text-main);
 }
 .data-table tr:last-child td { border-bottom: none; }
-:root.dark-mode .data-table td, :root.dark-mode .data-table th { border-bottom-color: #334155; }
+:root.dark-mode .data-table th { background-color: rgba(255,255,255,0.03); }
 
 /* Badges */
 .badge { display: inline-block; padding: 0.25rem 0.6rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; text-transform: capitalize; }
@@ -338,16 +331,24 @@ button.small { padding: 0.35rem 0.75rem; font-size: 0.75rem; }
 .badge.draft, .badge.unknown, .badge.needs_review { background: #f1f5f9; color: #475569; }
 .badge.exempt { background: #e0f2fe; color: #0369a1; }
 
+/* Dark mode badges */
+:root.dark-mode .badge.paid, :root.dark-mode .badge.active { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+:root.dark-mode .badge.unpaid, :root.dark-mode .badge.overdue { background: rgba(239, 68, 68, 0.2); color: #fca5a5; }
+:root.dark-mode .badge.unknown { background: rgba(255, 255, 255, 0.1); color: #cbd5e1; }
+:root.dark-mode .badge.exempt { background: rgba(14, 165, 233, 0.2); color: #38bdf8; }
+
 /* Dashboard Specifics */
 .stat-row { display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid var(--border); color: var(--text-main); }
 .stat-row:last-child { border-bottom: none; }
 .chart-wrap { position: relative; height: 300px; width: 100%; margin-top: 1rem; }
 
-/* Payment Summaries */
-.rate-breakdown { background: var(--background-soft); padding: 1rem; border-radius: 0.5rem; border: 1px solid var(--border); margin-top: 1rem; color: var(--text-main); }
-.payment-summary { background: var(--background); padding: 1.5rem; border-radius: 0.5rem; margin-bottom: 1.5rem; color: var(--text-main); }
-.summary-row { display: flex; justify-content: space-between; padding: 0.25rem 0; color: var(--text-main); }
-.summary-row.balance { font-size: 1.25rem; font-weight: 700; color: var(--primary); border-top: 2px dashed var(--border); margin-top: 0.5rem; padding-top: 0.5rem; }
+/* Theme Switcher */
+.theme-switch {
+    display: flex; align-items: center; gap: 0.5rem; cursor: pointer;
+    padding: 0.5rem; border-radius: var(--radius);
+    color: var(--text-muted); font-size: 0.9rem; font-weight: 500;
+}
+.theme-switch:hover { background: var(--background); color: var(--primary); }
 
 /* Modals */
 .modal {
@@ -361,104 +362,6 @@ button.small { padding: 0.35rem 0.75rem; font-size: 0.75rem; }
     max-height: 90vh; overflow-y: auto; color: var(--text-main);
 }
 .hidden { display: none !important; }
-
-/* Site Grid */
-.filter-bar { display: flex; gap: 0.5rem; overflow-x: auto; padding-bottom: 0.5rem; margin-bottom: 1rem; }
-.filter-chip {
-    padding: 0.5rem 1rem; border-radius: 999px; background: var(--surface);
-    border: 1px solid var(--border); color: var(--text-muted); font-size: 0.9rem;
-    white-space: nowrap; cursor: pointer; font-weight: 600;
-}
-.filter-chip.active { background: var(--text-main); color: var(--surface); border-color: var(--text-main); }
-.filter-chip[data-status="Available"].active { background: var(--success); border-color: var(--success); color: white; }
-.filter-chip[data-status="Allocated"].active { background: var(--primary); border-color: var(--primary); color: white; }
-
-.site-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1rem; padding-bottom: 1rem; }
-.site-card {
-    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
-    padding: 1rem; display: flex; flex-direction: column; justify-content: space-between;
-    box-shadow: var(--shadow-sm); position: relative; overflow: hidden; color: var(--text-main);
-}
-.site-card.status-available { border-left: 4px solid var(--success); }
-.site-card.status-allocated { border-left: 4px solid var(--primary); }
-.site-card.status-inactive { border-left: 4px solid var(--text-muted); opacity: 0.7; }
-.site-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem; }
-.site-number { font-size: 1.5rem; font-weight: 800; color: var(--text-main); line-height: 1; }
-.site-type { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; }
-.site-occupant { font-size: 0.95rem; font-weight: 600; color: var(--primary); margin-top: 0.25rem; }
-.site-actions { display: flex; gap: 0.5rem; margin-top: auto; }
-.site-actions button { flex: 1; padding: 0.5rem; font-size: 0.85rem; border-radius: 8px; }
-.site-card.status-available .site-actions button { background-color: var(--success); }
-
-/* Map Module */
-.map-container {
-    position: relative; display: inline-block; vertical-align: top;
-    line-height: 0; background: #e2e8f0; border-radius: var(--radius);
-    overflow: hidden; min-width: 800px;
-}
-#map-wrapper { overflow: auto; width: 100%; -webkit-overflow-scrolling: touch; }
-#camp-map-img { display: block; width: 100%; height: auto; }
-#pins-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
-.map-pin {
-    position: absolute; width: 12px; height: 12px; background: var(--primary);
-    border: 2px solid white; border-radius: 50%; transform: translate(-50%, -50%);
-    cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.3); z-index: 10;
-    transition: transform 0.2s; pointer-events: auto;
-}
-.map-pin:hover { transform: translate(-50%, -50%) scale(1.5); z-index: 20; }
-.map-pin.status-available { background: var(--success); }
-.map-pin.status-allocated { background: var(--primary); }
-.map-pin.status-inactive { background: var(--secondary); }
-.map-pin.highlight { box-shadow: 0 0 0 4px rgba(255, 255, 0, 0.6); animation: pulse 1s infinite; z-index: 30; }
-.map-container.edit-active { cursor: crosshair; }
-.map-container.edit-active #camp-map-img { opacity: 0.8; }
-
-@keyframes pulse {
-    0% { transform: translate(-50%, -50%) scale(1); }
-    50% { transform: translate(-50%, -50%) scale(1.4); }
-    100% { transform: translate(-50%, -50%) scale(1); }
-}
-
-/* Mobile Bottom Nav */
-#mobile-nav {
-    display: none;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    height: 60px;
-    background: var(--surface);
-    border-top: 1px solid var(--border);
-    justify-content: space-around;
-    align-items: center;
-    z-index: 9999;
-    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-}
-
-.nav-icon {
-    background: transparent;
-    border: none;
-    font-size: 1.8rem;
-    color: var(--text-muted);
-    padding: 0.5rem 1rem;
-    cursor: pointer;
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: background-color 0.2s, color 0.2s;
-}
-
-/* Light Grey hover effect */
-.nav-icon:hover, .nav-icon:active {
-    color: var(--primary);
-    background-color: #f1f5f9; /* Light grey */
-}
-
-:root.dark-mode .nav-icon:hover, :root.dark-mode .nav-icon:active {
-    background-color: #334155; /* Darker grey for dark mode */
-}
 
 /* Mobile Sidebar Drawer */
 @media(max-width:900px){
@@ -497,10 +400,6 @@ button.small { padding: 0.35rem 0.75rem; font-size: 0.75rem; }
         background: rgba(0,0,0,0.5);
         z-index: 9998;
         backdrop-filter: blur(2px);
-    }
-
-    #mobile-nav {
-        display: flex;
     }
     
     #main-content {
