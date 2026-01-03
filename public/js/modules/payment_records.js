@@ -226,7 +226,7 @@ function renderTable(payments) {
             <td>${p.camp_year || '-'}</td> 
             <td>${p.first_name || '-'}</td>
             <td>${p.last_name || '-'}</td>
-            <td>${p.site_type || '-'}</td> <!-- Display Site Type -->
+            <td>${p.site_type || '-'}</td> 
             <td>${p.site_number || '-'}</td>
             <td>${arr}</td>
             <td>${dep}</td>
@@ -235,9 +235,9 @@ function renderTable(payments) {
             <td>$${parseFloat(p.camp_fee||0).toFixed(2)}</td>
             <td>$${parseFloat(p.site_fee||0).toFixed(2)}</td>
             <td><strong>$${parseFloat(p.total||0).toFixed(2)}</strong></td>
-            <td>$${parseFloat(p.tender_eftpos||0).toFixed(2)}</td> <!-- EFTPOS -->
-            <td>$${parseFloat(p.tender_cash||0).toFixed(2)}</td>   <!-- Cash -->
-            <td>$${parseFloat(p.tender_cheque||0).toFixed(2)}</td> <!-- Cheque -->
+            <td>$${parseFloat(p.tender_eftpos||0).toFixed(2)}</td>
+            <td>$${parseFloat(p.tender_cash||0).toFixed(2)}</td>
+            <td>$${parseFloat(p.tender_cheque||0).toFixed(2)}</td>
             <td>$${parseFloat(p.other_amount||0).toFixed(2)}</td>
             <td>-</td> <!-- Concession status -->
             <td>${new Date(p.payment_date).toLocaleDateString('en-AU')}</td>
