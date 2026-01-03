@@ -731,13 +731,16 @@ export async function render(container) {
         const tendered = cash + chq + eft;
         document.getElementById('total-tendered').textContent = `-$${tendered.toFixed(2)}`;
         
+        // Calculate due logic
+        // Use a small epsilon to handle floating point issues
         const due = total - prepaid - tendered;
-        
+        const isBalanced = Math.abs(due) < 0.01;
+
         const dueEl = document.getElementById('balance-due');
         dueEl.textContent = `$${Math.max(0, due).toFixed(2)}`;
         
         const submitBtn = document.getElementById('submit-payment');
-        if (Math.abs(due) < 0.01) {
+        if (isBalanced) {
             submitBtn.disabled = false;
             dueEl.style.color = 'var(--success)';
         } else {
@@ -838,6 +841,22 @@ export async function render(container) {
     // --- Submit ---
     document.getElementById('submit-payment').onclick = async () => {
         const btn = document.getElementById('submit-payment');
+        // Validate balance before allowing submit
+        const dueEl = document.getElementById('balance-due');
+        // Double check balance here to prevent race conditions or inspect element hacks
+        // Get raw values again
+        const total = parseFloat(container.dataset.total) || 0;
+        const prepaid = parseFloat(document.getElementById('prepaid-input').value)||0;
+        const cash = parseFloat(document.getElementById('pay-cash').value)||0;
+        const chq = parseFloat(document.getElementById('pay-cheque').value)||0;
+        const eft = parseFloat(document.getElementById('pay-eftpos').value)||0;
+        const due = total - prepaid - (cash + chq + eft);
+
+        if (Math.abs(due) >= 0.01) {
+            alert(`Cannot submit payment. Balance is not zero (Due: $${due.toFixed(2)}). Please allocate remaining amount to a tender type.`);
+            return;
+        }
+
         btn.disabled = true; btn.textContent = 'Saving...';
         try {
             const memId = document.getElementById('edit-member-id').value;
