@@ -35,30 +35,42 @@ class PaymentController {
             }
 
             // Normalize numeric inputs with safe defaults
-            // $campFee etc. calculated above for check
-            
             $headcount = isset($data['headcount']) ? $data['headcount'] : null;
             $notesIn = isset($data['notes']) ? trim($data['notes']) : '';
+            $siteType = isset($data['site_type']) ? $data['site_type'] : null; // Capture Site Type
 
             // Determine payment date (client provided or now)
             $clientDate = (isset($data['payment_date']) && !empty($data['payment_date'])) ? $data['payment_date'] : null;
             
-            // Stay dates (New)
+            // Stay dates
             $arrivalDate = (isset($data['arrival_date']) && !empty($data['arrival_date'])) ? $data['arrival_date'] : null;
             $departureDate = (isset($data['departure_date']) && !empty($data['departure_date'])) ? $data['departure_date'] : null;
+
+            // Calculate Tender Totals for Summary Columns
+            $tenderEftpos = 0.0;
+            $tenderCash = 0.0;
+            $tenderCheque = 0.0;
+
+            if (isset($data['tenders']) && is_array($data['tenders'])) {
+                foreach ($data['tenders'] as $t) {
+                    $amt = (float)($t['amount'] ?? 0);
+                    $method = strtoupper($t['method'] ?? '');
+                    if ($method === 'EFTPOS') $tenderEftpos += $amt;
+                    elseif ($method === 'CASH') $tenderCash += $amt;
+                    elseif ($method === 'CHEQUE') $tenderCheque += $amt;
+                }
+            }
 
             // Compute new site fee expiry and audit note if a site contribution is being made
             $newPaidUntilISO = null;
             $auditNote = '';
             if ($siteFee > 0) {
-                // Determine base date using Adelaide timezone
                 $tz = new \DateTimeZone('Australia/Adelaide');
                 $today = new \DateTime('now', $tz);
-                // Fetch current site fee account to get existing expiry
                 $stmtCheck = $db->prepare("SELECT id, paid_until FROM site_fee_accounts WHERE member_id = ?");
                 $stmtCheck->execute([$data['member_id']]);
                 $accountRow = $stmtCheck->fetch(PDO::FETCH_ASSOC);
-                // Set base date as later of today or existing paid_until
+                
                 $baseDate = clone $today;
                 if ($accountRow && !empty($accountRow['paid_until'])) {
                     $existing = new \DateTime($accountRow['paid_until'], $tz);
@@ -66,15 +78,12 @@ class PaymentController {
                         $baseDate = $existing;
                     }
                 }
-                // Always add one year for each site contribution purchase
                 $yearsToAdd = 1;
                 $newDate = clone $baseDate;
-                // Add years safely; using modify to handle leap years
                 $newDate->modify('+' . $yearsToAdd . ' year');
                 $newPaidUntilISO = $newDate->format('Y-m-d');
                 $newPaidUntilDisplay = $newDate->format('d/m/Y');
 
-                // Format audit note; include currency symbol and amount
                 $auditNote = sprintf('Site contribution: +%d year (%s%.2f). New paid until: %s',
                     $yearsToAdd,
                     '$',
@@ -83,26 +92,23 @@ class PaymentController {
                 );
             }
 
-            // Combine user notes and audit note
             $finalNotes = $notesIn;
             if ($auditNote !== '') {
                 $finalNotes .= ($finalNotes !== '' ? "\n" : '') . $auditNote;
             }
 
-            // 1. Create Payment Record (Updated with arrival/departure)
+            // 1. Create Payment Record with Tenders and Site Type
             $stmt = $db->prepare(
                 "INSERT INTO payments (
                     member_id, camp_id, site_id, payment_date,
                     camp_fee, site_fee, prepaid_applied, other_amount,
-                    total, headcount, notes, arrival_date, departure_date
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+                    total, headcount, notes, arrival_date, departure_date,
+                    site_type, tender_eftpos, tender_cash, tender_cheque
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
             );
             
-            // Try to find site_id from allocation if not provided
-            // This ensures we link the payment to a site if the member is allocated
             $siteIdToStore = $data['site_id'] ?? null;
             if (!$siteIdToStore) {
-                // Look up current allocation
                  $stmtAlloc = $db->prepare("SELECT site_id FROM site_allocations WHERE member_id = ? AND is_current = 1 LIMIT 1");
                  $stmtAlloc->execute([$data['member_id']]);
                  $alloc = $stmtAlloc->fetch(PDO::FETCH_ASSOC);
@@ -120,16 +126,20 @@ class PaymentController {
                 $siteFee,
                 $prepaidApplied,
                 $otherAmount,
-                $totalCheck, // Use calculated total
+                $totalCheck,
                 $headcount,
                 $finalNotes,
                 $arrivalDate,
-                $departureDate
+                $departureDate,
+                $siteType,        // New
+                $tenderEftpos,    // New
+                $tenderCash,      // New
+                $tenderCheque     // New
             ]);
 
             $paymentId = $db->lastInsertId();
 
-            // 2. Record Tenders
+            // 2. Record Tenders (Detailed)
             if (isset($data['tenders']) && is_array($data['tenders'])) {
                 $stmtTender = $db->prepare("INSERT INTO payment_tenders (payment_id, method, amount, reference) VALUES (?, ?, ?, ?)");
                 foreach ($data['tenders'] as $tender) {
@@ -144,9 +154,8 @@ class PaymentController {
                 }
             }
 
-            // 3. Update Site Fee Account if a site contribution was included
+            // 3. Update Site Fee Account
             if ($siteFee > 0 && $newPaidUntilISO !== null) {
-                // Check if site fee account already exists
                 if ($accountRow) {
                     $stmtUpdate = $db->prepare("UPDATE site_fee_accounts SET paid_until = ?, status = 'Paid' WHERE id = ?");
                     $stmtUpdate->execute([$newPaidUntilISO, $accountRow['id']]);
@@ -154,17 +163,15 @@ class PaymentController {
                     $stmtCreate = $db->prepare("INSERT INTO site_fee_accounts (member_id, paid_until, status) VALUES (?, ?, 'Paid')");
                     $stmtCreate->execute([$data['member_id'], $newPaidUntilISO]);
                 }
-                // Update member site_fee_status to Paid
                 $stmtMem = $db->prepare("UPDATE members SET site_fee_status = 'Paid' WHERE id = ?");
                 $stmtMem->execute([$data['member_id']]);
             }
 
-            // 4. Update Prepayments if used
+            // 4. Update Prepayments
             if ($prepaidApplied > 0 && isset($data['prepayment_ids']) && is_array($data['prepayment_ids'])) {
                 $remaining = floatval($prepaidApplied);
                 foreach ($data['prepayment_ids'] as $pid) {
                     if ($remaining <= 0) break;
-                    // Fetch current prepayment amount
                     $stmtPre = $db->prepare("SELECT id, amount FROM prepayments WHERE id = ? AND (status IS NULL OR status NOT IN ('Applied'))");
                     $stmtPre->execute([$pid]);
                     $pre = $stmtPre->fetch(PDO::FETCH_ASSOC);
@@ -172,14 +179,12 @@ class PaymentController {
                     $preAmount = floatval($pre['amount']);
                     if ($preAmount <= 0) continue;
                     if ($preAmount > $remaining) {
-                        // Partial usage: deduct remainder from this prepay and mark partial
                         $newAmount = $preAmount - $remaining;
                         $stmtUp = $db->prepare("UPDATE prepayments SET amount = ?, status = 'Partial' WHERE id = ?");
                         $stmtUp->execute([$newAmount, $pid]);
                         $remaining = 0;
                         break;
                     } else {
-                        // Full usage: set amount to zero and mark applied
                         $remaining -= $preAmount;
                         $stmtUp = $db->prepare("UPDATE prepayments SET amount = 0, status = 'Applied' WHERE id = ?");
                         $stmtUp->execute([$pid]);
@@ -193,12 +198,13 @@ class PaymentController {
         } catch (Exception $e) {
             $db->rollBack();
             http_response_code(500);
-            // Always return JSON even on error
             echo json_encode(['success' => false, 'message' => $e->getMessage()]);
         }
     }
+
     public function index() {
         $db = Database::connect();
+        // Updated to select tender columns
         $sql = "
             SELECT 
                 p.*, 
@@ -261,9 +267,6 @@ class PaymentController {
         }
     }
 
-    /**
-     * Legacy summary for reconciliation totals (cash/eftpos/etc)
-     */
     public function summary() {
         header('Content-Type: application/json');
         $db = Database::connect();
@@ -271,7 +274,6 @@ class PaymentController {
         $start = $_GET['start'] ?? null;
         $end   = $_GET['end'] ?? null;
         
-        // Default to today if no date provided
         if ($start && $end) {
             $startDate = $start . ' 00:00:00';
             $endDate   = $end   . ' 23:59:59';
@@ -311,17 +313,10 @@ class PaymentController {
         ]);
     }
 
-    /**
-     * Detailed dashboard stats: Headcount over time & In-Camp-Now list.
-     * Calculated based on payments' arrival/departure dates.
-     * Updated to include ALL payments regardless of site allocation.
-     */
     public function dashboardStats() {
         header('Content-Type: application/json');
         $db = Database::connect();
         
-        // 1. Determine Date Range (Active Camp)
-        // If camp_id passed, use it. Else find first active camp.
         $campId = $_GET['camp_id'] ?? null;
         if (!$campId) {
             $camp = $db->query("SELECT id, start_date, end_date, name FROM camps WHERE status = 'Active' ORDER BY start_date DESC LIMIT 1")->fetch();
@@ -339,11 +334,6 @@ class PaymentController {
         $campStart = $camp['start_date'];
         $campEnd = $camp['end_date'];
         
-        // 2. Fetch Payments with Dates
-        // Updated Query: LEFT JOIN sites to ensure unallocated payments are included.
-        // We use the site_id stored in payments (which store() now tries to populate) 
-        // OR fallback to site allocations if needed, but for simplicity relying on payments.
-        
         $sql = "SELECT p.headcount, p.arrival_date, p.departure_date, 
                        m.first_name, m.last_name, s.site_number
                 FROM payments p
@@ -359,13 +349,11 @@ class PaymentController {
         $stmt->execute([$camp['id']]);
         $payments = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        // 3. Process Data
-        $dailyStats = []; // 'YYYY-MM-DD' => ['headcount' => 0, 'site_ids' => []]
+        $dailyStats = []; 
         $currentGuests = [];
         $tz = new \DateTimeZone('Australia/Adelaide');
         $todayStr = (new DateTime('now', $tz))->format('Y-m-d');
 
-        // Init array for every day of camp
         try {
             $period = new DatePeriod(
                  new DateTime($campStart),
@@ -378,12 +366,10 @@ class PaymentController {
                 $dailyStats[$d] = [
                     'date' => $d,
                     'headcount' => 0,
-                    'site_ids' => [] // To count unique occupied sites
+                    'site_ids' => [] 
                 ];
             }
-        } catch (Exception $e) {
-            // Handle invalid dates in camp definition
-        }
+        } catch (Exception $e) { }
 
         foreach ($payments as $p) {
             $arr = $p['arrival_date'];
@@ -391,8 +377,6 @@ class PaymentController {
             $hc = (int)$p['headcount'];
             $site = $p['site_number'] ?? 'Unassigned';
 
-            // Check if currently in camp (today is between arr (inclusive) and dep (exclusive))
-            // Using >= arr and < dep logic (checkout day doesn't count as "in camp")
             if ($todayStr >= $arr && $todayStr < $dep) {
                 $currentGuests[] = [
                     'name' => $p['first_name'] . ' ' . $p['last_name'],
@@ -402,19 +386,15 @@ class PaymentController {
                 ];
             }
 
-            // Fill daily stats
             try {
                 $stayStart = new DateTime($arr);
                 $stayEnd = new DateTime($dep);
                 
-                // Limit loop to prevent infinite loops on bad data
                 $daysProcessed = 0;
                 while ($stayStart < $stayEnd && $daysProcessed < 100) {
                     $ymd = $stayStart->format('Y-m-d');
                     if (isset($dailyStats[$ymd])) {
                         $dailyStats[$ymd]['headcount'] += $hc;
-                        // Track unique sites to calculate average density
-                        // Only count actual sites, not unassigned
                         if ($site !== 'Unassigned' && !in_array($site, $dailyStats[$ymd]['site_ids'])) {
                             $dailyStats[$ymd]['site_ids'][] = $site;
                         }
@@ -425,7 +405,6 @@ class PaymentController {
             } catch (Exception $e) { continue; }
         }
 
-        // Prepare Chart Data
         $labels = [];
         $dataHeadcount = [];
         $dataAvg = [];
@@ -454,11 +433,9 @@ class PaymentController {
         $db = Database::connect();
         $db->beginTransaction();
         try {
-            // Delete tenders
             $stmt = $db->prepare("DELETE FROM payment_tenders WHERE payment_id = ?");
             $stmt->execute([$id]);
             
-            // Delete payment
             $stmt = $db->prepare("DELETE FROM payments WHERE id = ?");
             $stmt->execute([$id]);
             
