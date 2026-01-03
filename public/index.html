@@ -27,7 +27,14 @@
 
         <nav id="sidebar" class="hidden">
             <div class="brand-desktop">
-                Campo <span class="version">v1.116</span>
+                <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+                    <span>Campo <span class="version">v1.117</span></span>
+                    <!-- Dark Mode Toggle moved here for desktop -->
+                    <label class="theme-switch" title="Toggle Dark Mode">
+                        <input type="checkbox" id="theme-toggle"> 
+                        <span style="font-size:1.2rem;">🌙</span>
+                    </label>
+                </div>
             </div>
             
             <ul class="nav-links">
@@ -43,13 +50,6 @@
                 <li><a href="/campo/import" data-link class="admin-only">Import Legacy</a></li>
                 <li><a href="#" id="logout-btn">Logout</a></li>
             </ul>
-            
-            <div class="sidebar-footer">
-                <label class="theme-switch">
-                    <input type="checkbox" id="theme-toggle"> 
-                    <span>Dark Mode</span>
-                </label>
-            </div>
         </nav>
         
         <main id="main-content">
@@ -64,6 +64,7 @@
         const toggle = document.getElementById('theme-toggle');
         const root = document.documentElement; 
         
+        // Initial check
         if (localStorage.getItem('theme') === 'dark') {
             root.classList.add('dark-mode');
             if(toggle) toggle.checked = true;
@@ -78,6 +79,8 @@
                     root.classList.remove('dark-mode');
                     localStorage.setItem('theme', 'light');
                 }
+                // Trigger resize to update charts colors if on dashboard
+                window.dispatchEvent(new Event('resize'));
             });
         }
         
