@@ -38,18 +38,11 @@ export function setAuthState(state) {
     }
 }
 
-function isPublicRoute(path) {
-    return path === '/campo/map' || path.endsWith('/map');
-}
-
 function isLoginRoute(path) {
     return path === '/campo/login';
 }
 
 function enforceAuthForPath(path) {
-    // Public route (map) is always allowed
-    if (isPublicRoute(path)) return path;
-
     // If not authed, only login route is allowed
     if (!isAuthenticated && !isLoginRoute(path)) {
         return '/campo/login';
@@ -64,18 +57,10 @@ function enforceAuthForPath(path) {
 }
 
 async function init() {
-    // ✅ Always bind navigation handlers up-front (fixes hamburger not working after login redirect)
+    // Always bind navigation handlers up-front
     setupNavigation();
 
     let path = window.location.pathname.replace(/\/$/, "");
-
-    if (isPublicRoute(path)) {
-        document.getElementById('sidebar').classList.add('hidden');
-        document.getElementById('mobile-header').style.display = 'none';
-        document.body.classList.add('public-view');
-        handleRoute(path);
-        return;
-    }
 
     // Determine auth state once on load
     try {
@@ -93,11 +78,20 @@ async function init() {
         path = enforced;
     }
 
-    // Login route should not show the mobile header
+    // Login route should not show nav
     if (isLoginRoute(path)) {
         const mh = document.getElementById('mobile-header');
         if (mh) mh.style.display = 'none';
-        document.getElementById('sidebar').classList.add('hidden');
+        const sb = document.getElementById('sidebar');
+        if (sb) sb.classList.add('hidden');
+    } else {
+        // If authed, show nav. This ensures /campo/map keeps the top menu available.
+        if (isAuthenticated) {
+            const sb = document.getElementById('sidebar');
+            if (sb) sb.classList.remove('hidden');
+            const mh = document.getElementById('mobile-header');
+            if (mh && window.innerWidth <= 900) mh.style.display = 'flex';
+        }
     }
 
     handleRoute(path);
@@ -125,7 +119,7 @@ function setupNavigation() {
         });
     }
 
-    // New Mobile Menu Button Logic
+    // Mobile Menu Button Logic
     const mobileMenuBtn = document.getElementById('mobile-menu-btn');
     if (mobileMenuBtn) {
         mobileMenuBtn.addEventListener('click', (e) => {
@@ -135,7 +129,6 @@ function setupNavigation() {
 
             const sidebar = document.getElementById('sidebar');
             if (sidebar && sidebar.classList.contains('hidden')) {
-                // Ensure sidebar is visible before sliding it in
                 sidebar.classList.remove('hidden');
             }
             document.body.classList.toggle('mobile-menu-open');
@@ -149,7 +142,7 @@ function setupNavigation() {
             const header = document.getElementById('mobile-header');
 
             // If click is NOT inside sidebar and NOT inside header, close it
-            if (!sidebar.contains(e.target) && !header.contains(e.target)) {
+            if (sidebar && header && !sidebar.contains(e.target) && !header.contains(e.target)) {
                 document.body.classList.remove('mobile-menu-open');
             }
         }
@@ -166,22 +159,17 @@ export function navigateTo(url) {
         history.replaceState(null, null, path);
     }
 
-    if (isPublicRoute(path)) {
-        document.getElementById('sidebar').classList.add('hidden');
-        document.getElementById('mobile-header').style.display = 'none';
-        document.body.classList.add('public-view');
+    // Login route should not show nav
+    if (isLoginRoute(path) || !isAuthenticated) {
+        const sb = document.getElementById('sidebar');
+        if (sb) sb.classList.add('hidden');
+        const mh = document.getElementById('mobile-header');
+        if (mh) mh.style.display = 'none';
     } else {
-        // Login route should not show nav
-        if (isLoginRoute(path) || !isAuthenticated) {
-            document.getElementById('sidebar').classList.add('hidden');
-            document.getElementById('mobile-header').style.display = 'none';
-        } else {
-            document.getElementById('sidebar').classList.remove('hidden');
-            if (window.innerWidth <= 900) {
-                document.getElementById('mobile-header').style.display = 'flex';
-            }
-        }
-        document.body.classList.remove('public-view');
+        const sb = document.getElementById('sidebar');
+        if (sb) sb.classList.remove('hidden');
+        const mh = document.getElementById('mobile-header');
+        if (mh && window.innerWidth <= 900) mh.style.display = 'flex';
     }
 
     document.body.classList.remove('mobile-menu-open');
@@ -194,7 +182,7 @@ async function handleRoute(path) {
     if (path === '/campo') path = '/campo/dashboard';
 
     // Safety net: never render protected pages if not authed
-    if (!isAuthenticated && !isLoginRoute(path) && !isPublicRoute(path)) {
+    if (!isAuthenticated && !isLoginRoute(path)) {
         history.replaceState(null, null, '/campo/login');
         path = '/campo/login';
     }
