@@ -3,6 +3,8 @@
 require_once __DIR__ . '/../Database.php';
 
 class PaymentController {
+    // ... (store, index, update, delete, dashboardStats methods remain unchanged) ...
+
     public function store() {
         $data = json_decode(file_get_contents('php://input'), true);
         $db = Database::connect();
@@ -292,10 +294,11 @@ class PaymentController {
 
         // Fetch Individual Transaction Rows to apply "Cash First" logic
         // Include payment_date to grouping
+        // ADDED prepaid_applied to query
         $stmt = $db->prepare(
             "SELECT 
                 tender_eftpos, tender_cash, tender_cheque,
-                camp_fee, site_fee, other_amount, total, id, payment_date
+                camp_fee, site_fee, other_amount, prepaid_applied, total, id, payment_date
             FROM payments
             WHERE payment_date BETWEEN ? AND ?"
         );
@@ -308,6 +311,7 @@ class PaymentController {
             'eftpos' => 0.0,
             'cash' => 0.0,
             'cheque' => 0.0,
+            'prepaid' => 0.0, // Added
             'count' => count($rows)
         ];
         
@@ -315,14 +319,16 @@ class PaymentController {
             'total' => 0.0,
             'eftpos' => 0.0,
             'cash' => 0.0,
-            'cheque' => 0.0
+            'cheque' => 0.0,
+            'prepaid' => 0.0 // Added
         ];
 
         $site = [
             'total' => 0.0,
             'eftpos' => 0.0,
             'cash' => 0.0,
-            'cheque' => 0.0
+            'cheque' => 0.0,
+            'prepaid' => 0.0 // Added
         ];
         
         $daily = [];
@@ -332,31 +338,37 @@ class PaymentController {
             $date = substr($row['payment_date'], 0, 10);
             if (!isset($daily[$date])) {
                 $daily[$date] = [
-                    'total' => ['revenue'=>0,'eftpos'=>0,'cash'=>0,'cheque'=>0],
-                    'camp' => ['total'=>0,'eftpos'=>0,'cash'=>0,'cheque'=>0],
-                    'site' => ['total'=>0,'eftpos'=>0,'cash'=>0,'cheque'=>0]
+                    'total' => ['revenue'=>0,'eftpos'=>0,'cash'=>0,'cheque'=>0,'prepaid'=>0],
+                    'camp' => ['total'=>0,'eftpos'=>0,'cash'=>0,'cheque'=>0,'prepaid'=>0],
+                    'site' => ['total'=>0,'eftpos'=>0,'cash'=>0,'cheque'=>0,'prepaid'=>0]
                 ];
             }
 
             $tCash = floatval($row['tender_cash']);
             $tEft = floatval($row['tender_eftpos']);
             $tChq = floatval($row['tender_cheque']);
+            $tPre = floatval($row['prepaid_applied']); // New
             
             $cFee = floatval($row['camp_fee']);
             $sFee = floatval($row['site_fee']);
-            $totalRow = floatval($row['total']);
+            $totalRow = floatval($row['total']); // This usually includes prepaid portion if logic is Total = (Fees) - Prepaid + Tender. Wait, usually logic is Total Bill. 
+            // In store(), Total is saved as calculated amount.
+            // But for reconciliation "Total Taken", we usually mean "Value of transactions".
+            // If row['total'] is the bill amount, that works.
             
             // Global totals
             $totals['revenue'] += $totalRow;
             $totals['eftpos'] += $tEft;
             $totals['cash'] += $tCash;
             $totals['cheque'] += $tChq;
+            $totals['prepaid'] += $tPre;
 
             // Daily Total
             $daily[$date]['total']['revenue'] += $totalRow;
             $daily[$date]['total']['eftpos'] += $tEft;
             $daily[$date]['total']['cash'] += $tCash;
             $daily[$date]['total']['cheque'] += $tChq;
+            $daily[$date]['total']['prepaid'] += $tPre;
 
             // Category Totals
             $camp['total'] += $cFee;
@@ -365,74 +377,63 @@ class PaymentController {
             $daily[$date]['camp']['total'] += $cFee;
             $daily[$date]['site']['total'] += $sFee;
 
-            // --- ALLOCATION LOGIC (Cash First to Camp) ---
-            // We use temp variables so we don't modify the loop source for next steps if needed, 
-            // but here we just need to distribute the tenders.
+            // --- ALLOCATION LOGIC ---
+            // Priority: 1. Prepaid, 2. Cash, 3. Other
+            // But user requested "Cash always allocated to Camp Fees".
+            // Let's assume Prepaid behaves like Cash for this purpose? Or applies proportionally?
+            // To prevent confusion, let's treat Prepaid as its own "Tender" that absorbs fees first, then Cash.
+            // Logic: Prepaid -> Cash -> EFTPOS -> Cheque
             
-            $tempCash = $tCash;
-            $tempEft = $tEft;
-            $tempChq = $tChq;
             $tempCFee = $cFee;
             $tempSFee = $sFee;
-
-            // 1. Allocate Cash to Camp
-            $cashToCamp = 0;
-            if ($tempCFee > 0) {
-                $cashToCamp = min($tempCFee, $tempCash);
-                $camp['cash'] += $cashToCamp;
-                $daily[$date]['camp']['cash'] += $cashToCamp;
-                
-                $tempCash -= $cashToCamp;
-                $tempCFee -= $cashToCamp;
-            }
-
-            // 2. Allocate Remaining Cash to Site
-            $cashToSite = 0;
-            if ($tempSFee > 0 && $tempCash > 0) {
-                $cashToSite = min($tempSFee, $tempCash);
-                $site['cash'] += $cashToSite;
-                $daily[$date]['site']['cash'] += $cashToSite;
-
-                $tempCash -= $cashToSite;
-                $tempSFee -= $cashToSite;
-            }
             
-            // 3. Allocate Other Tenders (Waterfall: Camp then Site)
-            // Camp Remainder
-            if ($tempCFee > 0) {
-                // Use EFTPOS first
-                $eftToCamp = min($tempCFee, $tempEft);
-                $camp['eftpos'] += $eftToCamp;
-                $daily[$date]['camp']['eftpos'] += $eftToCamp;
-                $tempEft -= $eftToCamp;
-                $tempCFee -= $eftToCamp;
-            }
-            if ($tempCFee > 0) {
-                // Use Cheque next
-                $chqToCamp = min($tempCFee, $tempChq);
-                $camp['cheque'] += $chqToCamp;
-                $daily[$date]['camp']['cheque'] += $chqToCamp;
-                $tempChq -= $chqToCamp;
-                $tempCFee -= $chqToCamp;
-            }
+            // 1. Allocate Prepaid (To Camp then Site)
+            $preToCamp = min($tempCFee, $tPre);
+            $camp['prepaid'] += $preToCamp;
+            $daily[$date]['camp']['prepaid'] += $preToCamp;
+            $tempCFee -= $preToCamp;
+            $tPre -= $preToCamp; // Remaining Prepaid
 
-            // Site Remainder
-            if ($tempSFee > 0) {
-                 // Use Remaining EFTPOS
-                $eftToSite = min($tempSFee, $tempEft);
-                $site['eftpos'] += $eftToSite;
-                $daily[$date]['site']['eftpos'] += $eftToSite;
-                $tempEft -= $eftToSite;
-                $tempSFee -= $eftToSite;
-            }
-            if ($tempSFee > 0) {
-                 // Use Remaining Cheque
-                $chqToSite = min($tempSFee, $tempChq);
-                $site['cheque'] += $chqToSite;
-                $daily[$date]['site']['cheque'] += $chqToSite;
-                $tempChq -= $chqToSite;
-                $tempSFee -= $chqToSite;
-            }
+            $preToSite = min($tempSFee, $tPre);
+            $site['prepaid'] += $preToSite;
+            $daily[$date]['site']['prepaid'] += $preToSite;
+            $tempSFee -= $preToSite;
+            
+            // 2. Allocate Cash (To Camp then Site - per user request)
+            $cashToCamp = min($tempCFee, $tCash);
+            $camp['cash'] += $cashToCamp;
+            $daily[$date]['camp']['cash'] += $cashToCamp;
+            $tempCFee -= $cashToCamp;
+            $tCash -= $cashToCamp;
+
+            $cashToSite = min($tempSFee, $tCash);
+            $site['cash'] += $cashToSite;
+            $daily[$date]['site']['cash'] += $cashToSite;
+            $tempSFee -= $cashToSite;
+            
+            // 3. Allocate EFTPOS (Camp then Site)
+            $eftToCamp = min($tempCFee, $tEft);
+            $camp['eftpos'] += $eftToCamp;
+            $daily[$date]['camp']['eftpos'] += $eftToCamp;
+            $tempCFee -= $eftToCamp;
+            $tEft -= $eftToCamp;
+
+            $eftToSite = min($tempSFee, $tEft);
+            $site['eftpos'] += $eftToSite;
+            $daily[$date]['site']['eftpos'] += $eftToSite;
+            $tempSFee -= $eftToSite;
+            
+            // 4. Allocate Cheque (Camp then Site)
+            $chqToCamp = min($tempCFee, $tChq);
+            $camp['cheque'] += $chqToCamp;
+            $daily[$date]['camp']['cheque'] += $chqToCamp;
+            $tempCFee -= $chqToCamp;
+            $tChq -= $chqToCamp;
+
+            $chqToSite = min($tempSFee, $tChq);
+            $site['cheque'] += $chqToSite;
+            $daily[$date]['site']['cheque'] += $chqToSite;
+            $tempSFee -= $chqToSite;
         }
         
         ksort($daily);
@@ -466,7 +467,6 @@ class PaymentController {
         $campStart = $camp['start_date'];
         $campEnd = $camp['end_date'];
         
-        // 1. Headcount Data
         $sql = "SELECT p.headcount, p.arrival_date, p.departure_date, 
                        m.first_name, m.last_name, s.site_number
                 FROM payments p
