@@ -36,14 +36,44 @@ export async function render(container) {
                     <input type="date" id="end-date" class="small-input">
                 </div>
 
-                <div class="stat-row"><span>Total Taken:</span><strong id="total-taken">$0.00</strong></div>
-                <div class="stat-row"><span>EFTPOS:</span><span id="total-eftpos">$0.00</span></div>
-                <div class="stat-row"><span>Cash:</span><span id="total-cash">$0.00</span></div>
-                <div class="stat-row"><span>Cheque:</span><span id="total-cheque">$0.00</span></div>
-                <hr style="margin: 0.5rem 0; border:0; border-top:1px solid #eee;">
-                <div class="stat-row"><span>Site Contribution:</span><span id="site-contribution">$0.00</span></div>
-                <div class="stat-row"><span>Camp Fees:</span><span id="camp-fee">$0.00</span></div>
-                <div class="stat-row"><span>Transactions:</span><span id="payment-count">0</span></div>
+                <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:1rem; text-align:center;">
+                    <!-- Overall Total -->
+                    <div style="padding:0.5rem; background:#eff6ff; border-radius:8px;">
+                        <h4 style="margin:0 0 0.5rem 0; font-size:0.9rem; color:#1e40af;">Total Taken</h4>
+                        <strong id="total-revenue" style="display:block; font-size:1.2rem; margin-bottom:0.5rem;">$0.00</strong>
+                        <div style="font-size:0.75rem; text-align:left;">
+                            <div>EFTPOS: <span id="total-eftpos">$0.00</span></div>
+                            <div>Cash: <span id="total-cash">$0.00</span></div>
+                            <div>Cheque: <span id="total-cheque">$0.00</span></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Camp Fees -->
+                    <div style="padding:0.5rem; background:#ecfdf5; border-radius:8px;">
+                        <h4 style="margin:0 0 0.5rem 0; font-size:0.9rem; color:#065f46;">Camp Fees</h4>
+                        <strong id="camp-revenue" style="display:block; font-size:1.2rem; margin-bottom:0.5rem;">$0.00</strong>
+                        <div style="font-size:0.75rem; text-align:left;">
+                            <div>EFTPOS: <span id="camp-eftpos">$0.00</span></div>
+                            <div>Cash: <span id="camp-cash">$0.00</span></div>
+                            <div>Cheque: <span id="camp-cheque">$0.00</span></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Site Fees -->
+                    <div style="padding:0.5rem; background:#fff7ed; border-radius:8px;">
+                        <h4 style="margin:0 0 0.5rem 0; font-size:0.9rem; color:#9a3412;">Site Fees</h4>
+                        <strong id="site-revenue" style="display:block; font-size:1.2rem; margin-bottom:0.5rem;">$0.00</strong>
+                        <div style="font-size:0.75rem; text-align:left;">
+                            <div>EFTPOS: <span id="site-eftpos">$0.00</span></div>
+                            <div>Cash: <span id="site-cash">$0.00</span></div>
+                            <div>Cheque: <span id="site-cheque">$0.00</span></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="text-align:right; margin-top:1rem; font-size:0.8rem; color:#64748b;">
+                    Transactions: <span id="payment-count">0</span>
+                </div>
             </div>
 
             <!-- Right Column: Current Status -->
@@ -137,15 +167,32 @@ export async function render(container) {
         }
         
         // Visual loading state
-        document.getElementById('total-taken').textContent = '...';
+        document.getElementById('total-revenue').textContent = '...';
         
         try {
-            const summary = await API.get(`/payments/summary${params}`); 
-            updateFinancialStats(summary);
+            const data = await API.get(`/payments/summary${params}`); 
+            
+            // Total Column
+            updateSection('total', data.total);
+            // Camp Fees Column
+            updateSection('camp', data.camp_fees);
+            // Site Fees Column
+            updateSection('site', data.site_fees);
+
+            document.getElementById('payment-count').textContent = data.total.count || 0;
+
         } catch (e) { 
             console.error('Financial fetch failed', e);
-            document.getElementById('total-taken').textContent = '-';
+            document.getElementById('total-revenue').textContent = '-';
         }
+    }
+
+    function updateSection(prefix, data) {
+        // data contains total, eftpos, cash, cheque
+        document.getElementById(`${prefix}-revenue`).textContent = formatMoney(data.total || data.revenue); // Total key varies
+        document.getElementById(`${prefix}-eftpos`).textContent = formatMoney(data.eftpos);
+        document.getElementById(`${prefix}-cash`).textContent = formatMoney(data.cash);
+        document.getElementById(`${prefix}-cheque`).textContent = formatMoney(data.cheque);
     }
 
     async function fetchAndRender(campId) {
@@ -175,16 +222,6 @@ export async function render(container) {
     function formatMoney(amount) {
         const num = parseFloat(amount || 0);
         return '$' + num.toFixed(2);
-    }
-
-    function updateFinancialStats(data) {
-        document.getElementById('total-taken').textContent = formatMoney(data.total_revenue);
-        document.getElementById('total-eftpos').textContent = formatMoney(data.eftpos);
-        document.getElementById('total-cash').textContent = formatMoney(data.cash);
-        document.getElementById('total-cheque').textContent = formatMoney(data.cheque);
-        document.getElementById('site-contribution').textContent = formatMoney(data.site_contribution_total);
-        document.getElementById('camp-fee').textContent = formatMoney(data.camp_fee_total);
-        document.getElementById('payment-count').textContent = data.payment_count || 0;
     }
 
     function renderInCampList(guests) {
