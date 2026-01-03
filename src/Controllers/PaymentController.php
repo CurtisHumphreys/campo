@@ -3,8 +3,6 @@
 require_once __DIR__ . '/../Database.php';
 
 class PaymentController {
-    // ... (store, index, update, delete, dashboardStats methods remain unchanged) ...
-
     public function store() {
         $data = json_decode(file_get_contents('php://input'), true);
         $db = Database::connect();
@@ -293,10 +291,11 @@ class PaymentController {
         }
 
         // Fetch Individual Transaction Rows to apply "Cash First" logic
+        // Include payment_date to grouping
         $stmt = $db->prepare(
             "SELECT 
                 tender_eftpos, tender_cash, tender_cheque,
-                camp_fee, site_fee, other_amount, total, id
+                camp_fee, site_fee, other_amount, total, id, payment_date
             FROM payments
             WHERE payment_date BETWEEN ? AND ?"
         );
@@ -325,90 +324,124 @@ class PaymentController {
             'cash' => 0.0,
             'cheque' => 0.0
         ];
+        
+        $daily = [];
 
         // Process line by line
         foreach ($rows as $row) {
+            $date = substr($row['payment_date'], 0, 10);
+            if (!isset($daily[$date])) {
+                $daily[$date] = [
+                    'total' => ['revenue'=>0,'eftpos'=>0,'cash'=>0,'cheque'=>0],
+                    'camp' => ['total'=>0,'eftpos'=>0,'cash'=>0,'cheque'=>0],
+                    'site' => ['total'=>0,'eftpos'=>0,'cash'=>0,'cheque'=>0]
+                ];
+            }
+
             $tCash = floatval($row['tender_cash']);
             $tEft = floatval($row['tender_eftpos']);
             $tChq = floatval($row['tender_cheque']);
             
             $cFee = floatval($row['camp_fee']);
             $sFee = floatval($row['site_fee']);
-            // Note: We ignore other_amount/prepaid logic here for simplicity of breakdown display
-            // unless we want 'Other' column too. 
+            $totalRow = floatval($row['total']);
             
             // Global totals
-            $totals['revenue'] += floatval($row['total']);
+            $totals['revenue'] += $totalRow;
             $totals['eftpos'] += $tEft;
             $totals['cash'] += $tCash;
             $totals['cheque'] += $tChq;
 
+            // Daily Total
+            $daily[$date]['total']['revenue'] += $totalRow;
+            $daily[$date]['total']['eftpos'] += $tEft;
+            $daily[$date]['total']['cash'] += $tCash;
+            $daily[$date]['total']['cheque'] += $tChq;
+
             // Category Totals
             $camp['total'] += $cFee;
             $site['total'] += $sFee;
+            
+            $daily[$date]['camp']['total'] += $cFee;
+            $daily[$date]['site']['total'] += $sFee;
 
             // --- ALLOCATION LOGIC (Cash First to Camp) ---
+            // We use temp variables so we don't modify the loop source for next steps if needed, 
+            // but here we just need to distribute the tenders.
             
+            $tempCash = $tCash;
+            $tempEft = $tEft;
+            $tempChq = $tChq;
+            $tempCFee = $cFee;
+            $tempSFee = $sFee;
+
             // 1. Allocate Cash to Camp
             $cashToCamp = 0;
-            if ($cFee > 0) {
-                // If refund (negative fee), logic is inverted/messy. Assuming payments are mostly positive.
-                // Simple Min: Use up to available cash for camp fee
-                $cashToCamp = min($cFee, $tCash);
+            if ($tempCFee > 0) {
+                $cashToCamp = min($tempCFee, $tempCash);
                 $camp['cash'] += $cashToCamp;
+                $daily[$date]['camp']['cash'] += $cashToCamp;
                 
-                // Reduce available
-                $tCash -= $cashToCamp;
-                $cFee -= $cashToCamp;
+                $tempCash -= $cashToCamp;
+                $tempCFee -= $cashToCamp;
             }
 
             // 2. Allocate Remaining Cash to Site
             $cashToSite = 0;
-            if ($sFee > 0 && $tCash > 0) {
-                $cashToSite = min($sFee, $tCash);
+            if ($tempSFee > 0 && $tempCash > 0) {
+                $cashToSite = min($tempSFee, $tempCash);
                 $site['cash'] += $cashToSite;
-                $tCash -= $cashToSite;
-                $sFee -= $cashToSite;
+                $daily[$date]['site']['cash'] += $cashToSite;
+
+                $tempCash -= $cashToSite;
+                $tempSFee -= $cashToSite;
             }
             
-            // 3. Allocate Other Tenders (Proportional or Waterfall? Let's use Waterfall: Camp then Site)
+            // 3. Allocate Other Tenders (Waterfall: Camp then Site)
             // Camp Remainder
-            if ($cFee > 0) {
+            if ($tempCFee > 0) {
                 // Use EFTPOS first
-                $eftToCamp = min($cFee, $tEft);
+                $eftToCamp = min($tempCFee, $tempEft);
                 $camp['eftpos'] += $eftToCamp;
-                $tEft -= $eftToCamp;
-                $cFee -= $eftToCamp;
+                $daily[$date]['camp']['eftpos'] += $eftToCamp;
+                $tempEft -= $eftToCamp;
+                $tempCFee -= $eftToCamp;
             }
-            if ($cFee > 0) {
+            if ($tempCFee > 0) {
                 // Use Cheque next
-                $chqToCamp = min($cFee, $tChq);
+                $chqToCamp = min($tempCFee, $tempChq);
                 $camp['cheque'] += $chqToCamp;
-                $tChq -= $chqToCamp;
-                $cFee -= $chqToCamp;
+                $daily[$date]['camp']['cheque'] += $chqToCamp;
+                $tempChq -= $chqToCamp;
+                $tempCFee -= $chqToCamp;
             }
 
             // Site Remainder
-            if ($sFee > 0) {
+            if ($tempSFee > 0) {
                  // Use Remaining EFTPOS
-                $eftToSite = min($sFee, $tEft);
+                $eftToSite = min($tempSFee, $tempEft);
                 $site['eftpos'] += $eftToSite;
-                $tEft -= $eftToSite;
-                $sFee -= $eftToSite;
+                $daily[$date]['site']['eftpos'] += $eftToSite;
+                $tempEft -= $eftToSite;
+                $tempSFee -= $eftToSite;
             }
-            if ($sFee > 0) {
+            if ($tempSFee > 0) {
                  // Use Remaining Cheque
-                $chqToSite = min($sFee, $tChq);
+                $chqToSite = min($tempSFee, $tempChq);
                 $site['cheque'] += $chqToSite;
-                $tChq -= $chqToSite;
-                $sFee -= $chqToSite;
+                $daily[$date]['site']['cheque'] += $chqToSite;
+                $tempChq -= $chqToSite;
+                $tempSFee -= $chqToSite;
             }
         }
+        
+        ksort($daily);
 
         echo json_encode([
             'total' => $totals,
             'camp_fees' => $camp,
-            'site_fees' => $site
+            'site_fees' => $site,
+            'daily' => $daily
         ]);
     }
 
@@ -433,6 +466,7 @@ class PaymentController {
         $campStart = $camp['start_date'];
         $campEnd = $camp['end_date'];
         
+        // 1. Headcount Data
         $sql = "SELECT p.headcount, p.arrival_date, p.departure_date, 
                        m.first_name, m.last_name, s.site_number
                 FROM payments p
@@ -517,6 +551,29 @@ class PaymentController {
             $dataAvg[] = $avg;
         }
 
+        // 2. Financial Chart Data (Whole Camp)
+        $sqlFin = "SELECT DATE(payment_date) as date, SUM(total) as total, SUM(camp_fee) as camp, SUM(site_fee) as site
+                   FROM payments
+                   WHERE camp_id = ?
+                   GROUP BY DATE(payment_date)
+                   ORDER BY date";
+        $stmtFin = $db->prepare($sqlFin);
+        $stmtFin->execute([$camp['id']]);
+        $finRows = $stmtFin->fetchAll(PDO::FETCH_ASSOC);
+        
+        $finLabels = [];
+        $finTotal = [];
+        $finCamp = [];
+        $finSite = [];
+        
+        foreach($finRows as $r) {
+            if(!$r['date']) continue;
+            $finLabels[] = date('d/m', strtotime($r['date']));
+            $finTotal[] = $r['total'];
+            $finCamp[] = $r['camp'];
+            $finSite[] = $r['site'];
+        }
+
         echo json_encode([
             'camp_name' => $camp['name'],
             'current_guests' => $currentGuests,
@@ -524,6 +581,12 @@ class PaymentController {
                 'labels' => $labels,
                 'headcount' => $dataHeadcount,
                 'average' => $dataAvg
+            ],
+            'financial_chart' => [
+                'labels' => $finLabels,
+                'total' => $finTotal,
+                'camp' => $finCamp,
+                'site' => $finSite
             ]
         ]);
     }
