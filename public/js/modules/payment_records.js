@@ -102,16 +102,6 @@ export async function render(container) {
         </div>
     `;
 
-    // Load Payments (fetching tenders too would be ideal, but currently /payments doesn't return breakdown. 
-    // We might need to fetch detailed report or just use total for now if breakdown isn't in API response.
-    // Assuming /payments index returns what we have. If we need breakdown (Cash/Eftpos), we might need to update backend 
-    // or fetch differently. For now, I will use what's available in allPayments or place 0/Total in "Other" if unknown.
-    // WAIT: The previous turn PaymentController index() does NOT join tenders. 
-    // It returns p.*. 
-    // For the export to be accurate with tenders, we really need that data. 
-    // However, I can't edit the backend in this turn easily without user prompt.
-    // I will proceed with available data.
-    
     try {
         allPayments = await API.get('/payments');
         renderTable(allPayments);
@@ -230,18 +220,13 @@ function renderTable(payments) {
             nights = Math.max(0, Math.round((d2 - d1) / (1000 * 60 * 60 * 24)));
         }
 
-        // Tenders are not fully broken down in current /payments API, 
-        // using 0 placeholders or assumptions based on future implementation needs.
-        // For CSV export accuracy, backend would need to JOIN payment_tenders.
-        // Currently displaying "-" for unknown breakdowns.
-        
         return `
         <tr>
             <td>${p.camp_name || '-'}</td>
             <td>${p.camp_year || '-'}</td> 
             <td>${p.first_name || '-'}</td>
             <td>${p.last_name || '-'}</td>
-            <td>-</td> <!-- Site Type not in basic payment view -->
+            <td>${p.site_type || '-'}</td> <!-- Display Site Type -->
             <td>${p.site_number || '-'}</td>
             <td>${arr}</td>
             <td>${dep}</td>
@@ -250,9 +235,9 @@ function renderTable(payments) {
             <td>$${parseFloat(p.camp_fee||0).toFixed(2)}</td>
             <td>$${parseFloat(p.site_fee||0).toFixed(2)}</td>
             <td><strong>$${parseFloat(p.total||0).toFixed(2)}</strong></td>
-            <td>-</td> <!-- EFTPOS -->
-            <td>-</td> <!-- Cash -->
-            <td>-</td> <!-- Cheque -->
+            <td>$${parseFloat(p.tender_eftpos||0).toFixed(2)}</td> <!-- EFTPOS -->
+            <td>$${parseFloat(p.tender_cash||0).toFixed(2)}</td>   <!-- Cash -->
+            <td>$${parseFloat(p.tender_cheque||0).toFixed(2)}</td> <!-- Cheque -->
             <td>$${parseFloat(p.other_amount||0).toFixed(2)}</td>
             <td>-</td> <!-- Concession status -->
             <td>${new Date(p.payment_date).toLocaleDateString('en-AU')}</td>
@@ -298,10 +283,10 @@ function exportToCSV(data) {
 
         const row = [
             safe(p.camp_name),
-            safe(p.camp_year), // Note: camp_year might not be in GET /payments join yet
+            safe(p.camp_year),
             safe(p.first_name),
             safe(p.last_name),
-            safe(""), // Site Type
+            safe(p.site_type), // Export Site Type
             safe(p.site_number),
             safe(arr),
             safe(dep),
@@ -310,9 +295,9 @@ function exportToCSV(data) {
             money(p.camp_fee),
             money(p.site_fee),
             money(p.total),
-            money(0), // EFTPOS (Missing in join)
-            money(0), // Cash
-            money(0), // Cheque
+            money(p.tender_eftpos), // Export EFTPOS
+            money(p.tender_cash),   // Export Cash
+            money(p.tender_cheque), // Export Cheque
             money(p.other_amount),
             safe(""), // Concession
             safe(payDate),
