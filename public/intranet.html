@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" translate="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Campo - Intranet</title>
+    <meta name="google" content="notranslate">
+    <link rel="stylesheet" href="/campo/public/css/style.css?v=22">
+    <link rel="stylesheet" href="/campo/public/css/intranet.css?v=1">
+    <meta name="theme-color" content="#2563eb">
+    <link rel="icon" type="image/x-icon" href="/campo/public/icons/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="intranet-shell">
+        <header class="intranet-header">
+            <div class="intranet-header__top">
+                <div class="intranet-title">
+                    <div class="intranet-title__logo">⛺</div>
+                    <div class="intranet-title__text">
+                        <div class="intranet-title__name">Campo Intranet</div>
+                        <div class="intranet-title__sub" id="camp-subtitle">Loading current camp…</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="intranet-actions">
+                <a class="intranet-action" href="/campo/public-map">
+                    <div class="intranet-action__icon">🗺️</div>
+                    <div class="intranet-action__text">
+                        <div class="intranet-action__title">Public Map</div>
+                        <div class="intranet-action__desc">View campsite locations</div>
+                    </div>
+                    <div class="intranet-action__chev">›</div>
+                </a>
+
+                <a class="intranet-action" href="/campo/waitlist">
+                    <div class="intranet-action__icon">📝</div>
+                    <div class="intranet-action__text">
+                        <div class="intranet-action__title">Join the Waitlist</div>
+                        <div class="intranet-action__desc">Submit a request for a site</div>
+                    </div>
+                    <div class="intranet-action__chev">›</div>
+                </a>
+            </div>
+        </header>
+
+        <main class="intranet-main">
+            <section class="intranet-card">
+                <div class="intranet-card__header">
+                    <h2 class="intranet-card__title">Current Camp Program</h2>
+                    <div class="intranet-card__meta" id="program-updated"></div>
+                </div>
+                <div class="intranet-card__body">
+                    <div id="program-content" class="intranet-content muted">Loading…</div>
+                </div>
+            </section>
+
+            <section class="intranet-card">
+                <div class="intranet-card__header">
+                    <h2 class="intranet-card__title">Camp Notifications</h2>
+                </div>
+                <div class="intranet-card__body">
+                    <div id="notifications-content" class="intranet-content muted">Loading…</div>
+                </div>
+            </section>
+
+            <section class="intranet-card">
+                <div class="intranet-card__header">
+                    <h2 class="intranet-card__title">Camp Events</h2>
+                </div>
+                <div class="intranet-card__body">
+                    <div id="events-content" class="intranet-content muted">Loading…</div>
+                </div>
+            </section>
+
+            <div class="intranet-footer">
+                <div class="tiny-muted">This page is public. For admin access, use the Campo app login.</div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module" src="/campo/public/js/intranet.js?v=1"></script>
+</body>
+</html>
