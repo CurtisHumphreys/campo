@@ -253,7 +253,7 @@ export async function render(container) {
         importStatus.classList.remove('hidden', 'text-success', 'text-danger');
 
         try {
-            const response = await fetch('/campo/api/import/members', {
+            const response = await fetch('/api/import/members', {
                 method: 'POST',
                 body: formData
             });

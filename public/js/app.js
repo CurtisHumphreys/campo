@@ -2,96 +2,58 @@ import * as API from './api.js';
 import * as Auth from './modules/auth.js';
 
 const routes = {
-    '/campo/login': Auth.renderLogin,
-    '/campo/dashboard': (c) => import('./modules/dashboard.js').then(m => m.render(c)),
-    '/campo/members': (c) => import('./modules/members.js').then(m => m.render(c)),
-    '/campo/sites': (c) => import('./modules/sites.js').then(m => m.render(c)),
-    '/campo/payments': (c) => import('./modules/payments.js').then(m => m.render(c)),
-    '/campo/payment-records': (c) => import('./modules/payment_records.js').then(m => m.render(c)),
-    '/campo/camps': (c) => import('./modules/camps.js').then(m => m.render(c)),
-    '/campo/prepayments': (c) => import('./modules/prepayments.js').then(m => m.render(c)),
-    '/campo/import': (c) => import('./modules/import.js').then(m => m.render(c)),
-    '/campo/rates': (c) => import('./modules/rates.js').then(m => m.render(c)),
-    '/campo/map': (c) => import('./modules/map.js').then(m => m.render(c)),
-    '/campo/intranet-admin': (c) => import('./modules/intranet_admin.js').then(m => m.render(c)),
+    '/login': Auth.renderLogin,
+    '/dashboard': (c) => import('./modules/dashboard.js').then(m => m.render(c)),
+    '/members': (c) => import('./modules/members.js').then(m => m.render(c)),
+    '/sites': (c) => import('./modules/sites.js').then(m => m.render(c)),
+    '/payments': (c) => import('./modules/payments.js').then(m => m.render(c)),
+    '/payment-records': (c) => import('./modules/payment_records.js').then(m => m.render(c)),
+    '/camps': (c) => import('./modules/camps.js').then(m => m.render(c)),
+    '/prepayments': (c) => import('./modules/prepayments.js').then(m => m.render(c)),
+    '/import': (c) => import('./modules/import.js').then(m => m.render(c)),
+    '/rates': (c) => import('./modules/rates.js').then(m => m.render(c)),
+    '/map': (c) => import('./modules/map.js').then(m => m.render(c)),
 };
 
 // Prevent duplicate event bindings if init() runs more than once
 let navSetupDone = false;
 
-// Track auth state across client-side navigations
-let isAuthenticated = false;
-
-export function setAuthState(state) {
-    isAuthenticated = !!state;
-
-    const sidebar = document.getElementById('sidebar');
-    const mobileHeader = document.getElementById('mobile-header');
-
-    // Keep UI consistent with auth state (prevents sidebar/hamburger bypassing login)
-    if (!isAuthenticated) {
-        if (sidebar) sidebar.classList.add('hidden');
-        if (mobileHeader) mobileHeader.style.display = 'none';
-        document.body.classList.remove('mobile-menu-open');
-    } else {
-        if (sidebar) sidebar.classList.remove('hidden');
-        if (mobileHeader && window.innerWidth <= 900) mobileHeader.style.display = 'flex';
-    }
-}
-
-function isLoginRoute(path) {
-    return path === '/campo/login';
-}
-
-function enforceAuthForPath(path) {
-    // If not authed, only login route is allowed
-    if (!isAuthenticated && !isLoginRoute(path)) {
-        return '/campo/login';
-    }
-
-    // If authed and user hits root or login, send them to dashboard
-    if (isAuthenticated && (path === '/campo' || path === '/campo/' || path === '/campo/login')) {
-        return '/campo/dashboard';
-    }
-
-    return path;
-}
-
 async function init() {
-    // Always bind navigation handlers up-front
+    // ✅ Always bind navigation handlers up-front (fixes hamburger not working after login redirect)
     setupNavigation();
 
     let path = window.location.pathname.replace(/\/$/, "");
 
-    // Determine auth state once on load
+    if (path === '/map' || path.endsWith('/map')) {
+        document.getElementById('sidebar').classList.add('hidden');
+        document.getElementById('mobile-header').style.display = 'none';
+        document.body.classList.add('public-view');
+        handleRoute(path);
+        return; 
+    }
+
+    let isAuthenticated = false;
     try {
         const { authenticated } = await API.get('/check-auth');
-        setAuthState(authenticated);
+        isAuthenticated = authenticated;
     } catch (e) {
         console.error('Auth check failed', e);
-        setAuthState(false);
     }
 
-    const enforced = enforceAuthForPath(path);
-    if (enforced !== path) {
-        // Use replaceState to avoid back-button loop to protected route
-        history.replaceState(null, null, enforced);
-        path = enforced;
+    if (!isAuthenticated && path !== '/login') {
+        navigateTo('/login');
+        return;
     }
 
-    // Login route should not show nav
-    if (isLoginRoute(path)) {
-        const mh = document.getElementById('mobile-header');
-        if (mh) mh.style.display = 'none';
-        const sb = document.getElementById('sidebar');
-        if (sb) sb.classList.add('hidden');
-    } else {
-        // If authed, show nav.
-        if (isAuthenticated) {
-            const sb = document.getElementById('sidebar');
-            if (sb) sb.classList.remove('hidden');
-            const mh = document.getElementById('mobile-header');
-            if (mh && window.innerWidth <= 900) mh.style.display = 'flex';
+    if (isAuthenticated) {
+        document.getElementById('sidebar').classList.remove('hidden');
+        if (window.innerWidth <= 900) {
+            document.getElementById('mobile-header').style.display = 'flex';
+        }
+        
+        if (path === '/login' || path === '/' || path === '/') {
+            navigateTo('/dashboard');
+            return;
         }
     }
 
@@ -115,23 +77,16 @@ function setupNavigation() {
         logoutBtn.addEventListener('click', async (e) => {
             e.preventDefault();
             await API.post('/logout', {});
-            setAuthState(false);
-            navigateTo('/campo/login');
+            document.getElementById('sidebar').classList.add('hidden');
+            navigateTo('/login');
         });
     }
 
-    // Mobile Menu Button Logic
+    // New Mobile Menu Button Logic
     const mobileMenuBtn = document.getElementById('mobile-menu-btn');
     if (mobileMenuBtn) {
         mobileMenuBtn.addEventListener('click', (e) => {
             e.stopPropagation();
-            // Don't allow hamburger to open a menu on login/unauth pages
-            if (!isAuthenticated) return;
-
-            const sidebar = document.getElementById('sidebar');
-            if (sidebar && sidebar.classList.contains('hidden')) {
-                sidebar.classList.remove('hidden');
-            }
             document.body.classList.toggle('mobile-menu-open');
         });
     }
@@ -141,9 +96,9 @@ function setupNavigation() {
         if (document.body.classList.contains('mobile-menu-open')) {
             const sidebar = document.getElementById('sidebar');
             const header = document.getElementById('mobile-header');
-
+            
             // If click is NOT inside sidebar and NOT inside header, close it
-            if (sidebar && header && !sidebar.contains(e.target) && !header.contains(e.target)) {
+            if (!sidebar.contains(e.target) && !header.contains(e.target)) {
                 document.body.classList.remove('mobile-menu-open');
             }
         }
@@ -152,27 +107,20 @@ function setupNavigation() {
 
 export function navigateTo(url) {
     history.pushState(null, null, url);
-    let path = url.replace(/\/$/, "");
-
-    // Enforce auth on client-side navigations too
-    path = enforceAuthForPath(path);
-    if (window.location.pathname.replace(/\/$/, "") !== path) {
-        history.replaceState(null, null, path);
-    }
-
-    // Login route should not show nav
-    if (isLoginRoute(path) || !isAuthenticated) {
-        const sb = document.getElementById('sidebar');
-        if (sb) sb.classList.add('hidden');
-        const mh = document.getElementById('mobile-header');
-        if (mh) mh.style.display = 'none';
+    const path = url.replace(/\/$/, "");
+    
+    if (path === '/map') {
+        document.getElementById('sidebar').classList.add('hidden');
+        document.getElementById('mobile-header').style.display = 'none';
+        document.body.classList.add('public-view');
     } else {
-        const sb = document.getElementById('sidebar');
-        if (sb) sb.classList.remove('hidden');
-        const mh = document.getElementById('mobile-header');
-        if (mh && window.innerWidth <= 900) mh.style.display = 'flex';
+        document.getElementById('sidebar').classList.remove('hidden');
+        if (window.innerWidth <= 900) {
+            document.getElementById('mobile-header').style.display = 'flex';
+        }
+        document.body.classList.remove('public-view');
     }
-
+    
     document.body.classList.remove('mobile-menu-open');
     handleRoute(path);
 }
@@ -180,13 +128,7 @@ export function navigateTo(url) {
 async function handleRoute(path) {
     const main = document.getElementById('main-content');
     path = path.replace(/\/$/, "");
-    if (path === '/campo') path = '/campo/dashboard';
-
-    // Safety net: never render protected pages if not authed
-    if (!isAuthenticated && !isLoginRoute(path)) {
-        history.replaceState(null, null, '/campo/login');
-        path = '/campo/login';
-    }
+    if (path === '/') path = '/dashboard'; 
 
     const renderer = routes[path];
 

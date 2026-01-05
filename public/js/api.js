@@ -1,4 +1,4 @@
-const API_BASE = '/campo/api';
+const API_BASE = '/api';
 
 export async function post(endpoint, data) {
     const response = await fetch(`${API_BASE}${endpoint}`, {

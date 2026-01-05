@@ -122,11 +122,11 @@ export async function render(container) {
         formData.append('file', file);
         formData.append('camp_id', campId); // Always append camp_id now
 
-        let url = '/campo/api/import'; // Default Legacy
+        let url = '/api/import'; // Default Legacy
         if (type === 'prepayments') {
-            url = '/campo/api/import/prepayments';
+            url = '/api/import/prepayments';
         } else if (type === 'rates') {
-            url = '/campo/api/import/rates';
+            url = '/api/import/rates';
         }
 
         const status = document.getElementById('import-status');

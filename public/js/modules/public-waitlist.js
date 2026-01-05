@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (data.intended_days) data.intended_days = parseInt(data.intended_days); // Parse as int for scoring
 
         try {
-            const response = await fetch('/campo/api/waitlist', {
+            const response = await fetch('/api/waitlist', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)

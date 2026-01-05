@@ -1,12 +1,12 @@
 const CACHE_NAME = 'campo-cache-v10';
 const ASSETS_TO_CACHE = [
-  '/campo/',
-  '/campo/public/index.html',
-  '/campo/public/css/style.css?v=29',
-  '/campo/public/js/app.js?v=29',
-  '/campo/public/js/modules/rates.js',
-  '/campo/public/manifest.json',
-  '/campo/public/icons/icon-512x512.png'
+  '/',
+  '/public/index.html',
+  '/public/css/style.css?v=29',
+  '/public/js/app.js?v=29',
+  '/public/js/modules/rates.js',
+  '/public/manifest.json',
+  '/public/icons/icon-512x512.png'
 ];
 
 self.addEventListener('install', event => {

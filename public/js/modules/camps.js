@@ -164,7 +164,7 @@ function renderTable(camps) {
             try {
                 await API.post(`/ camp / delete? id = ${id}`, {});
                 // Refresh
-                document.querySelector('[data-link="/campo/camps"]').click();
+                document.querySelector('[data-link="/camps"]').click();
             } catch (err) {
                 alert('Error deleting camp: ' + err.message);
             }
