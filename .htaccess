@@ -1,0 +1,13 @@
+# Campo: route all requests through /index.php (except real files/directories)
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+
+# If the requested resource exists as a file or directory, serve it directly
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Otherwise, send to front controller
+RewriteRule ^ index.php [L]
+</IfModule>
