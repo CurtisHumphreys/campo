@@ -35,7 +35,8 @@ jobs:
           security: loose
           # Enable verbose logging to see exactly why the connection fails
           log-level: verbose
-          server-dir: ${{ secrets.FTP_REMOTE_PATH }}/
+          # Updated to point explicitly to public_html/
+          server-dir: public_html/
           dry-run: false
           dangerous-clean-slate: false
           exclude: |
