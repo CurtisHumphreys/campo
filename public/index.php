@@ -6,44 +6,15 @@ require_once __DIR__ . '/../src/Router.php';
 require_once __DIR__ . '/../src/Auth.php';
 
 spl_autoload_register(function ($class) {
-    if (file_exists(__DIR__ . '/../src/Controllers/' . $class . '.php')) {
-        require_once __DIR__ . '/../src/Controllers/' . $class . '.php';
-    }
+    $path = __DIR__ . '/../src/Controllers/' . $class . '.php';
+    if (file_exists($path)) require_once $path;
 });
 
 $router = new Router();
-// Serve the SPA shell for /campo/
-$router->get('/', function() {
-    readfile(__DIR__ . '/index.html');
-});
-
-// Serve the SPA shell for app routes
-$pages = [
-    '/login',
-    '/dashboard',
-    '/members',
-    '/sites',
-    '/payments',
-    '/payment-records',
-    '/settings',
-    '/rates',
-    '/camps',
-    '/import',
-    '/prepayments',
-    '/map',
-    '/intranet-admin'
-];
-
-foreach ($pages as $page) {
-    $router->get($page, function() {
-        readfile(__DIR__ . '/index.html');
-    });
-}
-
 
 function requireAuthJson() {
     if (!Auth::check()) {
-        if (!headers_sent()) header('Content-Type: application/json');
+        header('Content-Type: application/json');
         http_response_code(401);
         echo json_encode(['message' => 'Unauthorised']);
         return false;
@@ -51,24 +22,69 @@ function requireAuthJson() {
     return true;
 }
 
+/**
+ * PUBLIC PAGES (NO LOGIN)
+ */
 $router->get('/intranet', function() {
-    if (file_exists(__DIR__ . '/intranet.html')) readfile(__DIR__ . '/intranet.html');
+    $file = __DIR__ . '/intranet.html';
+    if (file_exists($file)) readfile($file);
+    else { http_response_code(404); echo "Not Found"; }
 });
 
 $router->get('/public-map', function() {
-    if (file_exists(__DIR__ . '/public-map.html')) readfile(__DIR__ . '/public-map.html');
+    $file = __DIR__ . '/public-map.html';
+    if (file_exists($file)) readfile($file);
+    else { http_response_code(404); echo "Not Found"; }
 });
 
 $router->get('/waitlist', function() {
-    if (file_exists(__DIR__ . '/waitlist.html')) readfile(__DIR__ . '/waitlist.html');
+    $file = __DIR__ . '/waitlist.html';
+    if (file_exists($file)) readfile($file);
+    else { http_response_code(404); echo "Not Found"; }
 });
 
+/**
+ * SPA SHELL (APP)
+ * These must serve index.html so the JS router can render pages.
+ */
+$router->get('/', function() {
+    readfile(__DIR__ . '/index.html');
+});
+
+$spaPages = [
+    '/login',
+    '/dashboard',
+    '/members',
+    '/sites',
+    '/payments',
+    '/payment-records',
+    '/camps',
+    '/prepayments',
+    '/import',
+    '/rates',
+    '/map',
+    '/intranet-admin'
+];
+
+foreach ($spaPages as $page) {
+    $router->get($page, function () {
+        readfile(__DIR__ . '/index.html');
+    });
+}
+
+/**
+ * MIGRATIONS / DEBUG
+ */
 $router->get('/api/migrate', function() { (new MigrationController())->migrate(); });
 
-// Auth routes
+/**
+ * AUTH
+ */
 $router->post('/api/login', function() {
+    header('Content-Type: application/json');
     $data = json_decode(file_get_contents('php://input'), true);
-    if (Auth::login($data['username'], $data['password'])) {
+
+    if (Auth::login($data['username'] ?? '', $data['password'] ?? '')) {
         echo json_encode(['success' => true, 'user' => Auth::user()]);
     } else {
         echo json_encode(['success' => false, 'message' => 'Invalid credentials']);
@@ -76,105 +92,110 @@ $router->post('/api/login', function() {
 });
 
 $router->post('/api/logout', function() {
+    header('Content-Type: application/json');
     Auth::logout();
     echo json_encode(['success' => true]);
 });
 
 $router->get('/api/check-auth', function() {
-    if (Auth::check()) {
-        echo json_encode(['authenticated' => true, 'user' => Auth::user()]);
-    } else {
-        echo json_encode(['authenticated' => false]);
-    }
+    header('Content-Type: application/json');
+    echo json_encode(Auth::check()
+        ? ['authenticated' => true, 'user' => Auth::user()]
+        : ['authenticated' => false]
+    );
 });
 
-// Public API (no login)
+/**
+ * PUBLIC APIs (NO LOGIN)
+ */
 $router->get('/api/public/intranet', function() { (new IntranetController())->publicActive(); });
 $router->get('/api/public/sites-map', function() { (new IntranetController())->publicSitesMap(); });
 
-// Waitlist API
+// Waitlist submit is public (form)
 $router->post('/api/waitlist', function() { (new SiteController())->storeWaitlist(); });
-$router->get('/api/site/waitlist', function() { if (!requireAuthJson()) return; (new SiteController())->waitlist(); });
-$router->post('/api/site/waitlist-update', function() { if (!requireAuthJson()) return; (new SiteController())->updateWaitlist(); }); // New Route
-$router->post('/api/site/waitlist-delete', function() { if (!requireAuthJson()) return; (new SiteController())->deleteWaitlist(); });
 
-// Intranet Content (admin)
+/**
+ * INTRANET ADMIN (LOGIN REQUIRED)
+ */
 $router->get('/api/intranet', function() { if (!requireAuthJson()) return; (new IntranetController())->adminGet(); });
 $router->post('/api/intranet', function() { if (!requireAuthJson()) return; (new IntranetController())->adminSave(); });
 
-// Members
+/**
+ * WAITLIST ADMIN (LOGIN REQUIRED)
+ */
+$router->get('/api/site/waitlist', function() { if (!requireAuthJson()) return; (new SiteController())->waitlist(); });
+$router->post('/api/site/waitlist-update', function() { if (!requireAuthJson()) return; (new SiteController())->updateWaitlist(); });
+$router->post('/api/site/waitlist-delete', function() { if (!requireAuthJson()) return; (new SiteController())->deleteWaitlist(); });
+
+/**
+ * MEMBERS (LOGIN REQUIRED)
+ */
 $router->get('/api/members', function() { if (!requireAuthJson()) return; (new MemberController())->index(); });
 $router->post('/api/members', function() { if (!requireAuthJson()) return; (new MemberController())->store(); });
 $router->post('/api/members/delete-all', function() { if (!requireAuthJson()) return; (new MemberController())->deleteAll(); });
-$router->post('/api/member/update', function() { if (!requireAuthJson()) return; $id = $_GET['id'] ?? null; if ($id) (new MemberController())->update($id); });
-$router->post('/api/member/delete', function() { if (!requireAuthJson()) return; $id = $_GET['id'] ?? null; if ($id) (new MemberController())->delete($id); });
-$router->get('/api/member/history', function() { if (!requireAuthJson()) return; $id = $_GET['id'] ?? null; if ($id) (new MemberController())->history($id); });
+$router->post('/api/member/update', function() { if (!requireAuthJson()) return; (new MemberController())->update($_GET['id'] ?? null); });
+$router->post('/api/member/delete', function() { if (!requireAuthJson()) return; (new MemberController())->delete($_GET['id'] ?? null); });
+$router->get('/api/member/history', function() { if (!requireAuthJson()) return; (new MemberController())->history($_GET['id'] ?? null); });
 
-// Sites
+/**
+ * SITES (LOGIN REQUIRED)
+ */
 $router->get('/api/sites', function() { if (!requireAuthJson()) return; (new SiteController())->index(); });
 $router->post('/api/sites', function() { if (!requireAuthJson()) return; (new SiteController())->store(); });
-$router->post('/api/site/update', function() { if (!requireAuthJson()) return; $id = $_GET['id'] ?? null; if ($id) (new SiteController())->update($id); });
+$router->post('/api/site/update', function() { if (!requireAuthJson()) return; (new SiteController())->update($_GET['id'] ?? null); });
 $router->post('/api/sites/allocate', function() { if (!requireAuthJson()) return; (new SiteController())->allocate(); });
 $router->get('/api/allocations', function() { if (!requireAuthJson()) return; (new SiteController())->allocations(); });
 
-// Camps
+/**
+ * CAMPS (LOGIN REQUIRED)
+ */
 $router->get('/api/camps', function() { if (!requireAuthJson()) return; (new CampController())->index(); });
 $router->get('/api/camps/active', function() { if (!requireAuthJson()) return; (new CampController())->active(); });
 $router->post('/api/camps', function() { if (!requireAuthJson()) return; (new CampController())->store(); });
-$router->get('/api/camp/rates', function() { if (!requireAuthJson()) return; $id = $_GET['id'] ?? null; if ($id) (new CampController())->rates($id); });
-$router->post('/api/camp/update', function() { if (!requireAuthJson()) return; $id = $_GET['id'] ?? null; if ($id) (new CampController())->update($id); });
-$router->post('/api/camp/delete', function() { if (!requireAuthJson()) return; $id = $_GET['id'] ?? null; if ($id) (new CampController())->delete($id); });
+$router->post('/api/camp/update', function() { if (!requireAuthJson()) return; (new CampController())->update($_GET['id'] ?? null); });
+$router->post('/api/camp/delete', function() { if (!requireAuthJson()) return; (new CampController())->delete($_GET['id'] ?? null); });
+$router->get('/api/camp/rates', function() { if (!requireAuthJson()) return; (new CampController())->rates($_GET['id'] ?? null); });
 
-// Payments
+/**
+ * PAYMENTS (LOGIN REQUIRED)
+ * IMPORTANT: add aliases dashboard.js expects:
+ * - /api/payments/summary
+ * - /api/payments/dashboard-stats
+ */
 $router->get('/api/payments', function() { if (!requireAuthJson()) return; (new PaymentController())->index(); });
 $router->post('/api/payments', function() { if (!requireAuthJson()) return; (new PaymentController())->store(); });
 $router->get('/api/payment-records', function() { if (!requireAuthJson()) return; (new PaymentController())->records(); });
-$router->get('/api/payment/receipt', function() { if (!requireAuthJson()) return; $id = $_GET['id'] ?? null; if ($id) (new PaymentController())->receipt($id); });
-$router->post('/api/payment/delete', function() { if (!requireAuthJson()) return; $id = $_GET['id'] ?? null; if ($id) (new PaymentController())->delete($id); });
+$router->post('/api/payment/delete', function() { if (!requireAuthJson()) return; (new PaymentController())->delete($_GET['id'] ?? null); });
+$router->get('/api/payment/receipt', function() { if (!requireAuthJson()) return; (new PaymentController())->receipt($_GET['id'] ?? null); });
+
+$router->get('/api/payments/summary', function() { if (!requireAuthJson()) return; (new PaymentController())->summary(); });
+$router->get('/api/payments/dashboard-stats', function() { if (!requireAuthJson()) return; (new PaymentController())->dashboardStats(); });
+
+// keep old path too, in case other code still calls it
 $router->get('/api/dashboard-stats', function() { if (!requireAuthJson()) return; (new PaymentController())->dashboardStats(); });
 
-// Import
+/**
+ * IMPORT (LOGIN REQUIRED)
+ */
 $router->post('/api/import', function() { if (!requireAuthJson()) return; (new ImportController())->upload(); });
 $router->post('/api/import/members', function() { if (!requireAuthJson()) return; (new ImportController())->importMembers(); });
 $router->post('/api/import/sites', function() { if (!requireAuthJson()) return; (new ImportController())->importSites(); });
 $router->post('/api/import/prepayments', function() { if (!requireAuthJson()) return; (new ImportController())->importPrepayments(); });
 $router->post('/api/import/rates', function() { if (!requireAuthJson()) return; (new ImportController())->importRates(); });
 
-// Prepayments
+/**
+ * PREPAYMENTS (LOGIN REQUIRED)
+ */
 $router->get('/api/prepayments', function() { if (!requireAuthJson()) return; (new PrepaymentController())->index(); });
 $router->post('/api/prepayments/match', function() { if (!requireAuthJson()) return; (new ImportController())->matchPrepayment(); });
 $router->post('/api/prepayments/delete-all', function() { if (!requireAuthJson()) return; (new PrepaymentController())->deleteAll(); });
 
-// Rates
-$router->get('/api/rates', function() { if (!requireAuthJson()) return; $campId = $_GET['camp_id'] ?? null; if ($campId) (new RateController())->index($campId); });
+/**
+ * RATES (LOGIN REQUIRED)
+ */
+$router->get('/api/rates', function() { if (!requireAuthJson()) return; (new RateController())->index($_GET['camp_id'] ?? null); });
 $router->post('/api/rates', function() { if (!requireAuthJson()) return; (new RateController())->store(); });
-$router->post('/api/rate/update', function() { if (!requireAuthJson()) return; $id = $_GET['id'] ?? null; if ($id) (new RateController())->update($id); });
-$router->post('/api/rate/delete', function() { if (!requireAuthJson()) return; $id = $_GET['id'] ?? null; if ($id) (new RateController())->delete($id); });
-
-// Revenue
-$router->get('/api/revenue', function() {
-    if (!requireAuthJson()) return;
-
-    header('Content-Type: application/json');
-    $db = Database::connect();
-
-    // Total Revenue by tender
-    $stmt = $db->query("
-        SELECT 
-            SUM(amount) as total,
-            SUM(CASE WHEN method = 'EFTPOS' THEN amount ELSE 0 END) as eftpos,
-            SUM(CASE WHEN method = 'Cash' THEN amount ELSE 0 END) as cash,
-            SUM(CASE WHEN method = 'Cheque' THEN amount ELSE 0 END) as cheque
-        FROM payment_tenders
-    ");
-    $revenue = $stmt->fetch();
-    echo json_encode([
-        'total_revenue' => $revenue['total'],
-        'eftpos' => $revenue['eftpos'],
-        'cash' => $revenue['cash'],
-        'cheque' => $revenue['cheque']
-    ]);
-});
+$router->post('/api/rate/update', function() { if (!requireAuthJson()) return; (new RateController())->update($_GET['id'] ?? null); });
+$router->post('/api/rate/delete', function() { if (!requireAuthJson()) return; (new RateController())->delete($_GET['id'] ?? null); });
 
 $router->dispatch();
-
