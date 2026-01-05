@@ -28,8 +28,12 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           port: ${{ secrets.FTP_PORT }}
-          # Switched to 'ftp' to bypass SSL handshake errors (AggregateError)
-          protocol: ftp
+          # DirectAdmin usually requires FTPS (Explicit)
+          protocol: ftps
+          # 'loose' accepts self-signed or mismatched certs (common on shared hosting)
+          security: loose
+          # Enable verbose logging to see exactly why the connection fails
+          log-level: verbose
           server-dir: ${{ secrets.FTP_REMOTE_PATH }}/
           dry-run: false
           dangerous-clean-slate: false
