@@ -28,10 +28,9 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           port: ${{ secrets.FTP_PORT }}
-          # 'ftps' with 'loose' security is best for most shared hosting (DirectAdmin/cPanel)
-          protocol: ftps
+          # Switched to 'ftp' to bypass SSL handshake errors (AggregateError)
+          protocol: ftp
           server-dir: ${{ secrets.FTP_REMOTE_PATH }}/
-          security: loose 
           dry-run: false
           dangerous-clean-slate: false
           exclude: |
