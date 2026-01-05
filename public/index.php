@@ -17,6 +17,43 @@ $router = new Router();
 
 $router->get('/api/migrate', function() { (new MigrationController())->migrate(); });
 
+$router->get('/api/health', function() {
+    header('Content-Type: application/json');
+    try {
+        // Confirm config constants exist
+        $configOk = defined('DB_HOST') && defined('DB_NAME') && defined('DB_USER');
+
+        $pdo = Database::getConnection();
+        $pdoOk = (bool)$pdo;
+
+        // Optional: check a likely table exists (adjust if your table differs)
+        $hasUsers = null;
+        try {
+            $stmt = $pdo->query("SHOW TABLES LIKE 'users'");
+            $hasUsers = (bool)$stmt->fetch();
+        } catch (Throwable $e) {
+            $hasUsers = "Table check failed: " . $e->getMessage();
+        }
+
+        echo json_encode([
+            'ok' => true,
+            'config_ok' => $configOk,
+            'db_host' => defined('DB_HOST') ? DB_HOST : null,
+            'db_name' => defined('DB_NAME') ? DB_NAME : null,
+            'db_user' => defined('DB_USER') ? DB_USER : null,
+            'pdo_ok' => $pdoOk,
+            'users_table' => $hasUsers
+        ]);
+    } catch (Throwable $e) {
+        http_response_code(500);
+        echo json_encode([
+            'ok' => false,
+            'message' => $e->getMessage()
+        ]);
+    }
+});
+
+
 $router->post('/api/login', function() {
     $data = json_decode(file_get_contents('php://input'), true);
     if (Auth::login($data['username'], $data['password'])) {
@@ -124,3 +161,4 @@ $router->get('/api/dashboard-stats-legacy', function() {
 
 
 $router->dispatch();
+
