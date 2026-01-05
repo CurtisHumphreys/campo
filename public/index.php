@@ -12,6 +12,34 @@ spl_autoload_register(function ($class) {
 });
 
 $router = new Router();
+// Serve the SPA shell for /campo/
+$router->get('/', function() {
+    readfile(__DIR__ . '/index.html');
+});
+
+// Serve the SPA shell for app routes
+$pages = [
+    '/login',
+    '/dashboard',
+    '/members',
+    '/sites',
+    '/payments',
+    '/payment-records',
+    '/settings',
+    '/rates',
+    '/camps',
+    '/import',
+    '/prepayments',
+    '/map',
+    '/intranet-admin'
+];
+
+foreach ($pages as $page) {
+    $router->get($page, function() {
+        readfile(__DIR__ . '/index.html');
+    });
+}
+
 
 function requireAuthJson() {
     if (!Auth::check()) {
@@ -149,3 +177,4 @@ $router->get('/api/revenue', function() {
 });
 
 $router->dispatch();
+
