@@ -20,7 +20,7 @@ export async function render(container) {
             <div id="map-scroll-wrapper" style="flex: 1; overflow: hidden; position: relative; background: #e2e8f0; touch-action: none; cursor: grab;">
                 <div id="map-wrapper" class="map-container" style="display: inline-block; min-width: 800px; transform-origin: 0 0;">
                     <img src="/public/img/map.jpg" id="camp-map-img" alt="Campsite Map" style="display: block; width: 100%; height: auto;">
-                    <div id="pins-layer" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;"></div>
+                    <div id="pins-layer" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: auto;"></div>
                 </div>
             </div>
         </div>
@@ -199,7 +199,7 @@ function renderPins() {
     layer.innerHTML = '';
 
     allSites.forEach(site => {
-        if (site.map_x && site.map_y) {
+        if (site.map_x !== null && site.map_x !== "" && site.map_y !== null && site.map_y !== "") {
             const pin = document.createElement('div');
             pin.className = `map-pin status-${(site.status || 'Available').toLowerCase()}`;
             pin.style.left = `${site.map_x}%`;
