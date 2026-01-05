@@ -163,8 +163,9 @@ function renderTable(camps) {
         if (confirmation === 'DELETE') {
             try {
                 await API.post(`/ camp / delete? id = ${id}`, {});
-                // Refresh
-                document.querySelector('[data-link="/camps"]').click();
+                // Refresh: navigate back to the camps page by triggering the SPA navigation
+                const link = document.querySelector('[data-link="/camps"]');
+                if (link) link.click();
             } catch (err) {
                 alert('Error deleting camp: ' + err.message);
             }

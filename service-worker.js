@@ -1,10 +1,10 @@
-const CACHE_NAME = 'campo-cache-v10';
+const CACHE_NAME = 'campo-cache-v1';
+// Assets required for offline for the admin app. Paths are now relative to the domain root.
 const ASSETS_TO_CACHE = [
   '/',
   '/public/index.html',
-  '/public/css/style.css?v=29',
-  '/public/js/app.js?v=29',
-  '/public/js/modules/rates.js',
+  '/public/css/style.css?v=35',
+  '/public/js/app.js?v=35',
   '/public/manifest.json',
   '/public/icons/icon-512x512.png'
 ];

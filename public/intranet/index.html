@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" translate="no">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Campo Intranet</title>
+    <meta name="google" content="notranslate" />
+
+    <!-- Shared and intranet-specific styles -->
+    <link rel="stylesheet" href="/public/css/style.css?v=35" />
+    <link rel="stylesheet" href="/public/css/intranet.css?v=1" />
+
+    <!-- PWA manifest for the intranet -->
+    <link rel="manifest" href="/intranet/manifest.json" />
+    <meta name="theme-color" content="#2563eb" />
+    <link rel="icon" type="image/x-icon" href="/public/icons/favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+    <div class="intranet-shell">
+        <header class="intranet-header">
+            <div class="intranet-title">
+                <div class="intranet-title__logo">⛺</div>
+                <div>
+                    <div class="intranet-title__name">Campo Intranet</div>
+                    <div class="intranet-title__sub" id="camp-subtitle">Loading current camp…</div>
+                </div>
+            </div>
+            <div class="intranet-actions">
+                <a class="intranet-action" href="/public-map">
+                    <div class="intranet-action__icon">🗺️</div>
+                    <div>
+                        <div class="intranet-action__title">Public Map</div>
+                        <div class="intranet-action__desc">View campsite locations</div>
+                    </div>
+                    <div class="intranet-action__chev">›</div>
+                </a>
+                <a class="intranet-action" href="/waitlist">
+                    <div class="intranet-action__icon">📝</div>
+                    <div>
+                        <div class="intranet-action__title">Join the Waitlist</div>
+                        <div class="intranet-action__desc">Submit a request for a site</div>
+                    </div>
+                    <div class="intranet-action__chev">›</div>
+                </a>
+            </div>
+        </header>
+        <main class="intranet-main">
+            <section class="intranet-card">
+                <div class="intranet-card__header">
+                    <h2 class="intranet-card__title">Current Camp Program</h2>
+                    <div class="intranet-card__meta" id="program-updated"></div>
+                </div>
+                <div class="intranet-card__body">
+                    <div id="program-content" class="intranet-content muted">Loading…</div>
+                </div>
+            </section>
+            <section class="intranet-card">
+                <div class="intranet-card__header">
+                    <h2 class="intranet-card__title">Camp Notifications</h2>
+                </div>
+                <div class="intranet-card__body">
+                    <div id="notifications-content" class="intranet-content muted">Loading…</div>
+                </div>
+            </section>
+            <section class="intranet-card">
+                <div class="intranet-card__header">
+                    <h2 class="intranet-card__title">Camp Events</h2>
+                </div>
+                <div class="intranet-card__body">
+                    <div id="events-content" class="intranet-content muted">Loading…</div>
+                </div>
+            </section>
+            <footer class="intranet-footer">
+                <div class="tiny-muted">This page is public. For administrative features, use the Campo app.</div>
+            </footer>
+        </main>
+    </div>
+
+    <!-- Fetch intranet content and handle install prompt -->
+    <script type="module" src="/public/js/intranet.js?v=1"></script>
+    <script>
+        // Register the intranet service worker scoped to /intranet/
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/intranet/sw.js', { scope: '/intranet/' })
+                    .catch(err => console.error('Intranet SW registration failed:', err));
+            });
+        }
+    </script>
+</body>
+</html>

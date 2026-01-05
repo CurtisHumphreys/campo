@@ -12,7 +12,8 @@ let isDragging = false;
 
 async function init() {
     try {
-        allSites = await API.get('/sites');
+        // Use the public sites-map endpoint which returns simplified site data without requiring login
+        allSites = await API.get('/public/sites-map');
         renderPins();
     } catch (e) {
         console.error("Failed to load sites", e);

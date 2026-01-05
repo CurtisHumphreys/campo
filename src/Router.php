@@ -14,14 +14,16 @@ class Router {
     public function dispatch() {
         $method = $_SERVER['REQUEST_METHOD'];
         $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-        
-        // Remove base path if needed (assuming / is base)
-        $basePath = '';
-        if ($basePath !== '' && strpos($uri, $basePath) === 0) {
-            $uri = substr($uri, strlen($basePath));
-        }
-        
-        // Remove trailing slash
+
+        /*
+         * The application previously assumed a base path of "/campo" when hosted in
+         * a subdirectory. Since the app is now hosted at the domain root, remove
+         * any hard-coded base path handling. If you choose to host this app
+         * under a subfolder in the future, you can reintroduce a `$basePath`
+         * variable here and strip it off of `$uri` if present.
+         */
+
+        // Normalize URI by removing trailing slash (except for root)
         $uri = rtrim($uri, '/');
         if ($uri === '') {
             $uri = '/';
@@ -33,7 +35,7 @@ class Router {
             return;
         }
 
-        // 404
+        // 404 fallback
         http_response_code(404);
         echo json_encode(['error' => 'Not Found']);
     }

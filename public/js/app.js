@@ -1,6 +1,7 @@
 import * as API from './api.js';
 import * as Auth from './modules/auth.js';
 
+// Define SPA routes. Keys are the pathname without trailing slash. Values are render functions.
 const routes = {
     '/login': Auth.renderLogin,
     '/dashboard': (c) => import('./modules/dashboard.js').then(m => m.render(c)),
@@ -13,25 +14,21 @@ const routes = {
     '/import': (c) => import('./modules/import.js').then(m => m.render(c)),
     '/rates': (c) => import('./modules/rates.js').then(m => m.render(c)),
     '/map': (c) => import('./modules/map.js').then(m => m.render(c)),
+    // Intranet admin management page (requires auth)
+    '/intranet-admin': (c) => import('./modules/intranet_admin.js').then(m => m.render(c)),
 };
 
 // Prevent duplicate event bindings if init() runs more than once
 let navSetupDone = false;
 
 async function init() {
-    // ✅ Always bind navigation handlers up-front (fixes hamburger not working after login redirect)
+    // Always bind navigation handlers up-front (fixes hamburger not working after login redirect)
     setupNavigation();
 
-    let path = window.location.pathname.replace(/\/$/, "");
+    // Normalise the current path by stripping trailing slashes
+    let path = window.location.pathname.replace(/\/$/, '');
 
-    if (path === '/map' || path.endsWith('/map')) {
-        document.getElementById('sidebar').classList.add('hidden');
-        document.getElementById('mobile-header').style.display = 'none';
-        document.body.classList.add('public-view');
-        handleRoute(path);
-        return; 
-    }
-
+    // Determine authentication status
     let isAuthenticated = false;
     try {
         const { authenticated } = await API.get('/check-auth');
@@ -40,21 +37,27 @@ async function init() {
         console.error('Auth check failed', e);
     }
 
+    // If not authenticated, always redirect to login unless already on login
     if (!isAuthenticated && path !== '/login') {
         navigateTo('/login');
         return;
     }
 
+    // If authenticated and visiting root or login, go to dashboard
+    if (isAuthenticated && (path === '' || path === '/' || path === '/login')) {
+        navigateTo('/dashboard');
+        return;
+    }
+
+    // Show or hide sidebar/header based on authentication
     if (isAuthenticated) {
         document.getElementById('sidebar').classList.remove('hidden');
         if (window.innerWidth <= 900) {
             document.getElementById('mobile-header').style.display = 'flex';
         }
-        
-        if (path === '/login' || path === '/' || path === '/') {
-            navigateTo('/dashboard');
-            return;
-        }
+    } else {
+        document.getElementById('sidebar').classList.add('hidden');
+        document.getElementById('mobile-header').style.display = 'none';
     }
 
     handleRoute(path);
@@ -68,7 +71,8 @@ function setupNavigation() {
         const link = e.target.closest('[data-link]');
         if (link) {
             e.preventDefault();
-            navigateTo(link.getAttribute('href'));
+            const href = link.getAttribute('href');
+            if (href) navigateTo(href);
         }
     });
 
@@ -107,28 +111,28 @@ function setupNavigation() {
 
 export function navigateTo(url) {
     history.pushState(null, null, url);
-    const path = url.replace(/\/$/, "");
-    
-    if (path === '/map') {
+    const path = url.replace(/\/$/, '');
+
+    // Toggling UI: if path is login, hide nav; otherwise show it if user is authenticated
+    if (path === '/login') {
         document.getElementById('sidebar').classList.add('hidden');
         document.getElementById('mobile-header').style.display = 'none';
-        document.body.classList.add('public-view');
     } else {
-        document.getElementById('sidebar').classList.remove('hidden');
+        // Sidebar visibility is managed by auth state inside handleRoute
+        // On small screens, ensure header is visible
         if (window.innerWidth <= 900) {
             document.getElementById('mobile-header').style.display = 'flex';
         }
-        document.body.classList.remove('public-view');
     }
-    
+
     document.body.classList.remove('mobile-menu-open');
     handleRoute(path);
 }
 
 async function handleRoute(path) {
     const main = document.getElementById('main-content');
-    path = path.replace(/\/$/, "");
-    if (path === '/') path = '/dashboard'; 
+    path = path.replace(/\/$/, '');
+    if (path === '') path = '/dashboard';
 
     const renderer = routes[path];
 
@@ -144,6 +148,7 @@ async function handleRoute(path) {
         main.innerHTML = '<h1>404 Not Found</h1>';
     }
 
+    // Highlight active link in sidebar
     document.querySelectorAll('.nav-links a').forEach(a => {
         a.classList.remove('active');
         if (a.getAttribute('href') === path) {

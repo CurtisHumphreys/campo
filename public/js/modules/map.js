@@ -254,8 +254,10 @@ function showDetails(site) {
     
     const btn = document.getElementById('dm-action');
     btn.onclick = () => {
+        // Navigate to Sites page within the SPA
         window.history.pushState(null, null, '/sites');
-        document.querySelector('a[href="/sites"]').click();
+        const link = document.querySelector('a[href="/sites"]');
+        if (link) link.click();
         modal.classList.add('hidden');
     };
     

@@ -1,12 +1,14 @@
 import * as API from '../api.js';
 
+// Admin page for managing intranet content. This module is loaded via app.js when navigating to /intranet-admin.
+
 export async function render(container) {
     container.innerHTML = `
         <div class="header-actions">
-            <h1>Intranet (Public Page)</h1>
+            <h1>Intranet Public Page</h1>
             <div class="actions-group">
-                <a class="secondary small" href="/campo/intranet" target="_blank" rel="noopener">Open Intranet</a>
-                <a class="secondary small" href="/campo/public-map" target="_blank" rel="noopener">Open Public Map</a>
+                <a class="secondary small" href="/intranet/" target="_blank" rel="noopener">Open Intranet</a>
+                <a class="secondary small" href="/public-map" target="_blank" rel="noopener">Public Map</a>
             </div>
         </div>
 
@@ -14,13 +16,13 @@ export async function render(container) {
             <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; align-items:center;">
                 <div>
                     <div style="font-weight:600;">Active Camp</div>
-                    <div id="active-camp-line" style="color: var(--muted, #64748b); margin-top:4px;">Loading…</div>
+                    <div id="active-camp-line" style="color: var(--text-muted); margin-top:4px;">Loading…</div>
                 </div>
                 <button id="save-intranet" class="primary">Save</button>
             </div>
         </div>
 
-        <div class="grid-2" style="margin-top:12px;">
+        <div class="grid-2" style="margin-top:12px; gap:1rem;">
             <div class="card">
                 <h2 style="margin-top:0;">Current Camp Program</h2>
                 <p class="muted" style="margin-top:-6px;">Shown on the public intranet page.</p>
@@ -53,9 +55,8 @@ export async function render(container) {
         const payload = {
             program: document.getElementById('program').value || '',
             notifications: document.getElementById('notifications').value || '',
-            events: document.getElementById('events').value || '',
+            events: document.getElementById('events').value || ''
         };
-
         try {
             await API.post('/intranet', payload);
             toast('Saved');
@@ -67,35 +68,36 @@ export async function render(container) {
 }
 
 async function load() {
-    const data = await API.get('/intranet');
-
-    const campLine = document.getElementById('active-camp-line');
-    if (campLine) {
-        if (!data.camp) {
-            campLine.textContent = 'No active camp set. Set a camp to Active first.';
-        } else {
-            const c = data.camp;
-            campLine.textContent = `${c.name || 'Camp'} ${c.year || ''} (${c.start_date || ''} to ${c.end_date || ''})`;
+    try {
+        const data = await API.get('/intranet');
+        const campLine = document.getElementById('active-camp-line');
+        if (campLine) {
+            if (!data.camp) {
+                campLine.textContent = 'No active camp set. Set a camp to Active first.';
+            } else {
+                const c = data.camp;
+                campLine.textContent = `${c.name || 'Camp'} ${c.year || ''} (${c.start_date || ''} to ${c.end_date || ''})`;
+            }
         }
+        const content = data.content || {};
+        document.getElementById('program').value = content.program || '';
+        document.getElementById('notifications').value = content.notifications || '';
+        document.getElementById('events').value = content.events || '';
+        const upd = content.updated_at ? new Date(content.updated_at).toLocaleString('en-AU') : '';
+        const last = document.getElementById('last-updated');
+        if (last) last.textContent = upd ? `Last updated: ${upd}` : '';
+    } catch (err) {
+        console.error(err);
+        document.getElementById('active-camp-line').textContent = 'Error loading camp.';
     }
-
-    const content = data.content || {};
-    document.getElementById('program').value = content.program || '';
-    document.getElementById('notifications').value = content.notifications || '';
-    document.getElementById('events').value = content.events || '';
-
-    const upd = content.updated_at ? new Date(content.updated_at).toLocaleString('en-AU') : '';
-    const last = document.getElementById('last-updated');
-    if (last) last.textContent = upd ? `Last updated: ${upd}` : '';
 }
 
 function toast(msg) {
-    // Minimal toast using existing styling conventions (no new theme)
     const el = document.createElement('div');
     el.textContent = msg;
     el.style.position = 'fixed';
     el.style.left = '50%';
-    el.style.bottom = '18px';
+    el.style.bottom = '16px';
     el.style.transform = 'translateX(-50%)';
     el.style.background = '#0f172a';
     el.style.color = '#fff';
@@ -105,5 +107,5 @@ function toast(msg) {
     el.style.zIndex = '9999';
     el.style.boxShadow = '0 10px 22px rgba(0,0,0,0.25)';
     document.body.appendChild(el);
-    setTimeout(() => el.remove(), 1200);
+    setTimeout(() => el.remove(), 1500);
 }

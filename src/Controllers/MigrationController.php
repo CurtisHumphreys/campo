@@ -59,6 +59,24 @@ class MigrationController {
             echo "Checking waitlist table...\n";
             $this->safeAddColumn($db, 'waitlist', 'phone', 'VARCHAR(50) AFTER last_name');
 
+            // 6. Intranet content table
+            echo "Checking camp_intranet_content table...\n";
+            $sql = "CREATE TABLE IF NOT EXISTS camp_intranet_content (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                camp_id INT NOT NULL UNIQUE,
+                program TEXT,
+                notifications TEXT,
+                events TEXT,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                FOREIGN KEY (camp_id) REFERENCES camps(id) ON DELETE CASCADE
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
+            try {
+                $db->exec($sql);
+                echo "Ensured camp_intranet_content table exists.\n";
+            } catch (Exception $e) {
+                echo "Warning: Failed to create camp_intranet_content: " . $e->getMessage() . "\n";
+            }
+
             echo "Migration Complete.\n</pre>";
 
         } catch (Exception $e) {

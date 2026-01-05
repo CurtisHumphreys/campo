@@ -1,3 +1,4 @@
+// API base is now the root /api path since the app is served from the domain root
 const API_BASE = '/api';
 
 export async function post(endpoint, data) {
@@ -14,7 +15,6 @@ export async function post(endpoint, data) {
         try {
             const errData = text ? JSON.parse(text) : {};
             throw new Error(errData.message || errData.error || 'API Error');
-
         } catch (e) {
             // If JSON parsing fails, throw raw text as message
             throw new Error(text || 'API Error');
@@ -34,7 +34,7 @@ export async function get(endpoint) {
     if (!response.ok) {
         try {
             const errData = text ? JSON.parse(text) : {};
-            throw new Error(errData.message || 'API Error');
+            throw new Error(errData.message || errData.error || 'API Error');
         } catch (e) {
             throw new Error(text || 'API Error');
         }

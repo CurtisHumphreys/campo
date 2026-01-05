@@ -4,8 +4,6 @@ session_start();
 require_once __DIR__ . '/../src/Database.php';
 require_once __DIR__ . '/../src/Router.php';
 require_once __DIR__ . '/../src/Auth.php';
-require_once __DIR__ . '/../config.php';
-
 
 spl_autoload_register(function ($class) {
     if (file_exists(__DIR__ . '/../src/Controllers/' . $class . '.php')) {
@@ -16,23 +14,6 @@ spl_autoload_register(function ($class) {
 $router = new Router();
 
 $router->get('/api/migrate', function() { (new MigrationController())->migrate(); });
-
-$router->get('/api/health', function() {
-    header('Content-Type: application/json');
-    try {
-        $pdo = Database::connect();
-
-        $stmt = $pdo->query("SELECT 1");
-        $ok = (bool)$stmt->fetchColumn();
-
-        echo json_encode(['ok' => $ok]);
-    } catch (Throwable $e) {
-        http_response_code(500);
-        echo json_encode(['ok' => false, 'message' => $e->getMessage()]);
-    }
-});
-
-
 
 $router->post('/api/login', function() {
     $data = json_decode(file_get_contents('php://input'), true);
@@ -57,12 +38,54 @@ $router->get('/api/check-auth', function() {
     }
 });
 
+// --- Public API routes for intranet and public map ---
+// Expose active camp intranet content without requiring login
+$router->get('/api/public/intranet', function() {
+    (new IntranetController())->publicActive();
+});
+// Expose simplified site data for the public map
+$router->get('/api/public/sites-map', function() {
+    (new IntranetController())->publicSitesMap();
+});
+
 $router->get('/public-map', function() {
+    // Serve the public map page (accessible without login)
     if (file_exists(__DIR__ . '/public-map.html')) readfile(__DIR__ . '/public-map.html');
 });
 $router->get('/waitlist', function() {
     if (file_exists(__DIR__ . '/waitlist.html')) readfile(__DIR__ . '/waitlist.html');
 });
+
+// --- Intranet public routes ---
+// Redirect /intranet (without slash) to /intranet/ for PWA scope consistency
+$router->get('/intranet', function() {
+    header('Location: /intranet/', true, 302);
+    exit;
+});
+
+// Serve intranet shell (no login required)
+$router->get('/intranet/', function() {
+    $file = __DIR__ . '/intranet/index.html';
+    if (file_exists($file)) readfile($file);
+    else { http_response_code(404); echo "Not Found"; }
+});
+
+// Serve intranet PWA manifest
+$router->get('/intranet/manifest.json', function() {
+    $file = __DIR__ . '/intranet/manifest.json';
+    if (!file_exists($file)) { http_response_code(404); echo "Not Found"; return; }
+    header('Content-Type: application/manifest+json');
+    readfile($file);
+});
+
+// Serve intranet service worker
+$router->get('/intranet/sw.js', function() {
+    $file = __DIR__ . '/intranet/sw.js';
+    if (!file_exists($file)) { http_response_code(404); echo "Not Found"; return; }
+    header('Content-Type: application/javascript');
+    readfile($file);
+});
+
 
 // Waitlist API
 $router->post('/api/waitlist', function() { (new SiteController())->storeWaitlist(); });
@@ -72,7 +95,7 @@ $router->post('/api/site/waitlist-delete', function() { (new SiteController())->
 
 $router->get('/', function() { readfile(__DIR__ . '/index.html'); });
 
-$pages = ['/login', '/dashboard', '/members', '/sites', '/payments', '/payment-records', '/settings', '/rates', '/camps', '/import', '/prepayments', '/map'];
+$pages = ['/login', '/dashboard', '/members', '/sites', '/payments', '/payment-records', '/settings', '/rates', '/camps', '/import', '/prepayments', '/map', '/intranet-admin'];
 foreach ($pages as $page) {
     $router->get($page, function() { readfile(__DIR__ . '/index.html'); });
 }
@@ -105,6 +128,14 @@ $router->post('/api/payment/update', function() { $id = $_GET['id'] ?? null; if 
 $router->post('/api/payment/delete', function() { $id = $_GET['id'] ?? null; if ($id) (new PaymentController())->delete($id); });
 $router->get('/api/payments/summary', function() { (new PaymentController())->summary(); });
 $router->get('/api/payments/dashboard-stats', function() { (new PaymentController())->dashboardStats(); });
+
+// Intranet admin API routes (requires authentication; Auth::check will be handled in controller)
+$router->get('/api/intranet', function() {
+    (new IntranetController())->adminGet();
+});
+$router->post('/api/intranet', function() {
+    (new IntranetController())->adminSave();
+});
 
 $router->post('/api/import', function() { (new ImportController())->upload(); });
 $router->post('/api/import/members', function() { (new ImportController())->importMembers(); });
@@ -139,7 +170,4 @@ $router->get('/api/dashboard-stats-legacy', function() {
     ]);
 });
 
-
 $router->dispatch();
-
-

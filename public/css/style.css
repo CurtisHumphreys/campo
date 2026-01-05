@@ -331,6 +331,72 @@ button.small { padding: 0.35rem 0.75rem; font-size: 0.75rem; }
 .badge.draft, .badge.unknown, .badge.needs_review { background: #f1f5f9; color: #475569; }
 .badge.exempt { background: #e0f2fe; color: #0369a1; }
 
+/* Additional badge styles for site statuses */
+/* Treat available sites similar to active statuses */
+.badge.available { background: #dcfce7; color: #15803d; }
+:root.dark-mode .badge.available { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+
+/* Site grid layout */
+.site-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    width: 100%;
+}
+
+/* Site card styling */
+.site-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.site-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+/* Site card header */
+.site-card .site-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.site-card .site-number {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--primary);
+}
+
+.site-card .site-type {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+    text-transform: capitalize;
+}
+
+.site-card .site-body {
+    flex: 1;
+    margin-bottom: 0.5rem;
+    color: var(--text-main);
+    font-size: 0.95rem;
+}
+
+.site-card .site-actions {
+    margin-top: auto;
+}
+
+.site-card .site-actions button {
+    width: 100%;
+}
+
 /* Dark mode badges */
 :root.dark-mode .badge.paid, :root.dark-mode .badge.active { background: rgba(16, 185, 129, 0.2); color: #34d399; }
 :root.dark-mode .badge.unpaid, :root.dark-mode .badge.overdue { background: rgba(239, 68, 68, 0.2); color: #fca5a5; }
