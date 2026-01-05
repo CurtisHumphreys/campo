@@ -15,9 +15,9 @@ class Router {
         $method = $_SERVER['REQUEST_METHOD'];
         $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         
-        // Remove base path if needed (assuming /campo/ is base)
-        $basePath = '/campo';
-        if (strpos($uri, $basePath) === 0) {
+        // Remove base path if needed (assuming / is base)
+        $basePath = '';
+        if ($basePath !== '' && strpos($uri, $basePath) === 0) {
             $uri = substr($uri, strlen($basePath));
         }
         
