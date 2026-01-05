@@ -474,3 +474,37 @@ button.small { padding: 0.35rem 0.75rem; font-size: 0.75rem; }
     
     .grid-2 { grid-template-columns: 1fr; }
 }
+
+
+/* Map pins */
+.map-container { position: relative; }
+#pins-layer { z-index: 5; }
+.map-pin{
+  position:absolute;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  border: 2px solid #ffffff;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.18);
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+}
+.map-pin::after{
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.9);
+  transform: translate(-50%, -50%);
+}
+.map-pin.highlight{
+  outline: 3px solid rgba(37,99,235,0.5);
+  outline-offset: 2px;
+}
+.map-pin.status-available{ background:#22c55e; }
+.map-pin.status-occupied{ background:#ef4444; }
+.map-pin.status-reserved{ background:#f59e0b; }
+.map-pin.status-maintenance{ background:#6b7280; }
