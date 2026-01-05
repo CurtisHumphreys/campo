@@ -4,6 +4,8 @@ session_start();
 require_once __DIR__ . '/../src/Database.php';
 require_once __DIR__ . '/../src/Router.php';
 require_once __DIR__ . '/../src/Auth.php';
+require_once __DIR__ . '/../config.php';
+
 
 spl_autoload_register(function ($class) {
     if (file_exists(__DIR__ . '/../src/Controllers/' . $class . '.php')) {
@@ -119,5 +121,6 @@ $router->get('/api/dashboard-stats-legacy', function() {
         'cheque' => $revenue['cheque']
     ]);
 });
+
 
 $router->dispatch();
