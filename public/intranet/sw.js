@@ -1,12 +1,12 @@
-const CACHE_NAME = 'campo-intranet-v1';
+const CACHE_NAME = 'campo-intranet-v2';
 
 // Precache essential intranet resources. Paths are relative to the domain root.
 const PRECACHE = [
   '/intranet/',
   '/intranet/manifest.json',
-  '/public/css/style.css?v=35',
-  '/public/css/intranet.css?v=1',
-  '/public/js/intranet.js?v=1',
+  '/public/css/style.css?v=36',
+  '/public/css/intranet.css?v=2',
+  '/public/js/intranet.js?v=2',
   '/public/icons/android-chrome-192x192.png',
   '/public/icons/android-chrome-512x512.png',
   '/public/icons/apple-touch-icon.png',

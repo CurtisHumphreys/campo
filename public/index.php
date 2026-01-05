@@ -57,14 +57,9 @@ $router->get('/waitlist', function() {
 });
 
 // --- Intranet public routes ---
-// Redirect /intranet (without slash) to /intranet/ for PWA scope consistency
+// Serve intranet shell (no login required). Router normalises trailing slashes,
+// so we register only the non-trailing-slash version.
 $router->get('/intranet', function() {
-    header('Location: /intranet/', true, 302);
-    exit;
-});
-
-// Serve intranet shell (no login required)
-$router->get('/intranet/', function() {
     $file = __DIR__ . '/intranet/index.html';
     if (file_exists($file)) readfile($file);
     else { http_response_code(404); echo "Not Found"; }
