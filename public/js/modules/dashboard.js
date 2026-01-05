@@ -4,6 +4,30 @@ import * as API from '../api.js';
 let headcountChart = null;
 let financialChart = null;
 
+async function ensureChartJsLoaded() {
+  if (window.Chart) return;
+
+  await new Promise((resolve, reject) => {
+    // Avoid double-inserting
+    if (document.querySelector('script[data-chartjs="1"]')) {
+      const wait = setInterval(() => {
+        if (window.Chart) { clearInterval(wait); resolve(); }
+      }, 50);
+      setTimeout(() => { clearInterval(wait); reject(new Error('Chart.js load timeout')); }, 8000);
+      return;
+    }
+
+    const s = document.createElement('script');
+    s.dataset.chartjs = "1";
+    s.src = "https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js";
+    s.async = true;
+    s.onload = () => resolve();
+    s.onerror = () => reject(new Error('Failed to load Chart.js'));
+    document.head.appendChild(s);
+  });
+}
+
+
 export async function render(container) {
     // DESTROY EXISTING CHARTS TO PREVENT CRASH
     if (headcountChart) {
@@ -14,6 +38,8 @@ export async function render(container) {
         financialChart.destroy();
         financialChart = null;
     }
+
+    
 
     // Removed inline background styles to allow CSS dark mode overrides
     container.innerHTML = `
@@ -128,6 +154,8 @@ export async function render(container) {
             </div>
         </div>
     `;
+
+      await ensureChartJsLoaded();
 
     // Apply inline styles specifically for light mode, relying on CSS class overrides for dark mode
     // (See style.css updates for .dashboard-summary-box)
@@ -469,3 +497,4 @@ export async function render(container) {
         });
     }
 }
+
