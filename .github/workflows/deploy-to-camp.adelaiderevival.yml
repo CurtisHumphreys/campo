@@ -28,9 +28,10 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           port: ${{ secrets.FTP_PORT }}
-          # DirectAdmin usually requires FTPS (Explicit)
-          protocol: ftps
-          # 'loose' accepts self-signed or mismatched certs (common on shared hosting)
+          # Switched to 'ftp' (plain text) to fix ECONNRESET (data socket) errors.
+          # This bypasses TLS/SSL handshake issues on the data channel.
+          protocol: ftp
+          # 'loose' is still good practice even if protocol is plain, just in case.
           security: loose
           # Enable verbose logging to see exactly why the connection fails
           log-level: verbose
