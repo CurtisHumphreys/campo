@@ -13,7 +13,8 @@ export async function post(endpoint, data) {
     if (!response.ok) {
         try {
             const errData = text ? JSON.parse(text) : {};
-            throw new Error(errData.message || 'API Error');
+            throw new Error(errData.message || errData.error || 'API Error');
+
         } catch (e) {
             // If JSON parsing fails, throw raw text as message
             throw new Error(text || 'API Error');
