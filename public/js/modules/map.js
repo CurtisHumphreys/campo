@@ -6,6 +6,12 @@ let editMode = false;
 // Pan/Zoom State (Internal)
 let lastTransform = { x: 0, y: 0, scale: 1 };
 
+function toNumber(v) {
+    if (v === null || v === undefined || v === '') return NaN;
+    const n = Number(v);
+    return Number.isFinite(n) ? n : NaN;
+}
+
 export async function render(container) {
     container.innerHTML = `
         <div class="header-actions">
@@ -16,11 +22,13 @@ export async function render(container) {
             </div>
         </div>
 
+        <div id="map-debug" style="margin: 6px 0 10px 0; font-size: 12px; color: var(--body-text, #75848f);"></div>
+
         <div class="card" style="padding: 0; overflow: hidden; height: 70vh; display: flex;">
             <div id="map-scroll-wrapper" style="flex: 1; overflow: hidden; position: relative; background: #e2e8f0; touch-action: none; cursor: grab;">
-                <div id="map-wrapper" class="map-container" style="display: inline-block; min-width: 800px; transform-origin: 0 0;">
+                <div id="map-wrapper" class="map-container" style="display: inline-block; min-width: 800px; transform-origin: 0 0; position: relative;">
                     <img src="/public/img/map.jpg" id="camp-map-img" alt="Campsite Map" style="display: block; width: 100%; height: auto;">
-                    <div id="pins-layer" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: auto;"></div>
+                    <div id="pins-layer" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: auto; z-index: 10;"></div>
                 </div>
             </div>
         </div>
@@ -63,10 +71,21 @@ export async function render(container) {
 
     // Fetch Sites
     try {
-        allSites = await API.get('/sites');
+        const res = await API.get('/sites');
+        // Some endpoints may return {success:false,...} with HTTP 200
+        if (res && typeof res === 'object' && res.success === false) {
+            console.error('Failed to load sites:', res);
+            allSites = [];
+        } else {
+            allSites = Array.isArray(res) ? res : [];
+        }
         renderPins();
+        // Debug: helpful when pins disappear due to data shape
+        const mappedCount = allSites.filter(s => Number.isFinite(toNumber(s.map_x)) && Number.isFinite(toNumber(s.map_y))).length;
+        console.log(`[Map] Sites loaded: ${allSites.length}. Mapped pins: ${mappedCount}.`);
     } catch (e) {
         console.error("Failed to load sites", e);
+        allSites = [];
     }
 
     // Toggle Edit Mode
@@ -198,12 +217,18 @@ function renderPins() {
     const layer = document.getElementById('pins-layer');
     layer.innerHTML = '';
 
+    let rendered = 0;
+
     allSites.forEach(site => {
-        if (site.map_x !== null && site.map_x !== "" && site.map_y !== null && site.map_y !== "") {
+        const x = toNumber(site.map_x);
+        const y = toNumber(site.map_y);
+
+        // NOTE: Do not use truthy checks here. 0 is a valid coordinate.
+        if (Number.isFinite(x) && Number.isFinite(y)) {
             const pin = document.createElement('div');
             pin.className = `map-pin status-${(site.status || 'Available').toLowerCase()}`;
-            pin.style.left = `${site.map_x}%`;
-            pin.style.top = `${site.map_y}%`;
+            pin.style.left = `${x}%`;
+            pin.style.top = `${y}%`;
             pin.dataset.id = site.id;
             pin.dataset.site = site.site_number;
             pin.dataset.occupant = site.occupants || '';
@@ -226,15 +251,20 @@ function renderPins() {
             });
 
             layer.appendChild(pin);
+            rendered++;
         }
     });
+
+    // Lightweight on-screen debug (helps confirm data is arriving)
+    const dbg = document.getElementById('map-debug');
+    if (dbg) dbg.textContent = `Sites: ${allSites.length} | Pins: ${rendered}`;
 }
 
 function openPinModal(x, y) {
     const modal = document.getElementById('pin-modal');
     const select = document.getElementById('pin-site-select');
     
-    const unmapped = allSites.filter(s => !s.map_x).sort((a,b) => 
+    const unmapped = allSites.filter(s => !Number.isFinite(toNumber(s.map_x)) || !Number.isFinite(toNumber(s.map_y))).sort((a,b) => 
         a.site_number.localeCompare(b.site_number, undefined, {numeric:true})
     );
 
