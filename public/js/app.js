@@ -13,6 +13,7 @@ const routes = {
     '/campo/import': (c) => import('./modules/import.js').then(m => m.render(c)),
     '/campo/rates': (c) => import('./modules/rates.js').then(m => m.render(c)),
     '/campo/map': (c) => import('./modules/map.js').then(m => m.render(c)),
+    '/campo/intranet-admin': (c) => import('./modules/intranet_admin.js').then(m => m.render(c)),
 };
 
 // Prevent duplicate event bindings if init() runs more than once
@@ -85,7 +86,7 @@ async function init() {
         const sb = document.getElementById('sidebar');
         if (sb) sb.classList.add('hidden');
     } else {
-        // If authed, show nav. This ensures /campo/map keeps the top menu available.
+        // If authed, show nav.
         if (isAuthenticated) {
             const sb = document.getElementById('sidebar');
             if (sb) sb.classList.remove('hidden');
