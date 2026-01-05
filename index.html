@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" translate="no">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Campo - Camp Management</title>
+    <meta name="google" content="notranslate">
+    
+    <!-- Use root-based paths now that the app is hosted at the domain root. -->
+    <link rel="stylesheet" href="/public/css/style.css?v=35">
+
+    <!-- PWA manifest for the admin app -->
+    <link rel="manifest" href="/public/manifest.json">
+    <meta name="theme-color" content="#2563eb">
+    <link rel="icon" type="image/x-icon" href="/public/icons/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div id="app">
+        <!-- Mobile Top Bar -->
+        <header id="mobile-header">
+            <div class="mobile-brand">Campo</div>
+            <button id="mobile-menu-btn" class="icon-btn">☰</button>
+        </header>
+
+        <nav id="sidebar" class="hidden">
+            <div class="brand-desktop">
+                <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+                    <span>Campo <span class="version">v1.117</span></span>
+                    <!-- Dark Mode Toggle moved here for desktop -->
+                    <label class="theme-switch" title="Toggle Dark Mode">
+                        <input type="checkbox" id="theme-toggle"> 
+                        <span style="font-size:1.2rem;">🌙</span>
+                    </label>
+                </div>
+            </div>
+            
+            <ul class="nav-links">
+                <li><a href="/payments" class="nav-btn-green" data-link>Take Payments</a></li>
+                <li><a href="/dashboard" data-link>Dashboard</a></li>
+                <li><a href="/map" data-link>Camp Map</a></li>
+                <li><a href="/payment-records" data-link>Payment Records</a></li>
+                <li><a href="/members" data-link>Members</a></li>
+                <li><a href="/sites" data-link>Sites</a></li>
+                <li><a href="/camps" data-link>Camps</a></li>
+                <li><a href="/rates" data-link>Camp Rates</a></li>
+                <li><a href="/prepayments" data-link>Pre-payments</a></li>
+                <li><a href="/import" data-link class="admin-only">Import Legacy</a></li>
+                <!-- Intranet Admin page (manage public intranet content) -->
+                <li><a href="/intranet-admin" data-link>Intranet</a></li>
+                <li><a href="#" id="logout-btn">Logout</a></li>
+            </ul>
+        </nav>
+        
+        <main id="main-content">
+            <div class="loader">Loading...</div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Load the main SPA script from the root path -->
+    <script type="module" src="/public/js/app.js?v=38"></script>
+    
+    <script>
+        const toggle = document.getElementById('theme-toggle');
+        const root = document.documentElement; 
+        
+        // Initial check
+        if (localStorage.getItem('theme') === 'dark') {
+            root.classList.add('dark-mode');
+            if(toggle) toggle.checked = true;
+        }
+
+        if(toggle) {
+            toggle.addEventListener('change', () => {
+                if (toggle.checked) {
+                    root.classList.add('dark-mode');
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    root.classList.remove('dark-mode');
+                    localStorage.setItem('theme', 'light');
+                }
+                // Trigger resize to update charts colors if on dashboard
+                window.dispatchEvent(new Event('resize'));
+            });
+        }
+        
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                // Register the admin service worker at the root scope
+                navigator.serviceWorker.register('/service-worker.js', { scope: '/' })
+                    .catch(err => console.error('SW fail:', err));
+            });
+        }
+
+        // Install prompt for admin PWA (optional)
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Prevent the mini-infobar from appearing
+            e.preventDefault();
+            deferredPrompt = e;
+            // You could show a custom install button here if desired
+        });
+    </script>
+</body>
+
+</html>
