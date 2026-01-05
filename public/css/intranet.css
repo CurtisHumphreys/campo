@@ -1,0 +1,177 @@
+/* Campo Intranet (public) - scoped styling for a clean mobile-first layout. */
+/* Uses the same Inter font + base colours as the main app. */
+
+:root {
+  --intranet-bg: #f5f7fb;
+  --intranet-card: #ffffff;
+  --intranet-border: rgba(15, 23, 42, 0.08);
+  --intranet-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
+}
+
+body {
+  background: var(--intranet-bg);
+}
+
+.intranet-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.intranet-header {
+  padding: 18px 16px 10px;
+}
+
+.intranet-header__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.intranet-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.intranet-title__logo {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: #2563eb;
+  color: #fff;
+  font-size: 20px;
+  box-shadow: var(--intranet-shadow);
+}
+
+.intranet-title__name {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: #0f172a;
+  line-height: 1.1;
+}
+
+.intranet-title__sub {
+  font-size: 0.9rem;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+.intranet-actions {
+  margin-top: 14px;
+  display: grid;
+  gap: 10px;
+}
+
+.intranet-action {
+  display: grid;
+  grid-template-columns: 44px 1fr 16px;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 12px;
+  border-radius: 16px;
+  background: var(--intranet-card);
+  border: 1px solid var(--intranet-border);
+  box-shadow: var(--intranet-shadow);
+  text-decoration: none;
+  color: inherit;
+}
+
+.intranet-action__icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: rgba(37, 99, 235, 0.08);
+  font-size: 20px;
+}
+
+.intranet-action__title {
+  font-weight: 650;
+  color: #0f172a;
+}
+
+.intranet-action__desc {
+  font-size: 0.9rem;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+.intranet-action__chev {
+  color: #94a3b8;
+  font-size: 20px;
+  text-align: right;
+}
+
+.intranet-main {
+  padding: 0 16px 24px;
+  display: grid;
+  gap: 12px;
+}
+
+.intranet-card {
+  background: var(--intranet-card);
+  border: 1px solid var(--intranet-border);
+  border-radius: 18px;
+  box-shadow: var(--intranet-shadow);
+  overflow: hidden;
+}
+
+.intranet-card__header {
+  padding: 14px 14px 10px;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+}
+
+.intranet-card__title {
+  margin: 0;
+  font-size: 1rem;
+  color: #0f172a;
+}
+
+.intranet-card__meta {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  white-space: nowrap;
+}
+
+.intranet-card__body {
+  padding: 14px;
+}
+
+.intranet-content {
+  font-size: 0.95rem;
+  color: #0f172a;
+  line-height: 1.45;
+  white-space: pre-wrap;
+}
+
+.muted {
+  color: #64748b;
+}
+
+.intranet-footer {
+  padding-top: 8px;
+}
+
+.tiny-muted {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  text-align: centre;
+}
+
+/* Slightly roomier on bigger screens without changing the “mobile-first” feel */
+@media (min-width: 768px) {
+  .intranet-header,
+  .intranet-main {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+}
