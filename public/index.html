@@ -1,44 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" translate="no">
+
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Campo</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Campo - Camp Management</title>
+    <meta name="google" content="notranslate">
+
+    <link rel="stylesheet" href="/campo/public/css/style.css?v=35">
+
     <link rel="manifest" href="/campo/public/manifest.json">
     <meta name="theme-color" content="#2563eb">
     <link rel="icon" type="image/x-icon" href="/campo/public/icons/favicon.ico">
-    <link rel="stylesheet" href="/campo/public/css/style.css?v=22" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
-    <!-- Mobile Header -->
-    <header id="mobile-header" class="mobile-header">
-        <button id="mobile-menu-btn" class="hamburger-btn">☰</button>
-        <span class="mobile-title">Campo</span>
+    <div id="app">
+        <!-- Mobile Top Bar -->
+        <header id="mobile-header">
+            <div class="mobile-brand">Campo</div>
+            <button id="mobile-menu-btn" class="icon-btn">☰</button>
+        </header>
 
-        <!-- Mobile Dark Mode Toggle -->
-        <label class="theme-switch" title="Toggle Dark Mode">
-            <input type="checkbox" id="mobile-theme-toggle">
-            <span style="font-size:1.2rem;">🌙</span>
-        </label>
-    </header>
-
-    <div class="layout">
         <nav id="sidebar" class="hidden">
             <div class="brand-desktop">
                 <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
                     <span>Campo <span class="version">v1.117</span></span>
                     <!-- Dark Mode Toggle moved here for desktop -->
                     <label class="theme-switch" title="Toggle Dark Mode">
-                        <input type="checkbox" id="theme-toggle"> 
+                        <input type="checkbox" id="theme-toggle">
                         <span style="font-size:1.2rem;">🌙</span>
                     </label>
                 </div>
             </div>
-            
+
             <ul class="nav-links">
                 <li><a href="/campo/payments" class="nav-btn-green" data-link>Take Payments</a></li>
                 <li><a href="/campo/dashboard" data-link>Dashboard</a></li>
@@ -61,6 +59,7 @@
         <main id="main-content"></main>
     </div>
 
-    <script type="module" src="/campo/public/js/app.js?v=22"></script>
+    <script type="module" src="/campo/public/js/app.js?v=35"></script>
 </body>
+
 </html>
