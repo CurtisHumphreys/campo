@@ -15,14 +15,14 @@ function toNumber(v) {
 export async function render(container) {
     container.innerHTML = `
         <div class="header-actions">
-            <h1>Campsite Map</h1>
+            <h1>Campsite Map <span style="font-size:12px; font-weight:600; opacity:0.7;">v38</span></h1>
             <div class="actions-group">
                 <input type="text" id="map-search" placeholder="Search Member or Site..." class="search-input" style="max-width: 200px;">
                 <button id="toggle-edit-btn" class="secondary small">Enable Edit Mode</button>
             </div>
         </div>
 
-        <div id="map-debug" style="margin: 6px 0 10px 0; font-size: 12px; color: var(--body-text, #75848f);"></div>
+        <div id="map-debug" style="margin: 6px 0 10px 0; font-size: 12px; padding: 6px 10px; border-radius: 10px; background: rgba(37,99,235,0.08); color: var(--title-text, #343637);"></div>
 
         <div class="card" style="padding: 0; overflow: hidden; height: 70vh; display: flex;">
             <div id="map-scroll-wrapper" style="flex: 1; overflow: hidden; position: relative; background: #e2e8f0; touch-action: none; cursor: grab;">
@@ -69,6 +69,10 @@ export async function render(container) {
         </div>
     `;
 
+    // If you can see this line, the updated map module has definitely loaded.
+    const debugEl = document.getElementById('map-debug');
+    if (debugEl) debugEl.textContent = 'Map module loaded. Fetching sites...';
+
     // Fetch Sites
     try {
         const res = await API.get('/sites');
@@ -82,10 +86,13 @@ export async function render(container) {
         renderPins();
         // Debug: helpful when pins disappear due to data shape
         const mappedCount = allSites.filter(s => Number.isFinite(toNumber(s.map_x)) && Number.isFinite(toNumber(s.map_y))).length;
-        console.log(`[Map] Sites loaded: ${allSites.length}. Mapped pins: ${mappedCount}.`);
+        const sample = allSites.slice(0, 3).map(s => ({ id: s.id, site_number: s.site_number, map_x: s.map_x, map_y: s.map_y }));
+        console.log(`[Map] Sites loaded: ${allSites.length}. Mapped pins: ${mappedCount}. Sample:`, sample);
+        if (debugEl) debugEl.textContent = `Sites: ${allSites.length} | Pins with coords: ${mappedCount}`;
     } catch (e) {
         console.error("Failed to load sites", e);
         allSites = [];
+        if (debugEl) debugEl.textContent = 'Failed to load sites. Check console/network.';
     }
 
     // Toggle Edit Mode
