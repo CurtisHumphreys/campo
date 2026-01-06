@@ -4,7 +4,7 @@ session_start();
 require_once __DIR__ . '/../src/Database.php';
 require_once __DIR__ . '/../src/Router.php';
 require_once __DIR__ . '/../src/Auth.php';
-require_once __DIR__ . '/../config/config.php';
+// require_once __DIR__ . '/../config/config.php';
 
 // 1. SPA FALLBACK:
 // If the request is NOT an API call, serve the frontend HTML.
