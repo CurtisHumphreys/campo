@@ -38,144 +38,90 @@ class SiteController {
                         $occBySite[$sid][] = $occObj;
                     }
                 }
-            } catch (Throwable $eOcc) {
-                $occBySite = [];
+            } catch (Exception $e) {
+                // table might not exist yet
             }
 
             // 3) Merge
-            foreach ($sites as &$s) {
-                $sid = $s['id'] ?? null;
-                $s['occupants_list'] = ($sid !== null && isset($occBySite[$sid])) ? $occBySite[$sid] : [];
-                $names = array_map(function($o) { return $o['name']; }, $s['occupants_list']);
-                $s['occupants'] = implode(', ', $names);
+            foreach ($sites as &$site) {
+                $sid = $site['id'];
+                $site['occupants'] = $occBySite[$sid] ?? [];
+                
+                // Helper strings for UI
+                $names = array_map(function($o) { return $o['name']; }, $site['occupants']);
+                $site['occupant_name'] = implode(', ', $names);
+                $site['occupant_id'] = count($site['occupants']) > 0 ? $site['occupants'][0]['id'] : null;
             }
-            unset($s);
 
             echo json_encode($sites);
-        } catch (Throwable $e) {
-            http_response_code(200);
-            echo json_encode([
-                'success' => false,
-                'message' => 'Failed to load sites',
-                'debug'   => $e->getMessage(),
-            ]);
+
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode(['error' => $e->getMessage()]);
         }
+    }
+
+    // --- NEW METHOD FOR PUBLIC MAP ---
+    public function publicMap() {
+        $db = Database::connect();
+        
+        // Return simplified data for public view
+        $sql = "SELECT s.id, s.site_number, s.map_x, s.map_y, s.type,
+                       (CASE 
+                           WHEN sa.id IS NOT NULL THEN 'Occupied' 
+                           ELSE 'Available' 
+                        END) as status,
+                       CONCAT(m.first_name, ' ', m.last_name) as occupant_name
+                FROM sites s
+                LEFT JOIN site_allocations sa ON s.id = sa.site_id AND sa.is_current = 1
+                LEFT JOIN members m ON sa.member_id = m.id";
+                
+        $stmt = $db->query($sql);
+        $data = $stmt->fetchAll();
+        
+        if (!headers_sent()) header('Content-Type: application/json');
+        echo json_encode($data);
     }
 
     public function store() {
-        header('Content-Type: application/json');
+        // ... existing store code ...
         $data = json_decode(file_get_contents('php://input'), true);
         $db = Database::connect();
-        $stmt = $db->prepare("INSERT INTO sites (site_number, section, site_type, status) VALUES (?, ?, ?, ?)");
+        
+        $stmt = $db->prepare("INSERT INTO sites (site_number, type, power, water, sewer, map_x, map_y) VALUES (?, ?, ?, ?, ?, ?, ?)");
         $stmt->execute([
-            $data['site_number'] ?? '',
-            $data['section'] ?? '',
-            $data['site_type'] ?? '',
-            $data['status'] ?? 'Available'
+            $data['site_number'],
+            $data['type'],
+            $data['power'] ?? 'No',
+            $data['water'] ?? 'No',
+            $data['sewer'] ?? 'No',
+            $data['map_x'] ?? null,
+            $data['map_y'] ?? null
         ]);
+        
         echo json_encode(['success' => true, 'id' => $db->lastInsertId()]);
     }
 
-    public function update($id) {
-        header('Content-Type: application/json');
+    public function updateMapCoords($id) {
         $data = json_decode(file_get_contents('php://input'), true);
-        $db = Database::connect();
-
-        if (array_key_exists('map_x', $data) || array_key_exists('map_y', $data)) {
-             $stmt = $db->prepare("UPDATE sites SET map_x = ?, map_y = ? WHERE id = ?");
-             $mapX = array_key_exists('map_x', $data) ? $data['map_x'] : null;
-             $mapY = array_key_exists('map_y', $data) ? $data['map_y'] : null;
-             $stmt->execute([$mapX, $mapY, $id]);
-        } else {
-            $stmt = $db->prepare("UPDATE sites SET site_number = ?, section = ?, site_type = ?, status = ? WHERE id = ?");
-            $stmt->execute([
-                $data['site_number'] ?? '',
-                $data['section'] ?? '',
-                $data['site_type'] ?? '',
-                $data['status'] ?? 'Available',
-                $id
-            ]);
-        }
-
-        if (isset($data['member_id']) && !empty($data['member_id'])) {
-            $memberId = $data['member_id'];
-            try {
-                $check = $db->prepare("SELECT id FROM site_allocations WHERE site_id = ? AND member_id = ? AND is_current = 1");
-                $check->execute([$id, $memberId]);
-                if (!$check->fetch()) {
-                    $db->prepare("INSERT INTO site_allocations (site_id, member_id, start_date, is_current) VALUES (?, ?, CURDATE(), 1)")
-                       ->execute([$id, $memberId]);
-                }
-                $db->prepare("UPDATE sites SET status = 'Allocated' WHERE id = ?")->execute([$id]);
-            } catch (Throwable $eOcc) { }
-        }
-
-        echo json_encode(['success' => true]);
-    }
-
-    public function allocate() {
-        header('Content-Type: application/json');
-        $data = json_decode(file_get_contents('php://input'), true);
-        $db = Database::connect();
-
-        $siteId = $data['site_id'] ?? null;
-        $memberId = $data['member_id'] ?? null;
-
-        if (!$siteId || !$memberId) {
+        
+        if (!isset($data['map_x']) || !isset($data['map_y'])) {
             http_response_code(400);
-            echo json_encode(['success' => false, 'message' => 'Missing ID']);
+            echo json_encode(['error' => 'Missing coords']);
             return;
         }
 
-        $check = $db->prepare("SELECT id FROM site_allocations WHERE site_id = ? AND member_id = ? AND is_current = 1");
-        $check->execute([$siteId, $memberId]);
-        if (!$check->fetch()) {
-            $db->prepare("INSERT INTO site_allocations (site_id, member_id, start_date, is_current) VALUES (?, ?, CURDATE(), 1)")
-               ->execute([$siteId, $memberId]);
-        }
-        $db->prepare("UPDATE sites SET status = 'Allocated' WHERE id = ?")->execute([$siteId]);
+        $db = Database::connect();
+        $stmt = $db->prepare("UPDATE sites SET map_x = ?, map_y = ? WHERE id = ?");
+        $stmt->execute([$data['map_x'], $data['map_y'], $id]);
         
         echo json_encode(['success' => true]);
     }
 
-    public function deallocate() {
-        header('Content-Type: application/json');
+    // ... existing waitlist methods ...
+    public function submitWaitlist() {
         $data = json_decode(file_get_contents('php://input'), true);
         $db = Database::connect();
-
-        $siteId = $data['site_id'] ?? null;
-        $memberId = $data['member_id'] ?? null;
-
-        if (!$siteId || !$memberId) {
-             http_response_code(400);
-             echo json_encode(['success' => false, 'message' => 'Missing ID']);
-             return;
-        }
-
-        $db->prepare("UPDATE site_allocations SET is_current = 0, end_date = NOW() WHERE site_id = ? AND member_id = ? AND is_current = 1")
-           ->execute([$siteId, $memberId]);
-           
-        $check = $db->prepare("SELECT count(*) FROM site_allocations WHERE site_id = ? AND is_current = 1");
-        $check->execute([$siteId]);
-        if ($check->fetchColumn() == 0) {
-            $db->prepare("UPDATE sites SET status = 'Available' WHERE id = ?")->execute([$siteId]);
-        }
-
-        echo json_encode(['success' => true]);
-    }
-
-    // Waitlist Methods
-    public function waitlist() {
-        $db = Database::connect();
-        $stmt = $db->query("SELECT * FROM waitlist ORDER BY created_at DESC");
-        echo json_encode($stmt->fetchAll());
-    }
-
-    public function storeWaitlist() {
-        $data = json_decode(file_get_contents('php://input'), true);
-        $db = Database::connect();
-        
-        // ADDED phone column and value
         $stmt = $db->prepare("INSERT INTO waitlist (first_name, last_name, phone, site_type, adults, kids, special_considerations, intended_days, home_assembly, overflow_willing, subscription_willing, additional_comments) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->execute([
             $data['first_name'],
@@ -194,7 +140,6 @@ class SiteController {
         echo json_encode(['success' => true]);
     }
 
-    // New method to update priority
     public function updateWaitlist() {
         $data = json_decode(file_get_contents('php://input'), true);
         $id = $_GET['id'] ?? null;
@@ -214,9 +159,10 @@ class SiteController {
 
     public function deleteWaitlist() {
         $id = $_GET['id'] ?? null;
-        if(!$id) return;
+        if (!$id) return;
         $db = Database::connect();
-        $db->prepare("DELETE FROM waitlist WHERE id = ?")->execute([$id]);
+        $stmt = $db->prepare("DELETE FROM waitlist WHERE id = ?");
+        $stmt->execute([$id]);
         echo json_encode(['success' => true]);
     }
 }
