@@ -476,35 +476,44 @@ button.small { padding: 0.35rem 0.75rem; font-size: 0.75rem; }
 }
 
 
+/* REPLACE THE BOTTOM SECTION OF YOUR public/css/style.css WITH THIS: */
+
 /* Map pins */
-.map-container { position: relative; }
-#pins-layer { z-index: 5; }
-.map-pin{
-  position:absolute;
+.map-container { 
+    position: relative; 
+    width: fit-content; /* Critical: Ensures the container matches the image size exactly */
+    margin: 0 auto;     /* Centers the map if it's smaller than screen */
+}
+
+/* FIX: Pins layer must be absolute to stack correctly over the image */
+#pins-layer { 
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 5; 
+  pointer-events: none; /* Allows scrolling/touching the map background */
+}
+
+.map-pin {
+  position: absolute;
   width: 22px;
   height: 22px;
-  border-radius: 999px;
+  border-radius: 50%;
   border: 2px solid #ffffff;
   box-shadow: 0 4px 10px rgba(0,0,0,0.18);
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%); /* Centers the pin exactly on the coordinate */
   cursor: pointer;
+  background-color: var(--success); /* Default to Available */
+  z-index: 10;
+  pointer-events: auto; /* Re-enable clicks on pins */
 }
-.map-pin::after{
-  content: '';
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 8px;
-  height: 8px;
-  border-radius: 999px;
-  background: rgba(255,255,255,0.9);
-  transform: translate(-50%, -50%);
+
+.map-pin.highlight {
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.4);
+    z-index: 20;
+    transform: translate(-50%, -50%) scale(1.2);
 }
-.map-pin.highlight{
-  outline: 3px solid rgba(37,99,235,0.5);
-  outline-offset: 2px;
-}
-.map-pin.status-available{ background:#22c55e; }
-.map-pin.status-occupied{ background:#ef4444; }
-.map-pin.status-reserved{ background:#f59e0b; }
-.map-pin.status-maintenance{ background:#6b7280; }
