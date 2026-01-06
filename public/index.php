@@ -4,26 +4,6 @@ session_start();
 require_once __DIR__ . '/../src/Database.php';
 require_once __DIR__ . '/../src/Router.php';
 require_once __DIR__ . '/../src/Auth.php';
-// require_once __DIR__ . '/../config/config.php';
-
-// 1. SPA FALLBACK:
-// If the request is NOT an API call, serve the frontend HTML.
-// This allows the browser to load index.html, which then loads app.js to handle the routing.
-$requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-
-if (strpos($requestUri, '/api/') !== 0) {
-    // Verify file exists before requiring to avoid fatal error
-    if (file_exists(__DIR__ . '/index.html')) {
-        require __DIR__ . '/index.html';
-    } else {
-        echo "Error: index.html not found.";
-    }
-    exit;
-}
-
-// ---------------------------------------------------------
-// API ROUTING LOGIC (Only runs for /api/ requests)
-// ---------------------------------------------------------
 
 spl_autoload_register(function ($class) {
     if (file_exists(__DIR__ . '/../src/Controllers/' . $class . '.php')) {
@@ -58,63 +38,131 @@ $router->get('/api/check-auth', function() {
     }
 });
 
-// --- Public API routes ---
-$router->get('/api/public/intranet', function() { (new IntranetController())->publicActive(); });
-$router->post('/api/waitlist', function() { (new SiteController())->submitWaitlist(); });
-// NEW: Public Map Endpoint
-$router->get('/api/public/sites-map', function() { (new SiteController())->publicMap(); });
+// --- Public API routes for intranet and public map ---
+// Expose active camp intranet content without requiring login
+$router->get('/api/public/intranet', function() {
+    (new IntranetController())->publicActive();
+});
+// Expose simplified site data for the public map
+$router->get('/api/public/sites-map', function() {
+    (new IntranetController())->publicSitesMap();
+});
+
+$router->get('/public-map', function() {
+    // Serve the public map page (accessible without login)
+    if (file_exists(__DIR__ . '/public-map.html')) readfile(__DIR__ . '/public-map.html');
+});
+$router->get('/waitlist', function() {
+    if (file_exists(__DIR__ . '/waitlist.html')) readfile(__DIR__ . '/waitlist.html');
+});
+
+// --- Intranet public routes ---
+// Serve intranet shell (no login required). Router normalises trailing slashes,
+// so we register only the non-trailing-slash version.
+$router->get('/intranet', function() {
+    $file = __DIR__ . '/intranet/index.html';
+    if (file_exists($file)) readfile($file);
+    else { http_response_code(404); echo "Not Found"; }
+});
+
+// Serve intranet PWA manifest
+$router->get('/intranet/manifest.json', function() {
+    $file = __DIR__ . '/intranet/manifest.json';
+    if (!file_exists($file)) { http_response_code(404); echo "Not Found"; return; }
+    header('Content-Type: application/manifest+json');
+    readfile($file);
+});
+
+// Serve intranet service worker
+$router->get('/intranet/sw.js', function() {
+    $file = __DIR__ . '/intranet/sw.js';
+    if (!file_exists($file)) { http_response_code(404); echo "Not Found"; return; }
+    header('Content-Type: application/javascript');
+    readfile($file);
+});
 
 
-// --- Protected API routes ---
-if (Auth::check()) {
-    $router->get('/api/dashboard-stats', function() { (new PaymentController())->dashboardStats(); });
-    
-    $router->get('/api/members', function() { (new MemberController())->index(); });
-    $router->post('/api/members', function() { (new MemberController())->store(); });
-    $router->post('/api/member/update', function() { (new MemberController())->update($_GET['id']); });
-    $router->post('/api/member/delete', function() { (new MemberController())->delete($_GET['id']); });
-    $router->post('/api/members/delete-all', function() { (new MemberController())->deleteAll(); });
+// Waitlist API
+$router->post('/api/waitlist', function() { (new SiteController())->storeWaitlist(); });
+$router->get('/api/site/waitlist', function() { (new SiteController())->waitlist(); });
+$router->post('/api/site/waitlist-update', function() { (new SiteController())->updateWaitlist(); }); // New Route
+$router->post('/api/site/waitlist-delete', function() { (new SiteController())->deleteWaitlist(); });
 
-    $router->get('/api/sites', function() { (new SiteController())->index(); });
-    $router->post('/api/sites', function() { (new SiteController())->store(); });
-    
-    // Manual Regex-like routing for Map Coords ID
-    $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-    if (preg_match('#^/api/sites/(\d+)/map$#', $uri, $matches)) {
-        (new SiteController())->updateMapCoords($matches[1]);
-        exit;
-    }
+$router->get('/', function() { readfile(__DIR__ . '/index.html'); });
 
-    $router->post('/api/site/allocate', function() { (new SiteController())->allocate(); });
-    $router->post('/api/site/deallocate', function() { (new SiteController())->deallocate(); });
-    $router->post('/api/site/waitlist-update', function() { (new SiteController())->updateWaitlist(); });
-    $router->post('/api/site/waitlist-delete', function() { (new SiteController())->deleteWaitlist(); });
-
-    $router->get('/api/camps', function() { (new CampController())->index(); });
-    $router->get('/api/camps/active', function() { (new CampController())->active(); });
-    $router->post('/api/camps', function() { (new CampController())->store(); });
-    $router->post('/api/camp/update', function() { (new CampController())->update($_GET['id']); });
-    $router->post('/api/camp/delete', function() { (new CampController())->delete($_GET['id']); });
-
-    $router->get('/api/payments', function() { (new PaymentController())->index(); });
-    $router->post('/api/payments', function() { (new PaymentController())->store(); });
-    $router->post('/api/payment/delete', function() { (new PaymentController())->delete($_GET['id']); });
-
-    $router->post('/api/import/legacy', function() { (new ImportController())->importLegacy(); });
-    $router->post('/api/import/prepayments', function() { (new ImportController())->importPrepayments(); });
-    $router->post('/api/import/rates', function() { (new ImportController())->importRates(); });
-    $router->get('/api/prepayments', function() { (new PrepaymentController())->index(); });
-    $router->post('/api/prepayments/match', function() { (new ImportController())->matchPrepayment(); });
-    $router->post('/api/prepayments/delete-all', function() { (new PrepaymentController())->deleteAll(); });
-
-    $router->get('/api/rates', function() { $campId = $_GET['camp_id'] ?? null; if ($campId) (new RateController())->index($campId); });
-    $router->post('/api/rates', function() { (new RateController())->store(); });
-    $router->post('/api/rate/update', function() { $id = $_GET['id'] ?? null; if ($id) (new RateController())->update($id); });
-    $router->post('/api/rate/delete', function() { $id = $_GET['id'] ?? null; if ($id) (new RateController())->delete($id); });
-    
-    // Intranet Admin
-    $router->get('/api/intranet/admin', function() { (new IntranetController())->adminGet(); });
-    $router->post('/api/intranet/save', function() { (new IntranetController())->adminSave(); });
+$pages = ['/login', '/dashboard', '/members', '/sites', '/payments', '/payment-records', '/settings', '/rates', '/camps', '/import', '/prepayments', '/map', '/intranet-admin'];
+foreach ($pages as $page) {
+    $router->get($page, function() { readfile(__DIR__ . '/index.html'); });
 }
+
+$router->post('/api/site/deallocate', function() { (new SiteController())->deallocate(); });
+
+$router->get('/api/members', function() { (new MemberController())->index(); });
+$router->post('/api/members', function() { (new MemberController())->store(); });
+$router->post('/api/members/delete-all', function() { (new MemberController())->deleteAll(); });
+$router->post('/api/member/update', function() { $id = $_GET['id'] ?? null; if ($id) (new MemberController())->update($id); });
+$router->post('/api/member/delete', function() { $id = $_GET['id'] ?? null; if ($id) (new MemberController())->delete($id); });
+$router->get('/api/member/history', function() { $id = $_GET['id'] ?? null; if ($id) (new MemberController())->history($id); });
+
+$router->get('/api/sites', function() { (new SiteController())->index(); });
+$router->post('/api/sites', function() { (new SiteController())->store(); });
+$router->post('/api/site/update', function() { $id = $_GET['id'] ?? null; if ($id) (new SiteController())->update($id); });
+$router->post('/api/sites/allocate', function() { (new SiteController())->allocate(); });
+$router->get('/api/allocations', function() { (new SiteController())->allocations(); });
+
+$router->get('/api/camps', function() { (new CampController())->index(); });
+$router->get('/api/camps/active', function() { (new CampController())->active(); });
+$router->post('/api/camps', function() { (new CampController())->store(); });
+$router->get('/api/camp/rates', function() { $id = $_GET['id'] ?? null; if ($id) (new CampController())->rates($id); });
+$router->post('/api/camp/update', function() { $id = $_GET['id'] ?? null; if ($id) (new CampController())->update($id); });
+$router->post('/api/camp/delete', function() { $id = $_GET['id'] ?? null; if ($id) (new CampController())->delete($id); });
+
+$router->post('/api/payments', function() { (new PaymentController())->store(); });
+$router->get('/api/payments', function() { (new PaymentController())->index(); });
+$router->post('/api/payment/update', function() { $id = $_GET['id'] ?? null; if ($id) (new PaymentController())->update($id); });
+$router->post('/api/payment/delete', function() { $id = $_GET['id'] ?? null; if ($id) (new PaymentController())->delete($id); });
+$router->get('/api/payments/summary', function() { (new PaymentController())->summary(); });
+$router->get('/api/payments/dashboard-stats', function() { (new PaymentController())->dashboardStats(); });
+
+// Intranet admin API routes (requires authentication; Auth::check will be handled in controller)
+$router->get('/api/intranet', function() {
+    (new IntranetController())->adminGet();
+});
+$router->post('/api/intranet', function() {
+    (new IntranetController())->adminSave();
+});
+
+$router->post('/api/import', function() { (new ImportController())->upload(); });
+$router->post('/api/import/members', function() { (new ImportController())->importMembers(); });
+$router->post('/api/import/sites', function() { (new ImportController())->importSites(); });
+$router->post('/api/import/prepayments', function() { (new ImportController())->importPrepayments(); });
+$router->post('/api/import/rates', function() { (new ImportController())->importRates(); });
+$router->get('/api/prepayments', function() { (new PrepaymentController())->index(); });
+$router->post('/api/prepayments/match', function() { (new ImportController())->matchPrepayment(); });
+$router->post('/api/prepayments/delete-all', function() { (new PrepaymentController())->deleteAll(); });
+
+$router->get('/api/rates', function() { $campId = $_GET['camp_id'] ?? null; if ($campId) (new RateController())->index($campId); });
+$router->post('/api/rates', function() { (new RateController())->store(); });
+$router->post('/api/rate/update', function() { $id = $_GET['id'] ?? null; if ($id) (new RateController())->update($id); });
+$router->post('/api/rate/delete', function() { $id = $_GET['id'] ?? null; if ($id) (new RateController())->delete($id); });
+
+$router->get('/api/dashboard-stats-legacy', function() {
+    $db = Database::connect();
+    $stmt = $db->query("
+        SELECT 
+            SUM(amount) as total,
+            SUM(CASE WHEN method = 'EFTPOS' THEN amount ELSE 0 END) as eftpos,
+            SUM(CASE WHEN method = 'Cash' THEN amount ELSE 0 END) as cash,
+            SUM(CASE WHEN method = 'Cheque' THEN amount ELSE 0 END) as cheque
+        FROM payment_tenders
+    ");
+    $revenue = $stmt->fetch();
+    echo json_encode([
+        'total_revenue' => $revenue['total'],
+        'eftpos' => $revenue['eftpos'],
+        'cash' => $revenue['cash'],
+        'cheque' => $revenue['cheque']
+    ]);
+});
 
 $router->dispatch();
