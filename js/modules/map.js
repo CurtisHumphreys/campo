@@ -37,16 +37,21 @@ function statusToColour(status) {
 }
 
 function applyPinStyles(pinEl, status) {
-  pinEl.style.position = 'absolute';
-  pinEl.style.width = '14px';
-  pinEl.style.height = '14px';
-  pinEl.style.borderRadius = '999px';
-  pinEl.style.transform = 'translate(-50%, -50%)';
-  pinEl.style.border = '2px solid #ffffff';
-  pinEl.style.boxShadow = '0 2px 8px rgba(0,0,0,0.35)';
-  pinEl.style.background = statusToColour(status);
-  pinEl.style.cursor = 'pointer';
-  pinEl.style.pointerEvents = 'auto';
+  // Use !important so no cached CSS can hide pins (opacity/visibility/background etc.)
+  pinEl.style.setProperty('position', 'absolute', 'important');
+  pinEl.style.setProperty('display', 'block', 'important');
+  pinEl.style.setProperty('width', '14px', 'important');
+  pinEl.style.setProperty('height', '14px', 'important');
+  pinEl.style.setProperty('border-radius', '999px', 'important');
+  pinEl.style.setProperty('transform', 'translate(-50%, -50%)', 'important');
+  pinEl.style.setProperty('border', '2px solid #ffffff', 'important');
+  pinEl.style.setProperty('box-shadow', '0 2px 8px rgba(0,0,0,0.35)', 'important');
+  pinEl.style.setProperty('background', statusToColour(status), 'important');
+  pinEl.style.setProperty('cursor', 'pointer', 'important');
+  pinEl.style.setProperty('pointer-events', 'auto', 'important');
+  pinEl.style.setProperty('opacity', '1', 'important');
+  pinEl.style.setProperty('visibility', 'visible', 'important');
+  pinEl.style.setProperty('z-index', '60', 'important');
 }
 
 function ensureOverlayLayer(mapWrapper) {
@@ -72,6 +77,11 @@ function ensureOverlayLayer(mapWrapper) {
   layer.style.inset = '0';
   layer.style.zIndex = '50';
   layer.style.pointerEvents = 'auto';
+  // Optional visual overlay debug: add ?debugMap=1 to the URL
+  if (new URLSearchParams(window.location.search).get('debugMap') === '1') {
+    layer.style.outline = '1px dashed rgba(255,0,0,0.35)';
+    layer.style.background = 'rgba(255,0,0,0.03)';
+  }
   return layer;
 }
 
@@ -166,6 +176,34 @@ export async function render(container) {
   const wrapper = container.querySelector('#map-wrapper');
   const layer = ensureOverlayLayer(wrapper);
 
+  // Some themes/hosts apply layout rules that can collapse the wrapper height
+  // (e.g. if the image becomes absolutely positioned). If the overlay has no
+  // height, pins exist in the DOM but won't be visible. This keeps the overlay
+  // sized to the rendered image.
+  const img = wrapper.querySelector('#camp-map-img');
+  const syncOverlayToImage = () => {
+    if (!img) return;
+    const r = img.getBoundingClientRect();
+    if (!r || !r.height) return;
+    const wR = wrapper.getBoundingClientRect();
+    // Only enforce a height if wrapper is smaller than the image (avoid changing layout when already correct)
+    if (wR.height + 1 < r.height) {
+      wrapper.style.height = `${r.height}px`;
+    }
+    // Ensure overlay uses the same pixel height as the image
+    layer.style.height = `${r.height}px`;
+    layer.style.width = '100%';
+  };
+
+  if (img) {
+    if (img.complete) {
+      syncOverlayToImage();
+    } else {
+      img.addEventListener('load', syncOverlayToImage, { once: true });
+    }
+  }
+  window.addEventListener('resize', syncOverlayToImage);
+
   const toggle = container.querySelector('#edit-toggle');
   toggle.checked = editMode;
   toggle.addEventListener('change', () => {
@@ -207,7 +245,6 @@ export async function render(container) {
   wrapper.addEventListener('click', async (ev) => {
     if (!editMode) return;
 
-    const img = wrapper.querySelector('#camp-map-img');
     if (!img) return;
 
     const rect = img.getBoundingClientRect();
