@@ -1,210 +1,159 @@
 import * as API from '../api.js';
 
+let allSites = [];
 let editMode = false;
-
-function toNum(v) {
-  const n = Number(v);
-  return Number.isFinite(n) ? n : null;
-}
-
-function isValidCoord(n) {
-  // allow 0..100 (0 is valid)
-  return typeof n === 'number' && Number.isFinite(n) && n >= 0 && n <= 100;
-}
-
-function ensureOverlaySized(wrapper, img, overlay) {
-  if (!wrapper || !img || !overlay) return;
-
-  const sync = () => {
-    // Make sure wrapper/overlay have a real height that matches the rendered image
-    const imgRect = img.getBoundingClientRect();
-    if (imgRect.height > 0) {
-      // Force wrapper height so absolute overlay has area to render into
-      const currentWrapperRect = wrapper.getBoundingClientRect();
-      if (currentWrapperRect.height < imgRect.height - 1) {
-        wrapper.style.height = `${imgRect.height}px`;
-      }
-      overlay.style.height = `${imgRect.height}px`;
-    }
-  };
-
-  // on load + resize
-  if (img.complete) sync();
-  img.addEventListener('load', sync);
-  window.addEventListener('resize', sync);
-
-  // also run a little after render (fonts/layout settling)
-  setTimeout(sync, 50);
-  setTimeout(sync, 250);
-}
-
-function makePin(site) {
-  const pin = document.createElement('div');
-  pin.className = 'map-pin';
-  pin.dataset.siteId = site.id;
-
-  // Inline styles: avoids any CSS cache weirdness
-  pin.style.position = 'absolute';
-  pin.style.width = '14px';
-  pin.style.height = '14px';
-  pin.style.borderRadius = '50%';
-  pin.style.transform = 'translate(-50%, -50%)';
-  pin.style.border = '2px solid #fff';
-  pin.style.boxShadow = '0 4px 10px rgba(0,0,0,0.25)';
-  pin.style.cursor = 'pointer';
-
-  // colour by status if available
-  const status = (site.status || '').toLowerCase();
-  let colour = '#2563eb'; // default blue
-  if (status.includes('occupied')) colour = '#ef4444';
-  else if (status.includes('available')) colour = '#22c55e';
-  else if (status.includes('spare')) colour = '#f59e0b';
-  pin.style.background = colour;
-
-  return pin;
-}
-
-function renderPins(overlay, sites, onPinClick) {
-  overlay.innerHTML = '';
-
-  let pinsWithCoords = 0;
-
-  sites.forEach(site => {
-    const x = toNum(site.map_x);
-    const y = toNum(site.map_y);
-
-    if (!isValidCoord(x) || !isValidCoord(y)) return;
-    pinsWithCoords++;
-
-    const pin = makePin(site);
-    pin.style.left = `${x}%`;
-    pin.style.top = `${y}%`;
-
-    pin.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      onPinClick(site);
-    });
-
-    overlay.appendChild(pin);
-  });
-
-  return pinsWithCoords;
-}
-
-async function fetchSites() {
-  // authenticated endpoint
-  return await API.get('/sites');
-}
+let draggedPin = null;
 
 export async function render(container) {
-  container.innerHTML = `
-    <div class="card">
-      <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
-        <h1 style="margin:0;">Camp Map</h1>
-        <label style="display:flex; align-items:center; gap:8px; user-select:none;">
-          <input type="checkbox" id="toggleEdit" />
-          <span>Enable Edit Mode</span>
-        </label>
-      </div>
+    // 1. RENDER HTML IMMEDIATELY so IDs exist in the DOM
+    container.innerHTML = `
+        <div class="header-actions">
+            <h1>Camp Map</h1>
+            <div class="actions-group">
+                <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                    <input type="checkbox" id="edit-mode-toggle">
+                    <strong>Edit Mode (Drag Pins)</strong>
+                </label>
+            </div>
+        </div>
 
-      <!-- v39 debug line -->
-      <div id="mapDebug" style="margin-top:10px; font-size: 13px; opacity: 0.85;">
-        Map module v39 loaded. Fetching sites...
-      </div>
+        <div class="card" style="padding:0; overflow:auto; display:flex; justify-content:center; background:#cbd5e1;">
+            <div class="map-container" style="position:relative; width:fit-content;">
+                <!-- map.jpg -->
+                <img src="/public/img/map.jpg" id="camp-map-img" style="display:block; max-width:none;" alt="Campsite Map">
+                
+                <!-- Layer for Pins -->
+                <div id="pins-layer"></div>
+            </div>
+        </div>
 
-      <div id="map-wrapper" style="margin-top:12px; width:100%; position:relative;">
-        <img
-          id="camp-map-img"
-          src="/public/img/map.jpg"
-          alt="Campsite Map"
-          style="display:block; width:100%; height:auto; position:relative; z-index:1;"
-        />
-        <div
-          id="pins-layer"
-          style="position:absolute; left:0; top:0; right:0; bottom:0; z-index:50; pointer-events:auto;"
-        ></div>
-      </div>
-    </div>
-  `;
+        <div class="card">
+            <h3>Map Debug</h3>
+            <p id="map-debug" class="muted">Loading sites...</p>
+        </div>
+    `;
 
-  const toggle = container.querySelector('#toggleEdit');
-  const debug = container.querySelector('#mapDebug');
-  const wrapper = container.querySelector('#map-wrapper');
-  const img = container.querySelector('#camp-map-img');
-  const overlay = container.querySelector('#pins-layer');
-
-  // Make sure overlay has real height (this was the likely cause of "DOM pins exist but invisible")
-  ensureOverlaySized(wrapper, img, overlay);
-
-  let sites = [];
-  try {
-    sites = await fetchSites();
-  } catch (e) {
-    console.error(e);
-    debug.textContent = 'Failed to fetch sites (see console).';
-    return;
-  }
-
-  const pinsWithCoords = renderPins(overlay, sites, async (site) => {
-    if (!editMode) {
-      // non-edit mode: simple info modal (keep minimal)
-      alert(`${site.site_name || site.name || 'Site'}\nStatus: ${site.status || ''}`);
-      return;
+    // 2. Setup Events
+    const toggle = document.getElementById('edit-mode-toggle');
+    if (toggle) {
+        toggle.checked = editMode;
+        toggle.addEventListener('change', (e) => {
+            editMode = e.target.checked;
+            updateEditState();
+        });
     }
 
-    // edit mode: remove pin
-    if (!confirm(`Remove pin from ${site.site_name || site.name || 'this site'}?`)) return;
-
+    // 3. Fetch Data
     try {
-      await API.post(`/sites/${site.id}/map`, { map_x: null, map_y: null });
-      // refresh local + rerender
-      site.map_x = null;
-      site.map_y = null;
-      const count = renderPins(overlay, sites, () => {});
-      debug.textContent = `Sites: ${sites.length} | Pins with coords: ${count}`;
+        allSites = await API.get('/sites');
+        updateDebug(`Loaded ${allSites.length} sites.`);
+        renderPins();
     } catch (err) {
-      console.error(err);
-      alert('Failed to remove pin.');
- See console.');
+        console.error('Failed to load sites:', err);
+        updateDebug('Error loading sites: ' + err.message);
     }
-  });
+}
 
-  debug.textContent = `Sites: ${sites.length} | Pins with coords: ${pinsWithCoords}`;
+function updateEditState() {
+    const layer = document.getElementById('pins-layer');
+    if (!layer) return;
+    layer.style.pointerEvents = editMode ? 'auto' : 'none';
+    
+    // Visual cue
+    document.querySelectorAll('.map-pin').forEach(p => {
+        p.style.cursor = editMode ? 'move' : 'default';
+        p.style.border = editMode ? '2px dashed yellow' : '2px solid white';
+    });
+}
 
-  toggle.addEventListener('change', () => {
-    editMode = !!toggle.checked;
-  });
+function renderPins() {
+    const layer = document.getElementById('pins-layer');
+    if (!layer) return; // Guard clause against null error
 
-  // Clicking on map in edit mode -> add pin
-  overlay.addEventListener('click', async (e) => {
+    layer.innerHTML = '';
+
+    let renderedCount = 0;
+
+    allSites.forEach(site => {
+        // Only render if coordinates exist
+        if (site.map_x === null || site.map_y === null || site.map_x === undefined) return;
+
+        const pin = document.createElement('div');
+        pin.className = 'map-pin';
+        pin.title = `Site ${site.site_number}`;
+        
+        // Position using percentages
+        pin.style.left = `${site.map_x}%`;
+        pin.style.top = `${site.map_y}%`;
+        
+        // Color based on status
+        pin.style.backgroundColor = getStatusColor(site);
+
+        // DRAG LOGIC
+        pin.addEventListener('mousedown', (e) => startDrag(e, site, pin));
+        
+        layer.appendChild(pin);
+        renderedCount++;
+    });
+
+    updateDebug(`Rendered ${renderedCount} pins.`);
+    updateEditState();
+}
+
+function startDrag(e, site, pinElement) {
     if (!editMode) return;
+    e.preventDefault();
+    e.stopPropagation();
 
-    // calculate percent coords relative to wrapper
-    const rect = wrapper.getBoundingClientRect();
-    const px = ((e.clientX - rect.left) / rect.width) * 100;
-    const py = ((e.clientY - rect.top) / rect.height) * 100;
-
-    // choose site to pin
-    const siteIdStr = prompt('Enter Site ID to pin at this location (e.g. 123):');
-    const siteId = Number(siteIdStr);
-    if (!Number.isFinite(siteId)) return;
-
-    const site = sites.find(s => Number(s.id) === siteId);
-    if (!site) {
-      alert('Site not found.');
-      return;
+    const container = document.querySelector('.map-container');
+    const rect = container.getBoundingClientRect();
+    
+    function onMove(moveEvent) {
+        const x = moveEvent.clientX - rect.left;
+        const y = moveEvent.clientY - rect.top;
+        
+        // Convert to percentage
+        const perX = (x / rect.width) * 100;
+        const perY = (y / rect.height) * 100;
+        
+        pinElement.style.left = `${perX}%`;
+        pinElement.style.top = `${perY}%`;
+        
+        site.tempX = perX;
+        site.tempY = perY;
     }
 
+    function onUp() {
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onUp);
+        
+        if (site.tempX !== undefined) {
+            savePinPosition(site.id, site.tempX, site.tempY);
+            site.map_x = site.tempX;
+            site.map_y = site.tempY;
+        }
+    }
+
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+}
+
+async function savePinPosition(id, x, y) {
     try {
-      await API.post(`/sites/${site.id}/map`, { map_x: px, map_y: py });
-      site.map_x = px;
-      site.map_y = py;
-      const count = renderPins(overlay, sites, (s) => {});
-      debug.textContent = `Sites: ${sites.length} | Pins with coords: ${count}`;
+        await API.post(`/sites/${id}/map`, { map_x: x, map_y: y });
+        console.log(`Saved Site ${id}: ${x.toFixed(2)}%, ${y.toFixed(2)}%`);
     } catch (err) {
-      console.error(err);
-      alert('Failed to save pin.');
+        alert('Failed to save position: ' + err.message);
     }
-  });
+}
+
+function getStatusColor(site) {
+    // Logic can be expanded, currently just defaulting to green or red based on occupant
+    if (site.occupant_id || site.occupant_name) return '#ef4444'; // Red
+    return '#10b981'; // Green
+}
+
+function updateDebug(msg) {
+    const el = document.getElementById('map-debug');
+    if (el) el.textContent = msg;
 }
