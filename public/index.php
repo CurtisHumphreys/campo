@@ -5,6 +5,25 @@ require_once __DIR__ . '/../src/Database.php';
 require_once __DIR__ . '/../src/Router.php';
 require_once __DIR__ . '/../src/Auth.php';
 
+// 1. SPA FALLBACK:
+// If the request is NOT an API call, serve the frontend HTML.
+// This allows the browser to load index.html, which then loads app.js to handle the routing.
+$requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+
+if (strpos($requestUri, '/api/') !== 0) {
+    // Verify file exists before requiring to avoid fatal error
+    if (file_exists(__DIR__ . '/index.html')) {
+        require __DIR__ . '/index.html';
+    } else {
+        echo "Error: index.html not found.";
+    }
+    exit;
+}
+
+// ---------------------------------------------------------
+// API ROUTING LOGIC (Only runs for /api/ requests)
+// ---------------------------------------------------------
+
 spl_autoload_register(function ($class) {
     if (file_exists(__DIR__ . '/../src/Controllers/' . $class . '.php')) {
         require_once __DIR__ . '/../src/Controllers/' . $class . '.php';
@@ -57,24 +76,8 @@ if (Auth::check()) {
 
     $router->get('/api/sites', function() { (new SiteController())->index(); });
     $router->post('/api/sites', function() { (new SiteController())->store(); });
-    // NEW: Save Map Coords
-    $router->post('/api/sites/map', function() { (new SiteController())->updateMapCoords(basename($_SERVER['REQUEST_URI'])); }); 
-    // Wait... ^ The URI is /api/sites/123/map. basename is 'map'. 
-    // We need regex or manual parsing for ID in URL. 
-    // Let's use a simpler approach for now:
-    // Actually, `updateMapCoords` is not in the Router logic above.
-    // Let's rely on standard routes.
     
-    // Quick Fix for Regex routing in simple router:
-    // If we request /api/sites/123/map, the simple Router looks for exact match.
-    // We need to register this manually or use a regex router.
-    // For now, let's just use query param: /api/site/map?id=123
-    // But my JS sends to `/sites/${id}/map`.
-    
-    // Let's change JS to use `/api/site/map-coords?id=123` or fix router.
-    // For simplicity, I'll add a manual check in Router::dispatch or just handle it here.
-    
-    // Hacky fix for ID in URL for this specific project structure:
+    // Manual Regex-like routing for Map Coords ID
     $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
     if (preg_match('#^/api/sites/(\d+)/map$#', $uri, $matches)) {
         (new SiteController())->updateMapCoords($matches[1]);
