@@ -15,7 +15,7 @@ const routes = {
     '/rates': (c) => import('./modules/rates.js').then(m => m.render(c)),
     // Cache-bust the map module aggressively because browsers can hold on to module URLs
     // even after SW/storage clears (HTTP cache). Bump this when patching map behaviour.
-    '/map': (c) => import('./modules/map.js?v=38').then(m => m.render(c)),
+    '/map': (c) => import('./modules/map.js?v=39').then(m => m.render(c)),
     // Intranet admin management page (requires auth)
     '/intranet-admin': (c) => import('./modules/intranet_admin.js').then(m => m.render(c)),
 };
