@@ -15,14 +15,6 @@ class Router {
         $method = $_SERVER['REQUEST_METHOD'];
         $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
-        /*
-         * The application previously assumed a base path of "/campo" when hosted in
-         * a subdirectory. Since the app is now hosted at the domain root, remove
-         * any hard-coded base path handling. If you choose to host this app
-         * under a subfolder in the future, you can reintroduce a `$basePath`
-         * variable here and strip it off of `$uri` if present.
-         */
-
         // Normalize URI by removing trailing slash (except for root)
         $uri = rtrim($uri, '/');
         if ($uri === '') {
