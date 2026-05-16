@@ -1,0 +1,27 @@
+<?php
+define('DB_HOST', '127.0.0.1');
+define('DB_NAME', 'campoffice');
+define('DB_USER', 'forgebox');
+define('DB_PASS', 'Forgebox3.b');
+define('APP_BASE_URL', 'https://campoffice.nix.local');
+define('MAIL_TRANSPORT', 'smtp');
+define('MAIL_HOST', '');
+define('MAIL_PORT', 587);
+define('MAIL_ENCRYPTION', 'tls');
+define('MAIL_USERNAME', '');
+define('MAIL_PASSWORD', '');
+define('MAIL_FROM_NAME', 'Campo Notifications');
+define('MAIL_FROM_EMAIL', '');
+define('CHURCHSUITE_ENABLED', true);
+define('CHURCHSUITE_API_BASE', 'https://api.churchsuite.com/v2');
+define('CHURCHSUITE_AUTHORIZE_URL', 'https://login.churchsuite.com/oauth2/authorize');
+define('CHURCHSUITE_TOKEN_URL', 'https://login.churchsuite.com/oauth2/token');
+define('CHURCHSUITE_CLIENT_ID', 'vqwcubw30al09tgg4g1v');
+define('CHURCHSUITE_CLIENT_SECRET', 'cs_oauth2_1a135dc2-8247-4658-b888-94503da84af0');
+define('CHURCHSUITE_OAUTH_SCOPE', 'full_access');
+define('CHURCHSUITE_REDIRECT_URI', 'https://campoffice.nix.local/api/churchsuite/oauth/callback');
+define('CHURCHSUITE_TIMEOUT_SECONDS', 20);
+define('ANTHROPIC_API_KEY', '');
+define('ANTHROPIC_MODEL', 'claude-sonnet-4-6');
+define('SQUARE_ACCESS_TOKEN', '');
+define('SQUARE_LOCATION_ID', '');

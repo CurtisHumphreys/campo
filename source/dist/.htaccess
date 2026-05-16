@@ -1,0 +1,16 @@
+Options -MultiViews
+RewriteEngine On
+
+# Serve real static files and directories directly (assets, sw.js, etc.)
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# PHP router handles: API, intranet SPA, public standalone pages
+RewriteRule ^api/        index.php [L]
+RewriteRule ^intranet    index.php [L]
+RewriteRule ^waitlist$   index.php [L]
+RewriteRule ^public-map$ index.php [L]
+
+# All other routes → Vue SPA
+RewriteRule ^ index.html [L]

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Site Waitlist — Camp Office</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0d1117; color: #c9d1d9; min-height: 100vh; padding: 0; }
+  .wrap { max-width: 480px; margin: 0 auto; padding: 24px 16px 48px; }
+  .header { display: flex; align-items: center; gap: 10px; margin-bottom: 24px; }
+  .logo { width: 36px; height: 36px; border-radius: 10px; background: #e85d04; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 14px; color: #0d1117; flex-shrink: 0; }
+  .header h1 { font-size: 18px; font-weight: 700; color: #f0f6fc; }
+  .header p { font-size: 12px; color: #8b949e; margin-top: 1px; }
+  .card { background: #161b22; border: 1px solid #21262d; border-radius: 12px; padding: 24px; }
+  .card + .card { margin-top: 16px; }
+  .section-title { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: #8b949e; margin-bottom: 14px; }
+  .field { margin-bottom: 14px; }
+  label { display: block; font-size: 12px; font-weight: 500; color: #8b949e; margin-bottom: 5px; }
+  input, select, textarea { width: 100%; background: #0d1117; border: 1px solid #30363d; border-radius: 8px; color: #f0f6fc; font-size: 15px; padding: 10px 12px; outline: none; font-family: inherit; transition: border-color .15s; }
+  input:focus, select:focus, textarea:focus { border-color: #e85d04; }
+  textarea { resize: none; line-height: 1.5; }
+  select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238b949e' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .btn { display: block; width: 100%; padding: 14px; background: #e85d04; color: #0d1117; font-weight: 700; font-size: 16px; border: none; border-radius: 10px; cursor: pointer; transition: background .15s; margin-top: 20px; }
+  .btn:hover { background: #f77600; }
+  .btn:disabled { opacity: .5; cursor: not-allowed; }
+  .success { text-align: center; padding: 40px 24px; }
+  .success .icon { font-size: 48px; margin-bottom: 12px; }
+  .success h2 { font-size: 20px; font-weight: 700; color: #f0f6fc; margin-bottom: 8px; }
+  .success p { color: #8b949e; font-size: 14px; }
+  .err { background: #2d1117; border: 1px solid #4d1f1f; color: #f85149; border-radius: 8px; padding: 10px 14px; font-size: 13px; margin-top: 12px; display: none; }
+  ::placeholder { color: #484f58; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <div class="logo">C</div>
+    <div>
+      <h1>Site Waitlist</h1>
+      <p>Adelaide Revival Camp</p>
+    </div>
+  </div>
+
+  <!-- Form -->
+  <div id="form-wrap">
+    <div class="card">
+      <div class="section-title">Contact Details</div>
+      <div class="row2">
+        <div class="field"><label>First Name *</label><input id="first_name" required placeholder="Jane" /></div>
+        <div class="field"><label>Last Name *</label><input id="last_name" required placeholder="Smith" /></div>
+      </div>
+      <div class="field"><label>Phone *</label><input id="phone" type="tel" required placeholder="04xx xxx xxx" /></div>
+      <div class="field"><label>Home Assembly</label><input id="home_assembly" placeholder="e.g. Adelaide City" /></div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Site Preferences</div>
+      <div class="field">
+        <label>Site Type Preference</label>
+        <select id="site_type">
+          <option value="Powered Site">Powered Site</option>
+          <option value="Unpowered Site">Unpowered Site</option>
+          <option value="Dorms (KFC)">Dorms (KFC)</option>
+          <option value="Family Room">Family Room</option>
+          <option value="No preference">No preference</option>
+        </select>
+      </div>
+      <div class="row2">
+        <div class="field"><label>Adults</label><input id="adults" type="number" min="1" max="20" value="1" /></div>
+        <div class="field"><label>Children</label><input id="kids" type="number" min="0" max="20" value="0" /></div>
+      </div>
+      <div class="field"><label>How many days do you typically stay?</label><input id="intended_days" placeholder="e.g. 10" /></div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Additional Information</div>
+      <div class="field">
+        <label>Special Considerations</label>
+        <textarea id="special_considerations" rows="2" placeholder="Accessibility needs, medical requirements, etc."></textarea>
+      </div>
+      <div class="field">
+        <label>Would you consider an overflow site if one becomes available first?</label>
+        <select id="overflow_willing">
+          <option value="No">No</option>
+          <option value="Yes">Yes</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Additional Comments</label>
+        <textarea id="additional_comments" rows="3" placeholder="Anything else you'd like us to know…"></textarea>
+      </div>
+    </div>
+
+    <div class="err" id="err-msg"></div>
+    <button class="btn" id="submit-btn" onclick="submitForm()">Join Waitlist</button>
+  </div>
+
+  <!-- Success -->
+  <div id="success-wrap" style="display:none">
+    <div class="card success">
+      <div class="icon">✅</div>
+      <h2>You're on the list!</h2>
+      <p>We'll be in touch when a site becomes available.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+async function submitForm() {
+  const btn = document.getElementById('submit-btn')
+  const err = document.getElementById('err-msg')
+  const first = document.getElementById('first_name').value.trim()
+  const last  = document.getElementById('last_name').value.trim()
+  const phone = document.getElementById('phone').value.trim()
+
+  if (!first || !last || !phone) {
+    err.textContent = 'Please fill in all required fields.'
+    err.style.display = 'block'
+    return
+  }
+
+  btn.disabled = true
+  btn.textContent = 'Submitting…'
+  err.style.display = 'none'
+
+  const data = {
+    first_name: first,
+    last_name:  last,
+    phone,
+    home_assembly:           document.getElementById('home_assembly').value.trim(),
+    site_type:               document.getElementById('site_type').value,
+    adults:                  parseInt(document.getElementById('adults').value) || 1,
+    kids:                    parseInt(document.getElementById('kids').value) || 0,
+    intended_days:           document.getElementById('intended_days').value.trim(),
+    special_considerations:  document.getElementById('special_considerations').value.trim(),
+    overflow_willing:        document.getElementById('overflow_willing').value,
+    additional_comments:     document.getElementById('additional_comments').value.trim(),
+  }
+
+  try {
+    const res = await fetch('/api/waitlist', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    })
+    const json = await res.json()
+    if (json.success) {
+      document.getElementById('form-wrap').style.display = 'none'
+      document.getElementById('success-wrap').style.display = 'block'
+    } else {
+      throw new Error(json.message || 'Server error')
+    }
+  } catch (e) {
+    err.textContent = 'Submission failed — please try again.'
+    err.style.display = 'block'
+    btn.disabled = false
+    btn.textContent = 'Join Waitlist'
+  }
+}
+</script>
+</body>
+</html>

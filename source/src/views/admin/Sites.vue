@@ -1,0 +1,624 @@
+<template>
+  <div class="p-6 max-w-5xl mx-auto space-y-5">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between gap-4">
+      <div>
+        <h1 class="text-2xl font-bold text-ink-100">Sites</h1>
+        <p class="text-sm text-ink-500 mt-0.5">{{ activeView === 'waitlist' ? 'Site allocation waitlist' : 'Physical site registry' }}</p>
+      </div>
+      <div class="flex gap-2">
+        <button v-if="activeView !== 'waitlist'" @click="openNew" class="btn btn-primary btn-sm">+ Add Site</button>
+        <button @click="activeView === 'waitlist' ? (activeView = 'sites') : (activeView = 'waitlist', loadWaitlist())"
+          :class="['btn btn-sm', activeView === 'waitlist' ? 'btn-primary' : 'btn-ghost text-ink-400']">
+          Waitlist
+          <span v-if="waitlistActiveCount" class="ml-1.5 bg-ember-500 text-surface-900 text-xs font-bold rounded-full w-4 h-4 inline-flex items-center justify-center">{{ waitlistActiveCount }}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ── WAITLIST VIEW ───────────────────────────────────────────────────── -->
+    <template v-if="activeView === 'waitlist'">
+      <LoadingSpinner v-if="wlLoading" :full="true" />
+      <EmptyState v-else-if="!waitlistItems.length" icon="📋" title="No waitlist entries"
+        subtitle="Entries submitted via the camp intranet will appear here." />
+      <div v-else class="space-y-2">
+        <!-- Toolbar: counts + status filter + sort -->
+        <div class="flex items-center gap-2 flex-wrap text-sm text-ink-500">
+          <span>{{ filteredWaitlist.length }}<span class="text-ink-700">/</span>{{ waitlistItems.length }}</span>
+          <span class="text-ink-700">·</span>
+          <span>Active: <b class="text-ink-200">{{ waitlistActiveCount }}</b></span>
+          <div class="ml-auto flex items-center gap-2">
+            <!-- Sort -->
+            <div class="flex gap-1 border border-surface-600 rounded-lg p-0.5">
+              <button @click="wlSortBy = 'rank'"
+                :class="['btn btn-sm px-2.5', wlSortBy === 'rank' ? 'btn-primary' : 'btn-ghost text-ink-400']">
+                Rank
+              </button>
+              <button @click="wlSortBy = 'date'"
+                :class="['btn btn-sm px-2.5', wlSortBy === 'date' ? 'btn-primary' : 'btn-ghost text-ink-400']">
+                Date
+              </button>
+            </div>
+            <!-- Status filter -->
+            <div class="flex gap-1 border border-surface-600 rounded-lg p-0.5">
+              <button v-for="s in wlStatusFilters" :key="s"
+                @click="wlStatusFilter = s"
+                :class="['btn btn-sm px-2.5', wlStatusFilter === s ? 'btn-primary' : 'btn-ghost text-ink-400']">{{ s }}</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Entries -->
+        <div v-for="(item, idx) in filteredWaitlist" :key="item.id"
+          class="card overflow-hidden">
+          <!-- Summary row -->
+          <div class="p-4 flex items-start gap-3 cursor-pointer"
+            @click="expandedWlId = expandedWlId === item.id ? null : item.id">
+
+            <!-- Rank number -->
+            <div class="shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold"
+              :class="rankBubble(item)">
+              {{ rankMap[item.id] }}
+            </div>
+
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="font-semibold text-ink-100">{{ item.first_name }} {{ item.last_name }}</span>
+                <span :class="wlPriorityBadge(item.priority)">{{ item.priority }}</span>
+                <span v-if="item.priority_source === 'Manual'" class="text-[10px] text-ink-600">(manual)</span>
+                <span :class="wlStatusBadge(item.status)">{{ item.status }}</span>
+              </div>
+              <div class="text-sm text-ink-400 mt-0.5 flex flex-wrap gap-x-4 gap-y-0.5">
+                <span>{{ item.site_type }} · {{ item.adults }}A{{ item.kids ? ` ${item.kids}K` : '' }}</span>
+                <span v-if="item.days_waiting">{{ item.days_waiting }}d waiting</span>
+                <span v-if="item.intended_days">{{ item.intended_days }} intended days</span>
+                <span v-if="item.phone" class="text-ink-500">{{ item.phone }}</span>
+              </div>
+              <div v-if="item.special_considerations" class="text-xs text-amber-400 mt-0.5 truncate">
+                ⚠ {{ item.special_considerations }}
+              </div>
+            </div>
+            <div class="text-ink-600 text-sm shrink-0 mt-1.5">{{ expandedWlId === item.id ? '▲' : '▼' }}</div>
+          </div>
+
+          <!-- Expanded detail + edit -->
+          <div v-if="expandedWlId === item.id"
+            class="border-t border-surface-600 bg-surface-800 p-4 space-y-4">
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-2 text-sm">
+              <div v-if="item.home_assembly"><span class="text-ink-500">Assembly:</span> <span class="text-ink-200">{{ item.home_assembly }}</span></div>
+              <div><span class="text-ink-500">Overflow:</span> <span class="text-ink-200">{{ item.overflow_willing }}</span></div>
+              <div><span class="text-ink-500">Subscription:</span> <span class="text-ink-200">{{ item.subscription_willing }}</span></div>
+              <div><span class="text-ink-500">Score:</span> <span class="text-ink-200">{{ item.score }}</span></div>
+              <div><span class="text-ink-500">Global rank:</span> <span class="text-ink-200">#{{ rankMap[item.id] }} of {{ waitlistItems.length }}</span></div>
+              <div v-if="item.created_at"><span class="text-ink-500">Submitted:</span> <span class="text-ink-200">{{ fmtDate(item.created_at) }}</span></div>
+            </div>
+            <div v-if="item.special_considerations" class="text-xs text-amber-400 bg-amber-500/10 rounded-lg px-3 py-2">⚠ {{ item.special_considerations }}</div>
+            <div v-if="item.additional_comments" class="text-sm text-ink-400 bg-surface-700 rounded-lg px-3 py-2">{{ item.additional_comments }}</div>
+
+            <!-- Edit controls -->
+            <div class="flex flex-wrap gap-3 items-end pt-1">
+              <div>
+                <label class="field-label">Status</label>
+                <select :value="item.status" @change="patchWl(item, 'status', $event.target.value)" class="text-sm">
+                  <option v-for="s in wlStatuses" :key="s">{{ s }}</option>
+                </select>
+              </div>
+              <div>
+                <label class="field-label">Priority override</label>
+                <select :value="item.priority_override || ''" @change="patchWl(item, 'priority_override', $event.target.value)" class="text-sm">
+                  <option value="">Auto ({{ item.auto_priority }})</option>
+                  <option v-for="p in wlPriorities" :key="p">{{ p }}</option>
+                </select>
+              </div>
+              <button @click="deleteWlItem(item)" class="btn btn-ghost text-red-400 hover:text-red-300 btn-sm ml-auto">Delete</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <!-- ── SITES VIEW ─────────────────────────────────────────────────────── -->
+    <template v-else>
+
+    <!-- Camp selector + search + type filter -->
+    <div class="flex gap-2 flex-wrap items-center">
+      <select v-model="selectedCampId" @change="load" class="text-sm w-52">
+        <option :value="null">All camps</option>
+        <option v-for="c in camps" :key="c.id" :value="c.id">{{ c.name }}</option>
+      </select>
+      <input v-model="search" type="text" placeholder="Search site # or notes…"
+        class="flex-1 min-w-40 text-sm" @input="onSearch" />
+      <select v-model="filterType" @change="load" class="text-sm w-36">
+        <option value="">All types</option>
+        <option value="caravan">Caravan</option>
+        <option value="tent">Tent</option>
+        <option value="cabin">Cabin</option>
+        <option value="powered">Powered</option>
+        <option value="general">General</option>
+      </select>
+    </div>
+
+    <!-- Allocation filter tabs + summary -->
+    <div class="flex items-center justify-between gap-4 flex-wrap">
+      <div class="flex gap-1">
+        <button v-for="f in allocFilters" :key="f.value"
+          @click="filterAlloc = f.value; filterFee = 'all'; load()"
+          :class="['btn btn-sm', filterAlloc === f.value ? 'btn-primary' : 'btn-ghost text-ink-400']">
+          {{ f.label }}
+        </button>
+      </div>
+      <div class="text-sm text-ink-500" v-if="summary">
+        <template v-if="filterAlloc === 'inactive'">
+          Inactive: <span class="text-ink-200 font-medium">{{ summary.total }}</span>
+        </template>
+        <template v-else>
+          Total: <span class="text-ink-200 font-medium">{{ summary.total }}</span>
+          <span class="mx-2 text-ink-700">|</span>
+          Allocated: <span class="text-ink-200 font-medium">{{ summary.allocated }}</span>
+          <span class="mx-2 text-ink-700">|</span>
+          Free: <span class="text-emerald-400 font-medium">{{ summary.available }}</span>
+        </template>
+      </div>
+    </div>
+
+    <!-- Fee expiry filter tabs (only when viewing allocated active sites) -->
+    <div v-if="filterAlloc !== 'available' && filterAlloc !== 'inactive'" class="flex gap-1 flex-wrap">
+      <button v-for="f in feeFilters" :key="f.value"
+        @click="filterFee = f.value; load()"
+        :class="['btn btn-sm', filterFee === f.value ? 'btn-primary' : 'btn-ghost text-ink-400']">
+        {{ f.label }}
+        <span v-if="f.summaryKey && summary?.[f.summaryKey] !== undefined"
+          class="ml-1 opacity-70 tabular-nums">{{ summary[f.summaryKey] }}</span>
+      </button>
+    </div>
+
+    <LoadingSpinner v-if="loading" :full="true" />
+
+    <EmptyState v-else-if="!sites.length" icon="🏠"
+      :title="filterAlloc === 'inactive' ? 'No inactive sites' : 'No sites found'"
+      :subtitle="filterAlloc === 'inactive' ? 'No sites have been marked as inactive.' : 'Add the physical sites available at camp.'" />
+
+    <!-- Site grid -->
+    <div v-else class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+      <div v-for="s in sites" :key="s.id"
+        :class="[
+          'card p-4 cursor-pointer hover:bg-surface-700 transition-colors flex flex-col gap-2',
+          !s.is_active && 'opacity-50',
+          s.fee_expiry_status === 'overdue_6m' ? 'ring-1 ring-red-500/50' :
+          s.fee_expiry_status === 'overdue'    ? 'ring-1 ring-amber-500/40' : ''
+        ]"
+        @click="openDetail(s)">
+
+        <!-- Row 1: site number + status badge -->
+        <div class="flex items-start justify-between gap-2">
+          <div class="font-bold text-ember-400 text-2xl leading-none">{{ s.site_number }}</div>
+          <span :class="allocBadge(s)">{{ allocLabel(s) }}</span>
+        </div>
+
+        <!-- Row 2: type + power -->
+        <div class="text-xs text-ink-500 flex items-center gap-2">
+          <span :class="typeBadge(s.site_type)">{{ s.site_type || 'General' }}</span>
+          <span v-if="+s.power" class="text-amber-400">⚡ Power</span>
+          <span>👥 {{ s.capacity }}</span>
+        </div>
+
+        <!-- Row 3: household or empty -->
+        <div v-if="s.household_name"
+          class="text-sm font-semibold text-ink-100 leading-tight truncate">
+          {{ s.household_name }}
+        </div>
+        <div v-else class="text-sm text-ink-600 italic">Empty</div>
+
+        <!-- Row 4: nights + fee expiry (only if allocated) -->
+        <div v-if="s.allocation_id" class="flex items-center justify-between gap-2 mt-auto pt-1 border-t border-surface-700">
+          <span class="text-xs text-ink-500">
+            <span v-if="s.camp_nights !== null" class="text-ink-300 font-medium">{{ s.camp_nights }} night{{ s.camp_nights !== 1 ? 's' : '' }}</span>
+            <span v-else class="text-ink-600">No payment</span>
+          </span>
+          <span :class="feeExpiryBadge(s)">{{ feeExpiryLabel(s) }}</span>
+        </div>
+
+        <div v-if="s.notes" class="text-xs text-ink-600 truncate">{{ s.notes }}</div>
+      </div>
+    </div>
+
+    <!-- ── Detail modal ──────────────────────────────────────────────────── -->
+    <AppModal v-model="showDetail" :title="`Site ${detailData?.site?.site_number ?? ''}`" width="sm:max-w-2xl">
+      <div v-if="detailLoading" class="py-8 text-center text-ink-500">Loading…</div>
+      <div v-else-if="detailData" class="space-y-5">
+
+        <!-- Site meta row -->
+        <div class="flex items-center gap-3 flex-wrap">
+          <span :class="typeBadge(detailData.site.site_type)">{{ detailData.site.site_type || 'General' }}</span>
+          <span v-if="detailData.site.power" class="text-xs text-amber-400">⚡ Power</span>
+          <span class="text-xs text-ink-500">👥 Capacity {{ detailData.site.capacity }}</span>
+          <span v-if="detailData.site.notes" class="text-xs text-ink-500">{{ detailData.site.notes }}</span>
+        </div>
+
+        <!-- Allocation -->
+        <div v-if="detailData.alloc" class="space-y-3">
+          <div class="flex items-center justify-between">
+            <h3 class="text-sm font-semibold text-ink-300 uppercase tracking-wide">Household</h3>
+            <span class="badge bg-sky-500/20 text-sky-300">Allocated</span>
+          </div>
+          <div class="text-base font-bold text-ink-100">{{ detailData.alloc.household_name }}</div>
+
+          <!-- Members -->
+          <div class="grid grid-cols-2 gap-2">
+            <div v-for="m in detailData.members" :key="m.id"
+              class="flex items-center gap-2 bg-surface-800 rounded-lg px-3 py-2">
+              <span :class="memberTypeBadge(m.member_type)" class="shrink-0">{{ memberTypeLabel(m.member_type) }}</span>
+              <span class="text-sm text-ink-200 truncate">{{ m.first_name }} {{ m.last_name }}</span>
+            </div>
+          </div>
+        </div>
+        <div v-else class="text-sm text-ink-500 italic">
+          This site is not allocated for the selected camp.
+        </div>
+
+        <!-- Payment history -->
+        <div v-if="detailData.alloc">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-sm font-semibold text-ink-300 uppercase tracking-wide">Payment History</h3>
+            <select v-if="detailData.payments.length" v-model="detailCampFilter" class="text-xs py-1 px-2">
+              <option value="">All camps</option>
+              <option v-for="c in detailCamps" :key="c.id" :value="c.id">{{ c.name }}</option>
+            </select>
+          </div>
+          <div v-if="!filteredDetailPayments.length" class="text-sm text-ink-600 italic">No payments recorded.</div>
+          <div v-else class="space-y-2 max-h-72 overflow-y-auto pr-1">
+            <div v-for="p in filteredDetailPayments" :key="p.id"
+              class="bg-surface-800 rounded-lg px-4 py-3 space-y-2">
+              <div class="flex items-start justify-between gap-2">
+                <div>
+                  <div class="text-sm font-semibold text-ink-100">${{ fmt(p.total) }}</div>
+                  <div class="text-xs text-ember-400 font-medium">{{ p.camp_name }}</div>
+                  <div class="text-xs text-ink-500">{{ fmtDate(p.payment_date) }}</div>
+                </div>
+                <div class="text-right text-xs text-ink-400 space-y-0.5">
+                  <div v-if="p.camp_fee > 0">Camp fee: ${{ fmt(p.camp_fee) }}</div>
+                  <div v-if="p.site_fee > 0">Site fee: ${{ fmt(p.site_fee) }}</div>
+                  <div v-if="p.other_amount > 0">Other: ${{ fmt(p.other_amount) }}</div>
+                  <div v-if="p.prepaid_applied > 0">Prepaid: −${{ fmt(p.prepaid_applied) }}</div>
+                  <div v-if="p.arrival_date">{{ p.arrival_date }} → {{ p.departure_date }}</div>
+                </div>
+              </div>
+              <div class="flex gap-2 flex-wrap text-xs">
+                <span v-if="p.tender_eftpos > 0" class="text-sky-400">EFTPOS ${{ fmt(p.tender_eftpos) }}</span>
+                <span v-if="p.tender_cash > 0" class="text-emerald-400">Cash ${{ fmt(p.tender_cash) }}</span>
+                <span v-if="p.tender_bank > 0" class="text-purple-400">Bank ${{ fmt(p.tender_bank) }}</span>
+              </div>
+              <div v-if="p.notes" class="text-xs text-ink-500">{{ p.notes }}</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <template #footer>
+        <button v-if="detailData?.site" @click="openEditFromDetail"
+          class="btn btn-ghost text-ink-300">Edit Site</button>
+        <button @click="showDetail = false" class="btn btn-primary ml-auto">Close</button>
+      </template>
+    </AppModal>
+
+    <!-- ── Edit modal ────────────────────────────────────────────────────── -->
+    <AppModal v-model="showModal" :title="editing ? `Edit Site ${form.site_number}` : 'Add Site'">
+      <form @submit.prevent="save" class="space-y-4">
+        <div>
+          <label class="field-label">Site Number *</label>
+          <input v-model="form.site_number" type="text" required placeholder="e.g. 1, 2A, Cabin 3" />
+        </div>
+        <div>
+          <label class="field-label">Type</label>
+          <select v-model="form.site_type">
+            <option value="">General</option>
+            <option value="caravan">Caravan</option>
+            <option value="tent">Tent</option>
+            <option value="cabin">Cabin</option>
+            <option value="powered">Powered</option>
+          </select>
+        </div>
+        <div>
+          <label class="field-label">Capacity (people)</label>
+          <input v-model.number="form.capacity" type="number" min="1" max="30" />
+        </div>
+        <div class="flex items-center gap-3">
+          <input v-model="form.power" type="checkbox" id="chk-power" class="w-4 h-4 accent-ember-500" />
+          <label for="chk-power" class="text-sm text-ink-300">Has power connection</label>
+        </div>
+        <div class="flex items-center gap-3">
+          <input v-model="form.is_active" type="checkbox" id="chk-active" class="w-4 h-4 accent-ember-500" />
+          <label for="chk-active" class="text-sm text-ink-300">Active site <span class="text-ink-600">(uncheck to mark as inactive / decommissioned)</span></label>
+        </div>
+        <div>
+          <label class="field-label">Notes</label>
+          <textarea v-model="form.notes" rows="2" class="resize-none"
+            placeholder="Any relevant details about this site…" />
+        </div>
+      </form>
+      <template #footer>
+        <button v-if="editing" @click="doDelete"
+          class="btn btn-ghost text-red-400 hover:text-red-300 mr-auto">Delete</button>
+        <button @click="showModal = false" class="btn btn-ghost">Cancel</button>
+        <button @click="save" :disabled="saving" class="btn btn-primary">
+          {{ saving ? 'Saving…' : 'Save' }}
+        </button>
+      </template>
+    </AppModal>
+
+    </template><!-- end sites view -->
+
+  </div>
+</template>
+
+<script setup>
+import { ref, computed, inject, onMounted } from 'vue'
+import { api } from '@/api.js'
+import AppModal from '@/components/AppModal.vue'
+import LoadingSpinner from '@/components/LoadingSpinner.vue'
+import EmptyState from '@/components/EmptyState.vue'
+
+const toast = inject('toast')
+
+const loading          = ref(true)
+const saving           = ref(false)
+const showModal        = ref(false)
+const showDetail       = ref(false)
+const detailLoading    = ref(false)
+const detailData       = ref(null)
+const detailCampFilter = ref('')
+const editing          = ref(null)
+const sites            = ref([])
+const summary          = ref(null)
+const search           = ref('')
+const filterType     = ref('')
+const filterAlloc    = ref('all')
+const filterFee      = ref('all')
+const camps          = ref([])
+const selectedCampId = ref(null)
+
+// ── Waitlist state ────────────────────────────────────────────────────────────
+const activeView       = ref('sites')
+const wlLoading        = ref(false)
+const waitlistItems    = ref([])
+const expandedWlId     = ref(null)
+const wlStatusFilter   = ref('All')
+const wlSortBy         = ref('rank')   // 'rank' | 'date'
+const wlStatuses       = ['Active', 'Contacted', 'Allocated', 'Archived']
+const wlPriorities     = ['High', 'Medium', 'Low']
+const wlStatusFilters  = ['All', 'Active', 'Contacted', 'Allocated', 'Archived']
+
+const detailCamps = computed(() => {
+  if (!detailData.value?.payments) return []
+  const seen = new Map()
+  detailData.value.payments.forEach(p => { if (!seen.has(p.camp_id)) seen.set(p.camp_id, { id: p.camp_id, name: p.camp_name }) })
+  return [...seen.values()]
+})
+
+const filteredDetailPayments = computed(() => {
+  if (!detailData.value?.payments) return []
+  if (!detailCampFilter.value) return detailData.value.payments
+  return detailData.value.payments.filter(p => p.camp_id === detailCampFilter.value)
+})
+
+const waitlistActiveCount = computed(() => waitlistItems.value.filter(i => i.status === 'Active').length)
+
+// Rank is always score-based across the full list, regardless of current filter/sort
+const rankMap = computed(() => {
+  const sorted = [...waitlistItems.value].sort((a, b) =>
+    b.score - a.score || new Date(a.created_at) - new Date(b.created_at)
+  )
+  const map = {}
+  sorted.forEach((item, i) => { map[item.id] = i + 1 })
+  return map
+})
+
+const filteredWaitlist = computed(() => {
+  const items = wlStatusFilter.value === 'All' ? waitlistItems.value
+    : waitlistItems.value.filter(i => i.status === wlStatusFilter.value)
+  return [...items].sort((a, b) => {
+    if (wlSortBy.value === 'date') return new Date(a.created_at) - new Date(b.created_at)
+    return b.score - a.score || new Date(a.created_at) - new Date(b.created_at)
+  })
+})
+
+function wlPriorityBadge(p) {
+  return { High: 'badge bg-red-500/20 text-red-400', Medium: 'badge bg-amber-500/20 text-amber-400', Low: 'badge bg-surface-600 text-ink-500' }[p] || 'badge bg-surface-600 text-ink-500'
+}
+function wlStatusBadge(s) {
+  return { Active: 'badge bg-sky-500/20 text-sky-300', Contacted: 'badge bg-purple-500/20 text-purple-300', Allocated: 'badge bg-emerald-500/20 text-emerald-400', Archived: 'badge bg-surface-600 text-ink-500' }[s] || 'badge bg-surface-600 text-ink-500'
+}
+function rankBubble(item) {
+  const r = rankMap.value[item.id]
+  if (r <= 3)  return 'bg-ember-500/20 text-ember-400'
+  if (r <= 8)  return 'bg-amber-500/15 text-amber-400'
+  return 'bg-surface-600 text-ink-400'
+}
+
+async function loadWaitlist() {
+  wlLoading.value = true
+  try { waitlistItems.value = await api.waitlist.list() } catch {}
+  wlLoading.value = false
+}
+
+async function patchWl(item, field, value) {
+  try {
+    const res = await api.waitlist.update(item.id, { [field]: value })
+    if (res.item) {
+      const idx = waitlistItems.value.findIndex(i => i.id === item.id)
+      if (idx !== -1) waitlistItems.value[idx] = res.item
+    }
+  } catch { toast?.add('Update failed', 'error') }
+}
+
+async function deleteWlItem(item) {
+  if (!confirm(`Remove ${item.first_name} ${item.last_name} from the waitlist?`)) return
+  try {
+    await api.waitlist.delete(item.id)
+    waitlistItems.value = waitlistItems.value.filter(i => i.id !== item.id)
+    if (expandedWlId.value === item.id) expandedWlId.value = null
+    toast?.add('Removed from waitlist', 'success')
+  } catch { toast?.add('Delete failed', 'error') }
+}
+
+const allocFilters = [
+  { value: 'all',       label: 'All' },
+  { value: 'allocated', label: 'Allocated' },
+  { value: 'available', label: 'Available' },
+  { value: 'inactive',  label: 'Inactive' },
+]
+
+const feeFilters = [
+  { value: 'all',        label: 'Fee: All',      summaryKey: null },
+  { value: 'current',    label: 'Fee OK',         summaryKey: 'fee_current' },
+  { value: 'overdue',    label: 'Overdue',        summaryKey: 'fee_overdue' },
+  { value: 'overdue_6m', label: '6m+ Overdue',    summaryKey: 'fee_overdue_6m' },
+  { value: 'unknown',    label: 'Unknown',        summaryKey: 'fee_unknown' },
+]
+
+let searchTimer = null
+const blank = () => ({ site_number: '', site_type: '', power: false, capacity: 6, notes: '', is_active: true })
+const form = ref(blank())
+
+// ── Badges ────────────────────────────────────────────────────────────────────
+function typeBadge(type) {
+  return {
+    caravan: 'badge bg-sky-500/20 text-sky-400',
+    tent:    'badge bg-emerald-500/20 text-emerald-400',
+    cabin:   'badge bg-amber-500/20 text-amber-400',
+    powered: 'badge bg-purple-500/20 text-purple-400',
+  }[type] || 'badge bg-surface-600 text-ink-400'
+}
+function allocBadge(s)  {
+  if (!s.is_active) return 'badge bg-surface-600 text-ink-600'
+  return s.allocation_id ? 'badge bg-sky-500/20 text-sky-300' : 'badge bg-emerald-500/20 text-emerald-400'
+}
+function allocLabel(s)  {
+  if (!s.is_active) return 'Inactive'
+  return s.allocation_id ? 'Allocated' : 'Available'
+}
+
+function feeExpiryBadge(s) {
+  const st = s.fee_expiry_status
+  if (st === 'current')    return 'badge bg-emerald-500/20 text-emerald-400'
+  if (st === 'overdue')    return 'badge bg-amber-500/20 text-amber-400'
+  if (st === 'overdue_6m') return 'badge bg-red-500/20 text-red-400'
+  return 'badge bg-surface-600 text-ink-600'
+}
+function feeExpiryLabel(s) {
+  const st  = s.fee_expiry_status
+  const exp = s.site_fee_expires
+  if (!st) return ''
+  if (st === 'unknown') return 'Not set'
+  if (!exp) return ''
+  const d = new Date(exp + 'T00:00:00')
+  if (st === 'current') {
+    return 'Due ' + d.toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' })
+  }
+  const days = Math.round((Date.now() - d.getTime()) / 86400000)
+  return `${days}d overdue`
+}
+function memberTypeBadge(t) { return { adult: 'badge bg-sky-500/20 text-sky-400', youth: 'badge bg-purple-500/20 text-purple-400', child: 'badge bg-emerald-500/20 text-emerald-400', infant: 'badge bg-surface-600 text-ink-400' }[t] || 'badge bg-surface-600 text-ink-400' }
+function memberTypeLabel(t) { return t ? t.charAt(0).toUpperCase() + t.slice(1) : 'Unknown' }
+function tenderBadge(m)  { return { eftpos: 'bg-sky-500/20 text-sky-300', cash: 'bg-emerald-500/20 text-emerald-400', bank: 'bg-purple-500/20 text-purple-300', other: 'bg-surface-600 text-ink-400' }[m] || 'bg-surface-600 text-ink-400' }
+
+// ── Formatting ────────────────────────────────────────────────────────────────
+function fmt(n)     { return Number(n ?? 0).toFixed(2) }
+function fmtDate(d) { return d ? new Date(d).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }) : '' }
+
+// ── Data loading ──────────────────────────────────────────────────────────────
+async function loadCamps() {
+  try {
+    const res = await api.camps.list()
+    camps.value = Array.isArray(res) ? res : (res.camps ?? [])
+    // Default stays null (All camps) — user can filter by specific camp if needed
+  } catch {}
+}
+
+async function load() {
+  loading.value = true
+  try {
+    const res = await api.sites.list({
+      search:     search.value,
+      type:       filterType.value,
+      filter:     filterAlloc.value,
+      fee_filter: filterFee.value,
+      camp_id:    selectedCampId.value ?? '',
+    })
+    if (Array.isArray(res)) {
+      sites.value   = res
+      summary.value = null
+    } else {
+      sites.value   = res.sites   ?? []
+      summary.value = res.summary ?? null
+    }
+  } catch {}
+  loading.value = false
+}
+
+function onSearch() {
+  clearTimeout(searchTimer)
+  searchTimer = setTimeout(() => load(), 350)
+}
+
+// ── Detail modal ──────────────────────────────────────────────────────────────
+async function openDetail(s) {
+  detailData.value    = null
+  detailLoading.value = true
+  detailCampFilter.value = ''
+  showDetail.value    = true
+  try {
+    detailData.value = await api.get('/site/detail', { site_id: s.id })
+  } catch {}
+  detailLoading.value = false
+}
+
+function openEditFromDetail() {
+  const s = detailData.value?.site
+  if (!s) return
+  showDetail.value = false
+  editing.value = s
+  form.value = { ...blank(), ...s, power: !!s.power, is_active: s.is_active !== false }
+  showModal.value = true
+}
+
+// ── Edit modal ────────────────────────────────────────────────────────────────
+function openNew()   { editing.value = null; form.value = blank(); showModal.value = true }
+
+async function save() {
+  saving.value = true
+  try {
+    if (editing.value) {
+      await api.sites.update(editing.value.id, form.value)
+      toast?.add('Site updated', 'success')
+    } else {
+      await api.sites.create(form.value)
+      toast?.add('Site added', 'success')
+    }
+    showModal.value = false
+    await load()
+  } catch (e) {
+    toast?.add(e?.data?.message || 'Save failed', 'error')
+  } finally {
+    saving.value = false
+  }
+}
+
+async function doDelete() {
+  if (!confirm(`Delete site ${form.value.site_number}?`)) return
+  try {
+    await api.sites.delete(editing.value.id)
+    toast?.add('Site deleted', 'success')
+    showModal.value = false
+    await load()
+  } catch {
+    toast?.add('Delete failed', 'error')
+  }
+}
+
+onMounted(async () => {
+  await loadCamps()
+  await load()
+})
+</script>

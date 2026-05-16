@@ -1,0 +1,30 @@
+# CAMPO v2 - Vue SPA + PHP API
+DirectoryIndex index.html index.php
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+
+# Serve existing files directly (JS/CSS assets)
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^ - [L]
+
+# --- Sub-path context: nix.local/apps/campoffice/ ---
+# Routes use absolute paths so they resolve correctly under the default vhost.
+# These conditions only fire when REQUEST_URI contains the sub-path prefix.
+
+RewriteCond %{REQUEST_URI} ^/apps/campoffice/api/
+RewriteRule ^ /apps/campoffice/index.php [L]
+
+RewriteCond %{REQUEST_URI} ^/apps/campoffice/intranet
+RewriteRule ^ /apps/campoffice/intranet.html [L]
+
+RewriteCond %{REQUEST_URI} ^/apps/campoffice/
+RewriteRule ^ /apps/campoffice/index.html [L]
+
+# --- Root context: campoffice.nix.local/ ---
+# Relative paths resolve correctly when the vhost docroot is the app directory.
+
+RewriteRule ^api/ index.php [L]
+RewriteRule ^intranet(/.*)?$ intranet.html [L]
+RewriteRule ^ index.html [L]
+</IfModule>
