@@ -1845,8 +1845,8 @@ LOCK TABLES `home_adapters` WRITE;
 /*!40000 ALTER TABLE `home_adapters` DISABLE KEYS */;
 set autocommit=0;
 INSERT INTO `home_adapters` VALUES
-('ble','Bluetooth','ble','{\"id\": \"ble\", \"name\": \"Bluetooth\", \"protocol\": \"ble\", \"capabilities\": [], \"discovery\": \"scan\", \"mqtt_prefix\": \"fbhome/ble\"}','running','2026-05-17 05:29:55'),
-('wifi','Wi-Fi','wifi','{\"id\": \"wifi\", \"name\": \"Wi-Fi\", \"protocol\": \"wifi\", \"capabilities\": [\"on_off\"], \"discovery\": \"mdns\", \"mqtt_prefix\": \"fbhome/wifi\"}','running','2026-05-17 05:29:56');
+('ble','Bluetooth','ble','{\"id\": \"ble\", \"name\": \"Bluetooth\", \"protocol\": \"ble\", \"capabilities\": [], \"discovery\": \"scan\", \"mqtt_prefix\": \"fbhome/ble\"}','running','2026-05-18 05:30:01'),
+('wifi','Wi-Fi','wifi','{\"id\": \"wifi\", \"name\": \"Wi-Fi\", \"protocol\": \"wifi\", \"capabilities\": [\"on_off\"], \"discovery\": \"mdns\", \"mqtt_prefix\": \"fbhome/wifi\"}','running','2026-05-18 05:29:52');
 /*!40000 ALTER TABLE `home_adapters` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -2257,6 +2257,365 @@ UNLOCK TABLES;
 commit;
 
 --
+-- Table structure for table `inv_customers`
+--
+
+DROP TABLE IF EXISTS `inv_customers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `inv_customers` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `contact_first_name` varchar(100) DEFAULT NULL,
+  `contact_last_name` varchar(100) DEFAULT NULL,
+  `currency` char(3) DEFAULT 'AUD',
+  `account_number` varchar(100) DEFAULT NULL,
+  `phone` varchar(50) DEFAULT NULL,
+  `mobile` varchar(50) DEFAULT NULL,
+  `website` varchar(255) DEFAULT NULL,
+  `country` varchar(100) DEFAULT NULL,
+  `state` varchar(100) DEFAULT NULL,
+  `address_line_1` varchar(255) DEFAULT NULL,
+  `address_line_2` varchar(255) DEFAULT NULL,
+  `city` varchar(100) DEFAULT NULL,
+  `postal_code` varchar(20) DEFAULT NULL,
+  `notes` text DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `idx_inv_cust_name` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `inv_customers`
+--
+
+LOCK TABLES `inv_customers` WRITE;
+/*!40000 ALTER TABLE `inv_customers` DISABLE KEYS */;
+set autocommit=0;
+INSERT INTO `inv_customers` VALUES
+(1,'City of Playford','kleithboro@playford.sa.gov.au','Cyndi','Neuzerling','AUD','','','','','','','','','','',NULL,'2026-05-17 13:22:30','2026-05-17 13:22:30'),
+(2,'Gathered Design Market','hello@gatheredsa.com.au','Jenna','O\'Dell','AUD','','0402 214 595','','','','','','','','',NULL,'2026-05-17 13:22:30','2026-05-17 13:22:30'),
+(3,'Scrub Bird','info@scrubbird.com.au','Tanya','Sambrooks','AUD','','0450 974 764','0450 974 764','https://scrubbird.com.au/','Australia','South Australia','','','Adelaide','',NULL,'2026-05-17 13:22:30','2026-05-17 13:22:30'),
+(4,'Right Way Home Improvements','info@rightwayhomeimprovements.com.au','Brett','Sandeman','AUD','','1300 714 338','','https://rightwayhomeimprovements.com.au/','Australia','South Australia','UNIT 2/10 COMMERCIAL ROAD','','SALISBURY','5108',NULL,'2026-05-17 13:22:30','2026-05-17 13:22:30'),
+(5,'Lucille Orr','lucilleorr@mail.com','Lucille','Orr','AUD','','0413069006','','https://lucilleorr.com.au/','Australia','South Australia','','','','',NULL,'2026-05-17 13:22:30','2026-05-17 13:22:30'),
+(6,'Challa Gardens','challas@wideband.net.au','Tony Frangie','','AUD','','0408050160','','https://www.challagardenshotel.com.au/','Australia','South Australia','337 Torrens Rd','','Croydon','5008',NULL,'2026-05-17 13:22:30','2026-05-17 13:22:30'),
+(7,'Solder On Plumbing & Gas','adrian@sopg.com.au','Adrian Arlt','','AUD','','0467221205','','http://solderonplumbingandgas.com.au/','','','','','','',NULL,'2026-05-17 13:22:30','2026-05-17 13:22:30'),
+(8,'Sally Watson Art','sallywatson@outlook.com.au','Sally','Watson','AUD','','+61 411 721 076','','','','','','','','',NULL,'2026-05-17 13:22:30','2026-05-17 13:22:30'),
+(9,'Healthy Feet Podiatry','andrewblacket@gmail.com','Fraser','Warrick','AUD','','8271 2822','','https://www.healthyfeetpodiatry.com.au/','Australia','South Australia','441 Fullarton Road','','Highgate','5063',NULL,'2026-05-17 13:22:30','2026-05-17 13:22:30'),
+(10,'Red Hero Group','lisa@redherogroup.com','Lisa','Parnis','AUD','','+64 204 184 3132','','http://redherogroup.com/','Australia','South Australia','10 Erie Drive','Erie Drive','Seaford Meadows','5169',NULL,'2026-05-17 13:22:30','2026-05-17 13:22:30'),
+(11,'Sydney Board and Card Games (80 184 542 376)','sydneyboardandcardgames@gmail.com','Martin','Brandel','AUD','80 184 542 376','0424 473 724','','','Australia','New South Wales','153/313 Harris St','','Pyrmont','2009',NULL,'2026-05-17 13:22:30','2026-05-17 13:22:30'),
+(12,'Flush Plumbing','admin@flushpe.au','Tom','Coverdale','AUD','','0435 475 862','','','Australia','South Australia','34 Farrow Cct','','Seaford','5169',NULL,'2026-05-17 13:22:30','2026-05-17 13:22:30'),
+(13,'Just Guys Cut','smr.khalaf.95@gmail.com','Sam','Khalaf','AUD','','0424308635','','','Australia','South Australia','14 Parsons Road','','Reynella','5161',NULL,'2026-05-17 13:22:30','2026-05-17 13:22:30'),
+(14,'Just Guys Mens Hairdresser','k_keswanee@hotmail.com','Khaleed','Keswanee','AUD','','+61 413 633 712','','http://www.justguysmenshairdresser.com','Australia','South Australia','107 Semaphore Road','','Semaphore','5019',NULL,'2026-05-17 13:22:30','2026-05-17 13:22:30'),
+(15,'Adelaide Revival Fellowship Bibleshop','bibleshop@re-acts.com','Daniel','Mee','AUD','','','','https://adelaiderevival.com/','Australia','South Australia','25 Belair Rd','','Kingswood','5062',NULL,'2026-05-17 13:22:30','2026-05-17 13:22:30'),
+(16,'Andrew Jones','info@warriorgames.com.au','Andrew','Jones','AUD','','0422092596','','','Australia','New South Wales','18 Edward Street','','Junee','2663',NULL,'2026-05-17 13:22:30','2026-05-17 13:22:30'),
+(17,'Back To It Mental Health','corey@backtoit.com.au','Corey','Berg','AUD','','0447 073 307','','','Australia','South Australia','21 Adelaide Terrace','','St Marys','5042',NULL,'2026-05-17 13:22:30','2026-05-17 13:22:30'),
+(18,'Bare Tanning Lounge','hello@baretanninglounge.com','ELEANOR','COVERDALE','AUD','','0467979326','','http://baretanninglounge.com','Australia','South Australia','52-54 Cliff Avenue','','Port Noarlunga South','5167',NULL,'2026-05-17 13:22:30','2026-05-17 13:22:30'),
+(19,'Advanced Cylinder Testing','sulliestakeaway@gmail.com','Kaitlin','Walker','AUD','','0410 180 592','','http://sulliesTA.com.au','Australia','South Australia','105 Galloway Road','Shop 5','O\'Sullivan Beach','5166',NULL,'2026-05-17 13:22:30','2026-05-17 13:22:30'),
+(20,'The Bubbly Tea And Coffee Co','admin@thebubblyteaandcoffeeco.com.au','Carris','Quinn','AUD','','0425158023','','','Australia','South Australia','33 Beach Road','','Christies Beach','5165',NULL,'2026-05-17 13:22:30','2026-05-17 13:22:30');
+/*!40000 ALTER TABLE `inv_customers` ENABLE KEYS */;
+UNLOCK TABLES;
+commit;
+
+--
+-- Table structure for table `inv_invoice_items`
+--
+
+DROP TABLE IF EXISTS `inv_invoice_items`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `inv_invoice_items` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `invoice_id` int(11) NOT NULL,
+  `description` varchar(500) NOT NULL DEFAULT '',
+  `quantity` decimal(10,2) DEFAULT 1.00,
+  `unit_price` decimal(10,2) DEFAULT 0.00,
+  `subtotal` decimal(10,2) DEFAULT 0.00,
+  `tax_name` varchar(100) DEFAULT NULL,
+  `tax_rate` decimal(5,2) DEFAULT 0.00,
+  `tax_amount` decimal(10,2) DEFAULT 0.00,
+  `sort_order` int(11) DEFAULT 0,
+  PRIMARY KEY (`id`),
+  KEY `idx_inv_item_invoice` (`invoice_id`),
+  CONSTRAINT `fk_inv_item_invoice` FOREIGN KEY (`invoice_id`) REFERENCES `inv_invoices` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=95 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `inv_invoice_items`
+--
+
+LOCK TABLES `inv_invoice_items` WRITE;
+/*!40000 ALTER TABLE `inv_invoice_items` DISABLE KEYS */;
+set autocommit=0;
+INSERT INTO `inv_invoice_items` VALUES
+(1,1,'Virtual Tour Build',1.00,1190.00,1190.00,NULL,0.00,0.00,0),
+(2,2,'Facebook Pixel',1.00,25.00,25.00,NULL,0.00,0.00,0),
+(3,2,'Setup Newsletter',1.00,75.00,75.00,NULL,0.00,0.00,1),
+(4,2,'Blog',1.00,12.50,12.50,NULL,0.00,0.00,2),
+(5,2,'Create Privacy Policy',1.00,50.00,50.00,NULL,0.00,0.00,3),
+(6,2,'Product Photoshopping',1.00,37.50,37.50,NULL,0.00,0.00,4),
+(7,2,'Training',1.00,100.00,100.00,NULL,0.00,0.00,5),
+(8,2,'Web Development',1.00,200.00,200.00,NULL,0.00,0.00,6),
+(9,2,'Image Carousel',1.00,25.00,25.00,NULL,0.00,0.00,7),
+(10,2,'Site Popup',1.00,25.00,25.00,NULL,0.00,0.00,8),
+(11,3,'Landing Page',1.00,375.00,375.00,NULL,0.00,0.00,0),
+(12,3,'Sphere Edits',1.00,750.00,750.00,NULL,0.00,0.00,1),
+(13,3,'Tour Build',1.00,375.00,375.00,NULL,0.00,0.00,2),
+(14,3,'Vendor Training',1.00,187.50,187.50,NULL,0.00,0.00,3),
+(15,4,'Landing Page',1.00,375.00,375.00,NULL,0.00,0.00,0),
+(16,4,'Sphere Edits',1.00,750.00,750.00,NULL,0.00,0.00,1),
+(17,4,'Tour Build',1.00,375.00,375.00,NULL,0.00,0.00,2),
+(18,4,'Vendor Training',1.00,187.50,187.50,NULL,0.00,0.00,3),
+(19,5,'Web Development',1.00,300.00,300.00,NULL,0.00,0.00,0),
+(20,5,'Live Chat Integration',1.00,50.00,50.00,NULL,0.00,0.00,1),
+(21,6,'Add Integration',1.00,50.00,50.00,NULL,0.00,0.00,0),
+(22,7,'Hardware Purchase',1.00,649.00,649.00,NULL,0.00,0.00,0),
+(23,7,'Hardware Purchase',1.00,39.99,39.99,NULL,0.00,0.00,1),
+(24,8,'Website Updates',1.00,21.25,21.25,NULL,0.00,0.00,0),
+(25,9,'August Markets',1.00,361.01,361.01,NULL,0.00,0.00,0),
+(26,10,'Virtual Tour Build',1.00,735.00,735.00,NULL,0.00,0.00,0),
+(27,10,'QR Code',1.00,50.00,50.00,NULL,0.00,0.00,1),
+(28,11,'Website Updates',1.00,21.25,21.25,NULL,0.00,0.00,0),
+(29,12,'December Markets',1.00,455.00,455.00,NULL,0.00,0.00,0),
+(30,13,'Website changes',1.00,42.50,42.50,NULL,0.00,0.00,0),
+(31,14,'Landing Page',1.00,262.50,262.50,NULL,0.00,0.00,0),
+(32,15,'Website Updates',1.00,187.50,187.50,NULL,0.00,0.00,0),
+(33,16,'Website changes',1.00,42.50,42.50,NULL,0.00,0.00,0),
+(34,17,'Website Updates',1.00,90.75,90.75,NULL,0.00,0.00,0),
+(35,18,'Domain Transfer',1.00,112.50,112.50,NULL,0.00,0.00,0),
+(36,18,'Staging and Migration',1.00,450.00,450.00,NULL,0.00,0.00,1),
+(37,18,'SSL Setup',1.00,37.50,37.50,NULL,0.00,0.00,2),
+(38,18,'Divi Theme',1.00,337.50,337.50,NULL,0.00,0.00,3),
+(39,18,'Website Build',1.00,2925.00,2925.00,NULL,0.00,0.00,4),
+(40,18,'Mobile Optimisation',1.00,525.00,525.00,NULL,0.00,0.00,5),
+(41,18,'Google Analytics Integration',1.00,75.00,75.00,NULL,0.00,0.00,6),
+(42,19,'Hosting Setup',1.00,99.00,99.00,NULL,0.00,0.00,0),
+(43,19,'Wordpress Install',1.00,75.00,75.00,NULL,0.00,0.00,1),
+(44,19,'Divi Theme',1.00,270.00,270.00,NULL,0.00,0.00,2),
+(45,19,'Website Build',1.00,1500.00,1500.00,NULL,0.00,0.00,3),
+(46,19,'Email integration',1.00,112.50,112.50,NULL,0.00,0.00,4),
+(47,19,'Site Popup',1.00,112.50,112.50,NULL,0.00,0.00,5),
+(48,20,'Facebook Ad',1.00,150.00,150.00,NULL,0.00,0.00,0),
+(49,21,'Go RPG Campaign',1.00,75.00,75.00,NULL,0.00,0.00,0),
+(50,22,'Requested Site Changes',1.00,113.25,113.25,NULL,0.00,0.00,0),
+(51,22,'Site Maintenance',1.00,100.00,100.00,NULL,0.00,0.00,1),
+(52,22,'Unrequested Site Changes',1.00,305.00,305.00,NULL,0.00,0.00,2),
+(53,23,'Go RPG Campaign',1.00,275.00,275.00,NULL,0.00,0.00,0),
+(54,23,'Go RPG Special Edition',1.00,30.00,30.00,NULL,0.00,0.00,1),
+(55,24,'Hosting Payment',1.00,143.88,143.88,NULL,0.00,0.00,0),
+(56,24,'Domain Transfer',1.00,11.99,11.99,NULL,0.00,0.00,1),
+(57,24,'Hosting Setup',1.00,150.00,150.00,NULL,0.00,0.00,2),
+(58,24,'Website Build',1.00,900.00,900.00,NULL,0.00,0.00,3),
+(59,25,'Hosting Payment',1.00,143.88,143.88,NULL,0.00,0.00,0),
+(60,25,'Hosting Setup',1.00,150.00,150.00,NULL,0.00,0.00,1),
+(61,25,'Website Build',1.00,900.00,900.00,NULL,0.00,0.00,2),
+(62,25,'Domain Purchase',1.00,13.99,13.99,NULL,0.00,0.00,3),
+(63,25,'SSL Setup',1.00,25.00,25.00,NULL,0.00,0.00,4),
+(64,26,'JGMH - Facebook Ad Spend',1.00,190.11,190.11,NULL,0.00,0.00,0),
+(65,26,'Facebook Ad Management Fee',1.00,100.00,100.00,NULL,0.00,0.00,1),
+(66,26,'JGMH - Facebook Ad Spend',1.00,189.89,189.89,NULL,0.00,0.00,2),
+(67,27,'Biblus Card Game',1.00,300.00,300.00,NULL,0.00,0.00,0),
+(68,28,'Web Development',1.00,1500.00,1500.00,NULL,0.00,0.00,0),
+(69,28,'Hosting Payment',1.00,119.88,119.88,NULL,0.00,0.00,1),
+(70,28,'Meta Advertising',1.00,187.50,187.50,NULL,0.00,0.00,2),
+(71,29,'Website Build',1.00,1950.00,1950.00,NULL,0.00,0.00,0),
+(72,30,'Domain Transfer',1.00,9.50,9.50,NULL,0.00,0.00,0),
+(73,30,'Domain Renewal',1.00,71.49,71.49,NULL,0.00,0.00,1),
+(74,30,'Website Migration',1.00,225.00,225.00,NULL,0.00,0.00,2),
+(75,30,'Email Migration',1.00,75.00,75.00,NULL,0.00,0.00,3),
+(76,30,'Splash Page',1.00,0.00,0.00,NULL,0.00,0.00,4),
+(77,31,'Hosting Payment',1.00,108.00,108.00,NULL,0.00,0.00,0),
+(78,32,'Domain Renewal',1.00,21.34,21.34,NULL,0.00,0.00,0),
+(79,32,'Hosting Payment',1.00,164.76,164.76,NULL,0.00,0.00,1),
+(80,33,'Domain Purchase',1.00,21.50,21.50,NULL,0.00,0.00,0),
+(81,33,'Hosting Payment',1.00,132.00,132.00,NULL,0.00,0.00,1),
+(82,33,'SSL Purchase',1.00,20.00,20.00,NULL,0.00,0.00,2),
+(83,33,'SSL Setup',1.00,120.00,120.00,NULL,0.00,0.00,3),
+(84,33,'Domain Setup',1.00,90.00,90.00,NULL,0.00,0.00,4),
+(85,33,'Website Build',1.00,1800.00,1800.00,NULL,0.00,0.00,5),
+(86,33,'POS Integration',1.00,240.00,240.00,NULL,0.00,0.00,6),
+(87,34,'Hosting Payment',1.00,143.88,143.88,NULL,0.00,0.00,0),
+(88,35,'Domain Renewal',1.00,23.83,23.83,NULL,0.00,0.00,0),
+(89,36,'Domain Transfer',1.00,80.00,80.00,NULL,0.00,0.00,0),
+(90,36,'Hosting Payment',1.00,150.00,150.00,NULL,0.00,0.00,1),
+(91,37,'Backups',1.00,360.00,360.00,NULL,0.00,0.00,0),
+(92,37,'Migrations',1.00,480.00,480.00,NULL,0.00,0.00,1),
+(93,37,'Updates',1.00,30.00,30.00,NULL,0.00,0.00,2),
+(94,37,'Testing, Configuration & Handover',1.00,90.00,90.00,NULL,0.00,0.00,3);
+/*!40000 ALTER TABLE `inv_invoice_items` ENABLE KEYS */;
+UNLOCK TABLES;
+commit;
+
+--
+-- Table structure for table `inv_invoices`
+--
+
+DROP TABLE IF EXISTS `inv_invoices`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `inv_invoices` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `invoice_number` varchar(50) NOT NULL,
+  `customer_id` int(11) DEFAULT NULL,
+  `customer_name_snapshot` varchar(255) DEFAULT NULL,
+  `issue_date` date NOT NULL,
+  `due_date` date DEFAULT NULL,
+  `status` enum('draft','sent','paid','overdue','void') DEFAULT 'draft',
+  `subtotal` decimal(10,2) DEFAULT 0.00,
+  `tax_total` decimal(10,2) DEFAULT 0.00,
+  `total` decimal(10,2) DEFAULT 0.00,
+  `currency` char(3) DEFAULT 'AUD',
+  `notes` text DEFAULT NULL,
+  `internal_notes` text DEFAULT NULL,
+  `payment_method` enum('bank_transfer','stripe','cash','other') DEFAULT NULL,
+  `paid_at` datetime DEFAULT NULL,
+  `payment_reference` varchar(255) DEFAULT NULL,
+  `wave_transaction_id` varchar(100) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_inv_number` (`invoice_number`),
+  KEY `idx_inv_customer` (`customer_id`),
+  KEY `idx_inv_status` (`status`),
+  KEY `idx_inv_issue_date` (`issue_date`),
+  CONSTRAINT `fk_inv_customer` FOREIGN KEY (`customer_id`) REFERENCES `inv_customers` (`id`) ON DELETE SET NULL
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `inv_invoices`
+--
+
+LOCK TABLES `inv_invoices` WRITE;
+/*!40000 ALTER TABLE `inv_invoices` DISABLE KEYS */;
+set autocommit=0;
+INSERT INTO `inv_invoices` VALUES
+(1,'102',2,'Gathered Design Market','2020-05-04','2020-05-18','paid',1190.00,0.00,1190.00,'AUD','',NULL,'bank_transfer','2020-05-04 00:00:00',NULL,'936553608990816174','2026-05-17 13:22:33','2026-05-17 13:22:33'),
+(2,'103',3,'Scrub Bird','2020-05-05','2020-05-19','paid',550.00,0.00,550.00,'AUD','',NULL,'bank_transfer','2020-05-05 00:00:00',NULL,'937310560972830087','2026-05-17 13:22:33','2026-05-17 13:22:33'),
+(3,'101',1,'City of Playford','2020-05-06','2020-05-20','paid',1687.50,0.00,1687.50,'AUD','',NULL,'bank_transfer','2020-05-06 00:00:00',NULL,'936548764334814893','2026-05-17 13:22:33','2026-05-17 13:22:33'),
+(4,'105',1,'City of Playford','2020-05-15','2020-05-29','paid',1687.50,0.00,1687.50,'AUD','',NULL,'bank_transfer','2020-05-15 00:00:00',NULL,'944601861049153119','2026-05-17 13:22:33','2026-05-17 13:22:33'),
+(5,'104',4,'Right Way Home Improvements','2020-05-27','2020-06-10','paid',350.00,0.00,350.00,'AUD','',NULL,'bank_transfer','2020-05-27 00:00:00',NULL,'943329622186128454','2026-05-17 13:22:33','2026-05-17 13:22:33'),
+(6,'106',3,'Scrub Bird','2020-06-05','2020-06-19','paid',50.00,0.00,50.00,'AUD','',NULL,'bank_transfer','2020-06-05 00:00:00',NULL,'959774494505956380','2026-05-17 13:22:33','2026-05-17 13:22:33'),
+(7,'107',2,'Gathered Design Market','2020-07-24','2020-08-07','paid',688.99,0.00,688.99,'AUD','',NULL,'bank_transfer','2020-07-24 00:00:00',NULL,'995311643229550432','2026-05-17 13:22:33','2026-05-17 13:22:33'),
+(8,'108',6,'Challa Gardens','2020-07-29','2020-08-12','paid',21.25,0.00,21.25,'AUD','',NULL,'bank_transfer','2020-07-29 00:00:00',NULL,'998849741808858453','2026-05-17 13:22:33','2026-05-17 13:22:33'),
+(9,'109',2,'Gathered Design Market','2020-09-02','2020-09-16','paid',361.01,0.00,361.01,'AUD','',NULL,'bank_transfer','2020-09-02 00:00:00',NULL,'1024212365614380768','2026-05-17 13:22:33','2026-05-17 13:22:33'),
+(10,'110',2,'Gathered Design Market','2020-11-04','2020-11-18','paid',785.00,0.00,785.00,'AUD','',NULL,'bank_transfer','2020-11-04 00:00:00',NULL,'1069840821152511232','2026-05-17 13:22:33','2026-05-17 13:22:33'),
+(11,'111',6,'Challa Gardens','2020-12-17','2020-12-31','paid',21.25,0.00,21.25,'AUD','',NULL,'bank_transfer','2020-12-17 00:00:00',NULL,'1101057854976161634','2026-05-17 13:22:33','2026-05-17 13:22:33'),
+(12,'112',2,'Gathered Design Market','2020-12-17','2020-12-31','paid',455.00,0.00,455.00,'AUD','',NULL,'bank_transfer','2020-12-17 00:00:00',NULL,'1101061977859552440','2026-05-17 13:22:33','2026-05-17 13:22:33'),
+(13,'113',6,'Challa Gardens','2021-02-08','2021-02-22','paid',42.50,0.00,42.50,'AUD','',NULL,'bank_transfer','2021-02-08 00:00:00',NULL,'1139798616098076511','2026-05-17 13:22:33','2026-05-17 13:22:33'),
+(14,'114',7,'Solder On Plumbing & Gas','2021-02-16','2021-03-02','paid',262.50,0.00,262.50,'AUD','',NULL,'bank_transfer','2021-02-16 00:00:00',NULL,'1145543651401791322','2026-05-17 13:22:33','2026-05-17 13:22:33'),
+(15,'115',4,'Right Way Home Improvements','2021-04-23','2021-05-07','paid',187.50,0.00,187.50,'AUD','',NULL,'bank_transfer','2021-04-23 00:00:00',NULL,'1193279252951331937','2026-05-17 13:22:33','2026-05-17 13:22:33'),
+(16,'116',6,'Challa Gardens','2021-06-24','2021-07-08','paid',42.50,0.00,42.50,'AUD','',NULL,'bank_transfer','2021-06-24 00:00:00',NULL,'1238054767234774334','2026-05-17 13:22:33','2026-05-17 13:22:33'),
+(17,'117',8,'Sally Watson Art','2021-12-17','2021-12-31','paid',90.75,0.00,90.75,'AUD','',NULL,'bank_transfer','2021-12-17 00:00:00',NULL,'1365229038477637421','2026-05-17 13:22:33','2026-05-17 13:22:33'),
+(18,'118',9,'Healthy Feet Podiatry','2021-12-22','2022-01-05','paid',4462.50,0.00,4462.50,'AUD','',NULL,'bank_transfer','2021-12-22 00:00:00',NULL,'1369356403810104919','2026-05-17 13:22:33','2026-05-17 13:22:33'),
+(19,'119',10,'Red Hero Group','2022-01-21','2022-02-04','paid',2169.00,0.00,2169.00,'AUD','',NULL,'bank_transfer','2022-01-21 00:00:00',NULL,'1390989483066914024','2026-05-17 13:22:33','2026-05-17 13:22:33'),
+(20,'120',4,'Right Way Home Improvements','2022-02-15','2022-03-01','paid',150.00,0.00,150.00,'AUD','',NULL,'bank_transfer','2022-02-15 00:00:00',NULL,'1409037841698256667','2026-05-17 13:22:33','2026-05-17 13:22:33'),
+(21,'121',11,'Sydney Board and Card Games (80 184 542 376)','2024-04-02','2024-04-16','paid',75.00,0.00,75.00,'AUD','',NULL,'bank_transfer','2024-04-02 00:00:00',NULL,'1972469007642654056','2026-05-17 13:22:33','2026-05-17 13:22:33'),
+(22,'122',9,'Healthy Feet Podiatry','2024-07-04','2024-07-18','paid',518.25,0.00,518.25,'AUD','',NULL,'bank_transfer','2024-07-04 00:00:00',NULL,'2043341848700908878','2026-05-17 13:22:33','2026-05-17 13:22:33'),
+(23,'123',11,'Sydney Board and Card Games (80 184 542 376)','2024-07-17','2024-07-31','paid',305.00,0.00,305.00,'AUD','',NULL,'bank_transfer','2024-07-17 00:00:00',NULL,'2049102356959852273','2026-05-17 13:22:33','2026-05-17 13:22:33'),
+(24,'124',14,'Just Guys Mens Hairdresser','2024-11-08','2024-11-22','paid',1205.87,0.00,1205.87,'AUD','',NULL,'bank_transfer','2024-11-08 00:00:00',NULL,'2131692588602881168','2026-05-17 13:22:33','2026-05-17 13:22:33'),
+(25,'125',13,'Just Guys Cut','2024-11-14','2024-11-28','paid',1232.87,0.00,1232.87,'AUD','',NULL,'bank_transfer','2024-11-14 00:00:00',NULL,'2135978622652118157','2026-05-17 13:22:33','2026-05-17 13:22:33'),
+(26,'126',14,'Just Guys Mens Hairdresser','2024-12-11','2024-12-25','paid',480.00,0.00,480.00,'AUD','',NULL,'bank_transfer','2024-12-11 00:00:00',NULL,'2155738180802967316','2026-05-17 13:22:33','2026-05-17 13:22:33'),
+(27,'128',15,'Adelaide Revival Fellowship Bibleshop','2025-02-22','2025-03-08','paid',300.00,0.00,300.00,'AUD','',NULL,'bank_transfer','2025-02-22 00:00:00',NULL,'2208478109827724954','2026-05-17 13:22:33','2026-05-17 13:22:33'),
+(28,'130',12,'Flush Plumbing','2025-04-30','2025-05-14','paid',1807.38,0.00,1807.38,'AUD','',NULL,'bank_transfer','2025-04-30 00:00:00',NULL,'2257193407426459088','2026-05-17 13:22:33','2026-05-17 13:22:33'),
+(29,'131',17,'Back To It Mental Health','2025-06-10','2025-06-24','paid',1950.00,0.00,1950.00,'AUD','',NULL,'bank_transfer','2025-06-10 00:00:00',NULL,'2286745634818094633','2026-05-17 13:22:33','2026-05-17 13:22:33'),
+(30,'132',17,'Back To It Mental Health','2025-08-15','2025-08-29','paid',380.99,0.00,380.99,'AUD','',NULL,'bank_transfer','2025-08-15 00:00:00',NULL,'2334640193392473543','2026-05-17 13:22:33','2026-05-17 13:22:33'),
+(31,'133',18,'Bare Tanning Lounge','2025-10-10','2025-10-24','paid',108.00,0.00,108.00,'AUD','',NULL,'bank_transfer','2025-10-10 00:00:00',NULL,'2375157146108163927','2026-05-17 13:22:33','2026-05-17 13:22:33'),
+(32,'135',13,'Just Guys Cut','2025-10-13','2025-10-27','paid',186.10,0.00,186.10,'AUD','',NULL,'bank_transfer','2025-10-13 00:00:00',NULL,'2377276573511447661','2026-05-17 13:22:33','2026-05-17 13:22:33'),
+(33,'136',19,'Advanced Cylinder Testing','2025-11-07','2025-11-21','paid',2423.50,0.00,2423.50,'AUD','',NULL,'bank_transfer','2025-11-07 00:00:00',NULL,'2395849056749483485','2026-05-17 13:22:33','2026-05-17 13:22:33'),
+(34,'137',14,'Just Guys Mens Hairdresser','2025-11-08','2025-11-22','paid',143.88,0.00,143.88,'AUD','',NULL,'bank_transfer','2025-11-08 00:00:00',NULL,'2448501707643155593','2026-05-17 13:22:33','2026-05-17 13:22:33'),
+(35,'138',17,'Back To It Mental Health','2026-03-12','2026-03-26','paid',23.83,0.00,23.83,'AUD','',NULL,'bank_transfer','2026-03-12 00:00:00',NULL,'2486401870357198050','2026-05-17 13:22:33','2026-05-17 13:22:33'),
+(36,'139',19,'Advanced Cylinder Testing','2026-03-17','2026-03-31','paid',230.00,0.00,230.00,'AUD','',NULL,'bank_transfer','2026-03-17 00:00:00',NULL,'2489975445483812660','2026-05-17 13:22:33','2026-05-17 13:22:33'),
+(37,'140',20,'The Bubbly Tea And Coffee Co','2026-05-11','2026-05-25','paid',960.00,0.00,960.00,'AUD','',NULL,'bank_transfer','2026-05-11 00:00:00',NULL,'2529766421731341630','2026-05-17 13:22:33','2026-05-17 13:22:33');
+/*!40000 ALTER TABLE `inv_invoices` ENABLE KEYS */;
+UNLOCK TABLES;
+commit;
+
+--
+-- Table structure for table `inv_payments`
+--
+
+DROP TABLE IF EXISTS `inv_payments`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `inv_payments` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `invoice_id` int(11) NOT NULL,
+  `amount` decimal(10,2) NOT NULL,
+  `payment_date` date NOT NULL,
+  `method` enum('bank_transfer','stripe','cash','other') NOT NULL DEFAULT 'bank_transfer',
+  `reference` varchar(255) DEFAULT NULL,
+  `notes` text DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `idx_inv_payment_invoice` (`invoice_id`),
+  CONSTRAINT `fk_inv_payment_invoice` FOREIGN KEY (`invoice_id`) REFERENCES `inv_invoices` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `inv_payments`
+--
+
+LOCK TABLES `inv_payments` WRITE;
+/*!40000 ALTER TABLE `inv_payments` DISABLE KEYS */;
+set autocommit=0;
+/*!40000 ALTER TABLE `inv_payments` ENABLE KEYS */;
+UNLOCK TABLES;
+commit;
+
+--
+-- Table structure for table `inv_settings`
+--
+
+DROP TABLE IF EXISTS `inv_settings`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `inv_settings` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `setting_key` varchar(100) NOT NULL,
+  `setting_value` text DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_inv_setting_key` (`setting_key`)
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `inv_settings`
+--
+
+LOCK TABLES `inv_settings` WRITE;
+/*!40000 ALTER TABLE `inv_settings` DISABLE KEYS */;
+set autocommit=0;
+INSERT INTO `inv_settings` VALUES
+(1,'business_name','Urbantek','2026-05-17 13:21:58'),
+(2,'business_owner','Curtis Humphreys','2026-05-17 13:21:58'),
+(3,'business_title','Director','2026-05-17 13:21:58'),
+(4,'abn','88 345 096 788','2026-05-17 13:21:58'),
+(5,'phone','0466 848 838','2026-05-17 13:21:58'),
+(6,'website','urbantek.online','2026-05-17 13:21:58'),
+(7,'from_email','accounts@urbantek.online','2026-05-17 13:21:58'),
+(8,'bank_account_name','Urbantek Accounts','2026-05-17 13:21:58'),
+(9,'bank_bsb','923100','2026-05-17 13:21:58'),
+(10,'bank_account_number','304774640','2026-05-17 13:21:58'),
+(11,'currency','AUD','2026-05-17 13:21:58'),
+(12,'invoice_prefix','','2026-05-17 13:21:58'),
+(13,'next_invoice_number','200','2026-05-17 13:21:58'),
+(14,'default_due_days','14','2026-05-17 13:21:58'),
+(15,'tax_rate','0','2026-05-17 13:21:58'),
+(16,'tax_name','GST','2026-05-17 13:21:58'),
+(17,'stripe_payment_link','','2026-05-17 13:21:58'),
+(18,'default_notes','Thank you for choosing Urbantek. Please reach out directly with any questions.\n\nKind Regards,\nCurtis Humphreys\nDirector\nUrbantek\nurbantek.online\n0466 848 838','2026-05-17 13:21:58');
+/*!40000 ALTER TABLE `inv_settings` ENABLE KEYS */;
+UNLOCK TABLES;
+commit;
+
+--
 -- Table structure for table `jarvis_messages`
 --
 
@@ -2589,7 +2948,7 @@ CREATE TABLE `neon_snake_scores` (
   PRIMARY KEY (`id`),
   KEY `idx_neon_snake_top` (`score` DESC,`created_at`),
   KEY `idx_neon_snake_user` (`username`,`score` DESC,`created_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2607,7 +2966,9 @@ INSERT INTO `neon_snake_scores` VALUES
 (5,'admin','Player',132,6,'classic','normal',1,22852,'2026-04-27 02:48:43'),
 (6,'admin','CH',0,0,'rush','normal',1,3338,'2026-04-27 02:52:20'),
 (7,'admin','CH',17,1,'rush','normal',1,3734,'2026-04-27 02:52:26'),
-(8,'admin','CH',14,1,'rush','normal',0,9767,'2026-04-27 02:52:39');
+(8,'admin','CH',14,1,'rush','normal',0,9767,'2026-04-27 02:52:39'),
+(9,'admin','Player',608,26,'classic','normal',1,104500,'2026-05-17 13:20:26'),
+(10,'admin','Player',0,0,'classic','normal',1,2417,'2026-05-17 13:20:33');
 /*!40000 ALTER TABLE `neon_snake_scores` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -3387,8 +3748,8 @@ LOCK TABLES `ui_settings` WRITE;
 set autocommit=0;
 INSERT INTO `ui_settings` VALUES
 ('os.desktop','[{\"kind\":\"app\",\"id\":\"codex-gui\",\"pos\":{\"col\":0,\"row\":0}},{\"kind\":\"app\",\"id\":\"ingenico-chase\",\"pos\":{\"col\":1,\"row\":0}}]','2026-05-16 13:19:02'),
-('os.wallpaper','CopperBG.png','2026-05-16 13:04:34'),
-('os.widgets','[{\"id\":\"ingenico-chase\",\"x\":950,\"y\":70,\"w\":780,\"h\":610},{\"id\":\"codex-gui\",\"x\":1920,\"y\":10,\"w\":1920,\"h\":840}]','2026-05-16 14:16:30'),
+('os.wallpaper','CyanBG.png','2026-05-17 12:53:06'),
+('os.widgets','[{\"id\":\"ingenico-chase\",\"x\":950,\"y\":70,\"w\":780,\"h\":610},{\"id\":\"codex-gui\",\"x\":1920,\"y\":10,\"w\":1920,\"h\":840}]','2026-05-17 13:20:37'),
 ('theme','dark','2026-05-16 14:02:02');
 /*!40000 ALTER TABLE `ui_settings` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -3515,7 +3876,7 @@ CREATE TABLE `whatsapp_messages` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uq_msg` (`message_id`,`chat_jid`),
   KEY `idx_wa_account` (`wa_account`)
-) ENGINE=InnoDB AUTO_INCREMENT=4039 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4159 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -7562,7 +7923,126 @@ INSERT INTO `whatsapp_messages` VALUES
 (4035,'3EB0FB1C0A2E4BA9C92EA0','144221143048242@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'and NIGHT!',NULL,'extendedTextMessage',1778937597,'2026-05-16 13:19:57',NULL,NULL,NULL),
 (4036,'AC09349461BBE0432B9FCD0E1F06D9EA','120363029922398465@g.us',NULL,'Tomas Treml','63819170742378@lid','Tomas Treml',0,'Hi Everyone,\n\nHere is the roster for 17.5. Sunday. Please give thumbs 👍👎\n\nSunday 17/5\nPiano @66838432075952 Jack deLyster\nDrums -@245040903405612 Lawrence B\nGuitars - @163419294552259, Matt R., @281299470274701 Benny\nBass -@51956420726959 Tom C\nFlutes - @147343231951050 Erin B & @83146489995469 \nSingers - @38994159079481  Jo E. @148421184864304 Jess McL',NULL,'senderKeyDistributionMessage',1778939759,'2026-05-16 13:55:59',NULL,NULL,NULL),
 (4037,'3A169B8925AA242766BF','120363029922398465@g.us',NULL,'Jo','38994159079481@lid','Jo',0,'Amy Norman is Singing tomorrow with Jess (we swapped)',NULL,'senderKeyDistributionMessage',1778940049,'2026-05-16 14:00:49',NULL,NULL,NULL),
-(4038,'ACE4D7CFCDDAD12CF9040577595CAEBC','120363029922398465@g.us',NULL,'Shelley Treml','83146489995469@lid','Shelley Treml',0,NULL,NULL,'senderKeyDistributionMessage',1778940075,'2026-05-16 14:01:15',NULL,NULL,NULL);
+(4038,'ACE4D7CFCDDAD12CF9040577595CAEBC','120363029922398465@g.us',NULL,'Shelley Treml','83146489995469@lid','Shelley Treml',0,NULL,NULL,'senderKeyDistributionMessage',1778940075,'2026-05-16 14:01:15',NULL,NULL,NULL),
+(4039,'3A8F8AAD112C516256DC','144221143048242@lid',NULL,'Dwayne Baird','144221143048242@lid','Dwayne Baird',0,'It’s an easy add. Just ask the builder to add a way to type to the Assistant at the bottom of the transcription part of the text drawer.',NULL,'extendedTextMessage',1778967398,'2026-05-16 21:36:38',NULL,NULL,NULL),
+(4040,'3A8AA3ECAF1E31D20E3B','144221143048242@lid',NULL,'Dwayne Baird','144221143048242@lid','Dwayne Baird',0,'Morning! Haha',NULL,'conversation',1778967429,'2026-05-16 21:37:09',NULL,NULL,NULL),
+(4041,'ACF85F19C3D1DE8D48C1A2611DDEB372','120363029922398465@g.us',NULL,'Tomas Treml','63819170742378@lid','Tomas Treml',0,NULL,NULL,'reactionMessage',1778969271,'2026-05-16 22:07:51',NULL,NULL,NULL),
+(4043,'ACB0BDCE99B797A034C166954AC2E179','61403505790-1587861828@g.us',NULL,'Cameron','115139567186165@lid','Cameron',0,'Reminders for Sunday 17th May\n\nSound: @153480807334041  \nAV: @161246678622436  \n\n\nPlease note that if you are able to make your turn to respond with a 👍🏻 or unable to make your turn reply with a 👎🏻 or a 😢 to the message sent ASAP.',NULL,'senderKeyDistributionMessage',1778974515,'2026-05-16 23:35:15',NULL,NULL,NULL),
+(4044,'3A4203561B0B5D8C3B43','120363029922398465@g.us',NULL,'Amy','180835487600770@lid','Amy',0,NULL,NULL,'senderKeyDistributionMessage',1778974548,'2026-05-16 23:35:48',NULL,NULL,NULL),
+(4045,'3EB090FE5BF6283BA40ACF','144221143048242@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'Morning',NULL,'extendedTextMessage',1778974925,'2026-05-16 23:42:05',NULL,NULL,NULL),
+(4046,'3EB0E5DFE9FF8B317FB91C','144221143048242@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'And of course it\'s an easy add, you\'ve made everything an easy add i\'ve just gotta use my brain :D',NULL,'extendedTextMessage',1778974942,'2026-05-16 23:42:23',NULL,NULL,NULL),
+(4047,'3EB0747F6D427811A9B59D','144221143048242@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'Have you told Regan about this yet?',NULL,'extendedTextMessage',1778974954,'2026-05-16 23:42:34',NULL,NULL,NULL),
+(4048,'3EB032DC996FFDC1FE86C0','144221143048242@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'I\'ll start the backup process on Orion regardless so we\'re good to roll out',NULL,'extendedTextMessage',1778975068,'2026-05-16 23:44:28',NULL,NULL,NULL),
+(4049,'3A4BC064E1DECD8105C5','144221143048242@lid',NULL,'Dwayne Baird','144221143048242@lid','Dwayne Baird',0,'I haven’t told Regan. I think i’ll leave that for you. Might be fun going “hey, guess what?” What? “I got an update for Orion and Chuck” hehehe',NULL,'conversation',1778975489,'2026-05-16 23:51:29',NULL,NULL,NULL),
+(4050,'3AD003823AD91EDEA17C','144221143048242@lid',NULL,'Dwayne Baird','144221143048242@lid','Dwayne Baird',0,'Surprise him with it’s majesty',NULL,'conversation',1778975509,'2026-05-16 23:51:49',NULL,NULL,NULL),
+(4051,'3EB09DDF7851E1B707F495','144221143048242@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'Haha sounds good, i\'ll have it ready for when i see him monday to show him what you\'ve done',NULL,'extendedTextMessage',1778975749,'2026-05-16 23:55:49',NULL,NULL,NULL),
+(4052,'3EB08DB257519CCEE02681','144221143048242@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'Last night I added \"Widgets\" to my OS',NULL,'extendedTextMessage',1778975758,'2026-05-16 23:55:58',NULL,NULL,NULL),
+(4053,'3AA56206CF44C469782C','144221143048242@lid',NULL,'Dwayne Baird','144221143048242@lid','Dwayne Baird',0,'YEEESSSS',NULL,'conversation',1778975767,'2026-05-16 23:56:07',NULL,NULL,NULL),
+(4054,'3EB0EF9890117181A2D990','144221143048242@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'Works pretty well, essentially you can set any of your apps as a scalable widget that persists on the desktop',NULL,'extendedTextMessage',1778975777,'2026-05-16 23:56:17',NULL,NULL,NULL),
+(4055,'3A2AFDF74727FB7D2645','144221143048242@lid',NULL,'Dwayne Baird','144221143048242@lid','Dwayne Baird',0,'Hell yes',NULL,'conversation',1778975808,'2026-05-16 23:56:49',NULL,NULL,NULL),
+(4056,'3EB08D767BAF934DF026D7','144221143048242@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'alright orions running a full backup to my hostinger via SSH',NULL,'extendedTextMessage',1778975862,'2026-05-16 23:57:42',NULL,NULL,NULL),
+(4057,'3A464C2671F3958AAC49','120363029922398465@g.us',NULL,'Benny','281299470274701@lid','Benny',0,NULL,NULL,'senderKeyDistributionMessage',1778976977,'2026-05-17 00:16:17',NULL,NULL,NULL),
+(4058,'ACEF2C129146C0A412FD601AFE564343','61403505790-1587861828@g.us',NULL,'Bradley Provis','161246678622436@lid','Bradley Provis',0,NULL,NULL,'senderKeyDistributionMessage',1778978346,'2026-05-17 00:39:07',NULL,NULL,NULL),
+(4059,'AC387E94FC54703F5DDEEC794A1F8CB5','120363029922398465@g.us',NULL,'Jack de Lyster','66838432075952@lid','Jack de Lyster',0,NULL,NULL,'senderKeyDistributionMessage',1778979618,'2026-05-17 01:00:18',NULL,NULL,NULL),
+(4060,'ACA3729B2001A11EE78C1413AA7263AB','120363029922398465@g.us',NULL,'Matt Rose','163419294552259@lid','Matt Rose',0,NULL,NULL,'senderKeyDistributionMessage',1778979856,'2026-05-17 01:04:17',NULL,NULL,NULL),
+(4061,'3AEBB8C9B11E839259ED','61413055246-1612572278@g.us',NULL,'Celia','210522234429522@lid','Celia',0,'Team 2 is on today and next Sunday 😊',NULL,'senderKeyDistributionMessage',1778980792,'2026-05-17 01:19:52',NULL,NULL,NULL),
+(4062,'3AE6F4EB192F6733DBC3','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'Morning everyone.\nSo just found an issue with the forgebox possibly. \nI had a widget in the app menu for Claude usage and this morning at 12:03 a patch update was done and it wiped my widget from the dashboard. Claude had to find the original somewhere buried.',NULL,'conversation',1778982452,'2026-05-17 01:47:32',NULL,NULL,NULL),
+(4063,'3A7FA882D71F9D207108','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,NULL,'image','imageMessage',1778982466,'2026-05-17 01:47:46',NULL,NULL,NULL),
+(4064,'3A1D9D9533BFFDC6ADF7','120363346032343642@g.us',NULL,'Dwayne Baird','144221143048242@lid','Dwayne Baird',0,'What’d you update?',NULL,'conversation',1778982737,'2026-05-17 01:52:17',NULL,NULL,NULL),
+(4065,'3AD7D70DA68A8240B207','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'I didn’t update anything',NULL,'conversation',1778982751,'2026-05-17 01:52:31',NULL,NULL,NULL),
+(4066,'3A2F7016DB265429A24A','120363346032343642@g.us',NULL,'Dwayne Baird','144221143048242@lid','Dwayne Baird',0,'Something you’ve created has auto-updates baked in then. 😁',NULL,'conversation',1778982780,'2026-05-17 01:53:01',NULL,NULL,NULL),
+(4067,'3A9F1E74E5EA00EF2AC3','120363346032343642@g.us',NULL,'Dwayne Baird','144221143048242@lid','Dwayne Baird',0,'Just ask it what ran the update, since the forgebox doesn’t do updates.',NULL,'conversation',1778982803,'2026-05-17 01:53:23',NULL,NULL,NULL),
+(4068,'AC1F77135A94E81C5686D532A0F4C07A','120363029922398465@g.us',NULL,'Ryan H','143202917023758@lid','Ryan H',0,'I can back up Lawrence if he isn\'t there',NULL,'senderKeyDistributionMessage',1778983441,'2026-05-17 02:04:01',NULL,NULL,NULL),
+(4069,'3A3D247500497FA120B8','120363029922398465@g.us',NULL,'Jessica Mclean','148421184864304@lid','Jessica Mclean',0,NULL,NULL,'senderKeyDistributionMessage',1778983468,'2026-05-17 02:04:28',NULL,NULL,NULL),
+(4070,'3EB0E9DC2EF48D4CBDCEE4','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'Bash(systemctl list-timers --all 2>/dev/null | grep -iE \"update|patch|forgebox\" ; echo \"---\"; ls /opt/forgebox/system-units/ 2>/dev/null | grep -iE \"update|patch\")\n  ⎿  Sun 2026-05-17 13:58:36 NZST       1s Sun 2026-05-17 13:58:06 NZST      28s ago forgebox-claude-usage-active.timer    forgebox-claude-usage-active.service\n     Sun 2026-05-17 13:58:46 NZST      11s Sun 2026-05-17 13:58:16 NZST      18s ago forgebox-kb-whatsapp-embed.timer      forgebox-kb-whatsapp-embed.service\n     Sun 2026-05-17 13:59:00 NZST      25s Sun 2026-05-17 13:54:00 NZST 4min 34s ago forgebox-healthcheck.timer            forgebox-healthcheck.service\n     … +12 lines (ctrl+o to expand)\n\n● Bash(cat /opt/forgebox/system-units/forgebox-update-runner.timer 2>/dev/null; echo \"===SERVICE===\"; cat /opt/forgebox/system-units/forgebox-update-runner.service 2>/…)\n  ⎿  [Unit]\n     Description=Poll for queued ForgeBox software updates\n     … +20 lines (ctrl+o to expand)\n\n● Bash(journalctl --since \"2026-05-17 12:07:00\" --until \"2026-05-17 12:09:00\" 2>&1 | grep -iE \"patch|update|forgebox-patch|update-runner|update_runner\" | head -40)\n  ⎿  May 17 12:07:55 forgebox sudo[2083715]: admin :  PWD=/home/admin ; USER=root ; COMMAND=/usr/bin/mkdir -p /opt/forgebox/patch-engine\n     May 17 12:07:55 forgebox sudo[2083723]: admin :  PWD=/home/admin ; USER=root ; COMMAND=/usr/bin/cp /tmp/.fb_forgebox-patch /opt/forgebox/patch-engine/forgebox-patch\n     May 17 12:07:55 forgebox sudo[2083732]: admin :  PWD=/home/admin ; USER=root ; COMMAND=/usr/bin/cp /tmp/.fb_patch-engine.json /opt/forgebox/patch-engine/patch-engine.json\n     … +24 lines (ctrl+o to expand)\n\n● It was a manual update, not a cron — admin (you) kicked it off at 12:07:55. From journalctl:\n\n  12:07:55  sudo mkdir -p /opt/forgebox/patch-engine\n  12:07:55  sudo cp /tmp/.fb_forgebox-patch        → /opt/forgebox/patch-engine/forgebox-patch\n  12:07:55  sudo cp /tmp/.fb_patch-engine.json     → /opt/forgebox/patch-engine/patch-engine.json\n  12:07:56  sudo cp /tmp/.fb_release.key           → /opt/forgebox/patch-engine/release.key\n  12:08:11  sudo cp /tmp/.fb_forgebox-update-latest.tgz → /opt/forgebox/patch-engine/\n  12:08:11  sudo cp /tmp/.fb_SHA256SUMS            → /opt/forgebox/patch-engine/SHA256SUMS\n  12:08:11  sudo chmod +x .../forgebox-patch\n  12:08:11  sudo sha256sum -c SHA256SUMS --ignore-missing\n  12:08:12  sudo env FB_SUDO_PASS=… python3 forgebox-patch apply forgebox-update-latest.tgz \\\n                                              --config patch-engine.json --key release.key\n\n  The /tmp/.fb_* staging pattern is what the forgebox-update dashboard app uses — it drops files in /tmp then sudo-copies them into /opt/forgebox/patch-engine/. So this came from you clicking \"Update\" (or\n   equivalent) in the ForgeBox Update app on the dashboard ~2 hours ago.\n\n  Reassuring side-note: there\'s a forgebox-update-runner.timer file staged at /opt/forgebox/system-units/, but systemctl status forgebox-update-runner.timer returns \"could not be found\" — it\'s never been\n  installed/enabled. So nothing is auto-pulling patches. The widget will only regress next time you manually run an update with the same (or newer-but-still-broken) bundle.\n\n  I\'ll tighten the memory note to reflect that this is user-triggered, not cron-driven.\n\n  Wrote 1 memory (ctrl+o to expand)\n\n● Bottom line: you triggered it manually from the ForgeBox Update app at 12:07. No background timer is doing this — it\'s safe until you (or someone with the same auth) clicks Update again.',NULL,'conversation',1778983546,'2026-05-17 02:05:47',NULL,NULL,NULL),
+(4071,'3EB05F4020879A44D2343E','144221143048242@lid',NULL,'Dwayne Baird','144221143048242@lid','Dwayne Baird',0,'You ran the update on Regan\'s boxed without saying anything? HAHA',NULL,'extendedTextMessage',1778983890,'2026-05-17 02:11:30',NULL,NULL,NULL),
+(4072,'3EB078500A69E6F206EB','144221143048242@lid',NULL,'Dwayne Baird','144221143048242@lid','Dwayne Baird',0,NULL,NULL,'protocolMessage',1778983906,'2026-05-17 02:11:46',NULL,NULL,NULL),
+(4073,'3EB09FE13604189978890D','120363346032343642@g.us',NULL,'Dwayne Baird','144221143048242@lid','Dwayne Baird',0,'I gave Curtis a massive surprise for all of you guys, with an overhaul update that turns your Forgebox into a whole Operating System. It must have been installed already!',NULL,'conversation',1778984030,'2026-05-17 02:13:50',NULL,NULL,NULL),
+(4074,'3EB0A7F4432F22363C2362','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'how does it work?',NULL,'conversation',1778984096,'2026-05-17 02:14:56',NULL,NULL,NULL),
+(4075,'3EB082CFCA03BEE5FD2D1D','120363346032343642@g.us',NULL,'Dwayne Baird','144221143048242@lid','Dwayne Baird',0,'Check if your dashboard has OS',NULL,'conversation',1778984109,'2026-05-17 02:15:09',NULL,NULL,NULL),
+(4076,'3EB059485666E0DE54A1A6','120363346032343642@g.us',NULL,'Dwayne Baird','144221143048242@lid','Dwayne Baird',0,NULL,'image','imageMessage',1778984151,'2026-05-17 02:15:51',NULL,NULL,NULL),
+(4077,'3EB0D612F8F3250B758F79','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'whats with the pronoun crap',NULL,'conversation',1778984162,'2026-05-17 02:16:02',NULL,NULL,NULL),
+(4078,'3EB0DB00CCE0D77CACD882','120363346032343642@g.us',NULL,'Dwayne Baird','144221143048242@lid','Dwayne Baird',0,'The agent has to know how to address you.',NULL,'conversation',1778984193,'2026-05-17 02:16:33',NULL,NULL,NULL),
+(4079,'3EB00C0DA4ABAD3F3807C5','120363346032343642@g.us',NULL,'Dwayne Baird','144221143048242@lid','Dwayne Baird',0,'It\'ll say \"Sir\" or \"Madam\", like \"Good morning, Madam, what would you like to do this morning?\"',NULL,'conversation',1778984239,'2026-05-17 02:17:20',NULL,NULL,NULL),
+(4080,'3EB0648FDA54274A972DF8','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'so i can see two apps on my home screen. do i just talk to it?',NULL,'conversation',1778984345,'2026-05-17 02:19:06',NULL,NULL,NULL),
+(4081,'3EB04AABAE5FEAF89A1AAC','120363346032343642@g.us',NULL,'Dwayne Baird','144221143048242@lid','Dwayne Baird',0,'Yeah, if you click the temperature in the system tray you can set a background.',NULL,'conversation',1778984420,'2026-05-17 02:20:20',NULL,NULL,NULL),
+(4082,'3EB0C2FE2D5447DC807274','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'YOU BUILT THIS?!',NULL,'conversation',1778984463,'2026-05-17 02:21:03',NULL,NULL,NULL),
+(4083,'3EB042A617E51B021206AE','120363346032343642@g.us',NULL,'Dwayne Baird','144221143048242@lid','Dwayne Baird',0,'And it\'ll be worth choosing Leo for the Voice in the settings, that\'s what it\'s designed for.',NULL,'conversation',1778984471,'2026-05-17 02:21:11',NULL,NULL,NULL),
+(4084,'3EB05056A2A26B32EC68DB','120363346032343642@g.us',NULL,'Dwayne Baird','144221143048242@lid','Dwayne Baird',0,NULL,'image','imageMessage',1778984513,'2026-05-17 02:21:53',NULL,NULL,NULL),
+(4085,'3EB0AAC7D2DC3F45A0D6CF','120363346032343642@g.us',NULL,'Dwayne Baird','144221143048242@lid','Dwayne Baird',0,NULL,'image','imageMessage',1778984514,'2026-05-17 02:21:55',NULL,NULL,NULL),
+(4086,'3EB0012953CA269D8F705C','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'Yeah mine is on leo. I have to code back to app page for coding though right? or can i do it drom this new OS?',NULL,'conversation',1778984592,'2026-05-17 02:23:12',NULL,NULL,NULL),
+(4087,'3EB016C7AD4F7CB38EAF','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,NULL,NULL,'protocolMessage',1778984616,'2026-05-17 02:23:36',NULL,NULL,NULL),
+(4088,'3EB05B50313FE528B89E55','120363346032343642@g.us',NULL,'Dwayne Baird','144221143048242@lid','Dwayne Baird',0,'If you want to code something simple, ask your Assistant to open the builder and ask it to do \"XYZ\" but be very specific, because if it mishears it could be like a genie wish that backfires.',NULL,'extendedTextMessage',1778984655,'2026-05-17 02:24:15',NULL,NULL,NULL),
+(4089,'3EB005F3D745CE19BFF21E','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'hahahahaha',NULL,'conversation',1778984667,'2026-05-17 02:24:27',NULL,NULL,NULL),
+(4090,'3EB03EE1F2B160D2F541A4','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'how do i get chuck to upgrade?',NULL,'conversation',1778984680,'2026-05-17 02:24:40',NULL,NULL,NULL),
+(4091,'3EB000F029A523E10DA83E','120363346032343642@g.us',NULL,'Dwayne Baird','144221143048242@lid','Dwayne Baird',0,'Upgrade what?',NULL,'conversation',1778984689,'2026-05-17 02:24:49',NULL,NULL,NULL),
+(4092,'3EB01D1D9A3AD5580E9D5D','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'so that it has the new OS?',NULL,'conversation',1778984703,'2026-05-17 02:25:03',NULL,NULL,NULL),
+(4093,'3EB0E4C863B94A348FCFB6','120363346032343642@g.us',NULL,'Dwayne Baird','144221143048242@lid','Dwayne Baird',0,'OH Curtis should be able to help, you\'ll need to do a backup of any super important apps, just in case.',NULL,'conversation',1778984731,'2026-05-17 02:25:31',NULL,NULL,NULL),
+(4094,'3EB046E284FFA2E42D0E45','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'well im totally glad it didnt wipe any of my apps ive been building',NULL,'conversation',1778984753,'2026-05-17 02:25:54',NULL,NULL,NULL),
+(4095,'3EB02E60CDE9932886936D','120363346032343642@g.us',NULL,'Dwayne Baird','144221143048242@lid','Dwayne Baird',0,'Curtis said he was backing it up last night, so i\'m sure it was already done for you.',NULL,'conversation',1778984805,'2026-05-17 02:26:45',NULL,NULL,NULL),
+(4096,'3EB00582034679647A1558','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'I\'ll wait for him then.  How do I ggo back to the main part of the forgebox once I\'m in the OS?',NULL,'conversation',1778984851,'2026-05-17 02:27:32',NULL,NULL,NULL),
+(4097,'3EB0BAEB17032BFC4E7EA5','120363346032343642@g.us',NULL,'Dwayne Baird','144221143048242@lid','Dwayne Baird',0,'I also wrote the cumulative patch engine to ensure it\'s only ever additive, not destructive, so it will never touch your apps.\n\nThe one downside, that we just saw already, is if i\'ve updated something like the App Builder with my changes, my changes will overwrite your changes. Like an App Builder statusbar setting.',NULL,'conversation',1778984972,'2026-05-17 02:29:32',NULL,NULL,NULL),
+(4098,'3EB0A521AD152040EA3943','120363346032343642@g.us',NULL,'Dwayne Baird','144221143048242@lid','Dwayne Baird',0,NULL,'image','imageMessage',1778984997,'2026-05-17 02:29:58',NULL,NULL,NULL),
+(4099,'3EB02719221838C68A4FCC','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'Well I am the bug finder 😇',NULL,'conversation',1778985007,'2026-05-17 02:30:07',NULL,NULL,NULL),
+(4100,'3EB06862D03BC632A005C1','120363346032343642@g.us',NULL,'Dwayne Baird','144221143048242@lid','Dwayne Baird',0,'Just take off the /os/ from the end of the url for now',NULL,'conversation',1778985008,'2026-05-17 02:30:08',NULL,NULL,NULL),
+(4101,'3EB0B1BCEF913A5ADC88E6','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'https://orion.local/os/',NULL,'conversation',1778985118,'2026-05-17 02:31:58',NULL,NULL,NULL),
+(4102,'3EB0B9B645CE910A04BE8E','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,NULL,'image','imageMessage',1778985120,'2026-05-17 02:32:00',NULL,NULL,NULL),
+(4103,'3EB0E75D842D712CCFDB64','120363346032343642@g.us',NULL,'Dwayne Baird','144221143048242@lid','Dwayne Baird',0,'noo take it out of full-screen',NULL,'conversation',1778985138,'2026-05-17 02:32:18',NULL,NULL,NULL),
+(4104,'3EB0A143268BF69EDF4E25','120363346032343642@g.us',NULL,'Dwayne Baird','144221143048242@lid','Dwayne Baird',0,'LOL',NULL,'conversation',1778985140,'2026-05-17 02:32:20',NULL,NULL,NULL),
+(4105,'3EB0280B7AA9B9E35D69F0','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'that is what happens when you press forgeinthebox down the bottom',NULL,'conversation',1778985142,'2026-05-17 02:32:22',NULL,NULL,NULL),
+(4106,'3EB0F3A71E72F90A4C48E9','120363346032343642@g.us',NULL,'Dwayne Baird','144221143048242@lid','Dwayne Baird',0,'That\'s your email client, one that the Assistant can access',NULL,'conversation',1778985190,'2026-05-17 02:33:10',NULL,NULL,NULL),
+(4107,'3EB0312AFA3294C6EA5D13','120363346032343642@g.us',NULL,'Dwayne Baird','144221143048242@lid','Dwayne Baird',0,'If you connect in your emails',NULL,'conversation',1778985203,'2026-05-17 02:33:23',NULL,NULL,NULL),
+(4108,'3EB0002661FF8666F59149','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'ok, so it needs a toggle button to go back and forth within the box if you don\'t want to be in the OS.',NULL,'conversation',1778985241,'2026-05-17 02:34:01',NULL,NULL,NULL),
+(4109,'3EB0E3A6637F4BFA777A69','120363346032343642@g.us',NULL,'Dwayne Baird','144221143048242@lid','Dwayne Baird',0,'I\'m going to move everything to the OS and slowly decommission the website-style dashboard.',NULL,'conversation',1778985413,'2026-05-17 02:36:53',NULL,NULL,NULL),
+(4110,'3EB014A586606BD45F47B5','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'ahhhh',NULL,'conversation',1778985420,'2026-05-17 02:37:00',NULL,NULL,NULL),
+(4111,'3EB06456C866648045487A','120363346032343642@g.us',NULL,'Dwayne Baird','144221143048242@lid','Dwayne Baird',0,'but that\'ll be later when I find time',NULL,'conversation',1778985474,'2026-05-17 02:37:54',NULL,NULL,NULL),
+(4112,'3A0DC739522D34AAB58B','120363029922398465@g.us',NULL,'Benny','281299470274701@lid','Benny',0,'I’m gonna be late',NULL,'senderKeyDistributionMessage',1778989266,'2026-05-17 03:41:06',NULL,NULL,NULL),
+(4113,'AC8422186B0F3E51FAB29563FC8ED18A','61403505790-1587861828@g.us',NULL,'Jonny Welch','195549894570056@lid','Jonny Welch',0,'Right click on PowerPoint, Pause',NULL,'conversation',1778997179,'2026-05-17 05:52:59',NULL,NULL,NULL),
+(4114,'AC6E1A84010C8227AC499AB25EA9CC1D','61403505790-1587861828@g.us',NULL,'Jonny Welch','195549894570056@lid','Jonny Welch',0,'If needed, haha',NULL,'conversation',1778997191,'2026-05-17 05:53:11',NULL,NULL,NULL),
+(4115,'3A2BF05DFB6A0A19EA04','144221143048242@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'I tested it working and backed up first haha',NULL,'conversation',1778997968,'2026-05-17 06:06:08',NULL,NULL,NULL),
+(4116,'3AD3366A343F677A060C','231335629164614@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'Is orion down',NULL,'conversation',1778997981,'2026-05-17 06:06:22',NULL,NULL,NULL),
+(4117,'3EB0EC03B7FD694B1B20DD','231335629164614@lid',NULL,'Regan','231335629164614@lid','Regan',0,'no',NULL,'extendedTextMessage',1778997993,'2026-05-17 06:06:33',NULL,NULL,NULL),
+(4118,'3A4339425A332FF0B2CB','231335629164614@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'Getting bad gateway',NULL,'conversation',1778998092,'2026-05-17 06:08:12',NULL,NULL,NULL),
+(4119,'3EB05C4A4C78191D55D296','231335629164614@lid',NULL,'Regan','231335629164614@lid','Regan',0,'interesting',NULL,'extendedTextMessage',1778998107,'2026-05-17 06:08:27',NULL,NULL,NULL),
+(4120,'3EB0576E8F2D94F5E453DD','231335629164614@lid',NULL,'Regan','231335629164614@lid','Regan',0,'clear your cache and try again',NULL,'extendedTextMessage',1778998120,'2026-05-17 06:08:40',NULL,NULL,NULL),
+(4121,'3A9370527ADFEF426F01','231335629164614@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,NULL,'image','imageMessage',1778998144,'2026-05-17 06:09:05',NULL,NULL,NULL),
+(4122,'3EB07488E8F84CCDFFB613','231335629164614@lid',NULL,'Regan','231335629164614@lid','Regan',0,'funny, i got it to fix the lighthouse tunnel and it seems to have messed up forge tunnel. im on it',NULL,'extendedTextMessage',1778998219,'2026-05-17 06:10:19',NULL,NULL,NULL),
+(4123,'3EB081A8E3C2210F4806BF','231335629164614@lid',NULL,'Regan','231335629164614@lid','Regan',0,'try again',NULL,'extendedTextMessage',1778998304,'2026-05-17 06:11:44',NULL,NULL,NULL),
+(4124,'3EB09E71EF1F4564E3F100','231335629164614@lid',NULL,'Regan','231335629164614@lid','Regan',0,'did it work',NULL,'extendedTextMessage',1778998442,'2026-05-17 06:14:02',NULL,NULL,NULL),
+(4125,'3ABA1C5E78E754189D9D','231335629164614@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'Back up now',NULL,'conversation',1779000099,'2026-05-17 06:41:39',NULL,NULL,NULL),
+(4126,'3AB26C494CD6773B4392','231335629164614@lid',NULL,'Regan','231335629164614@lid','Regan',0,'Damn I’m good ☺️',NULL,'conversation',1779000119,'2026-05-17 06:41:59',NULL,NULL,NULL),
+(4127,'3AD629D7E51568773BA4','231335629164614@lid',NULL,'Regan','231335629164614@lid','Regan',0,'🤣🤣🤣🤣',NULL,'conversation',1779000124,'2026-05-17 06:42:04',NULL,NULL,NULL),
+(4128,'3EB06D002745859FDAB0E6','144221143048242@lid',NULL,'Dwayne Baird','144221143048242@lid','Dwayne Baird',0,'I\'m sure he\'s loving it.',NULL,'extendedTextMessage',1779000586,'2026-05-17 06:49:46',NULL,NULL,NULL),
+(4129,'ACE52740D73948E12D3011FDD2075770','61403505790-1587861828@g.us',NULL,'Bradley Provis','161246678622436@lid','Bradley Provis',0,'Saw this too late 🤦🏼😂',NULL,'conversation',1779000975,'2026-05-17 06:56:15',NULL,NULL,NULL),
+(4130,'4A8ED9F560C7475C660B','61413055246-1612572278@g.us',NULL,'Celia','210522234429522@lid','Celia',0,NULL,'image','imageMessage',1779001246,'2026-05-17 07:00:46',NULL,NULL,NULL),
+(4131,'4AA6180BC69194F125A5','61413055246-1612572278@g.us',NULL,'Celia','210522234429522@lid','Celia',0,NULL,'image','imageMessage',1779001246,'2026-05-17 07:00:46',NULL,NULL,NULL),
+(4132,'4A7BB5315005AAB01277','61413055246-1612572278@g.us',NULL,'Celia','210522234429522@lid','Celia',0,NULL,'image','imageMessage',1779001247,'2026-05-17 07:00:47',NULL,NULL,NULL),
+(4133,'4AD3C6A3B021B91D863D','61413055246-1612572278@g.us',NULL,'Celia','210522234429522@lid','Celia',0,NULL,'image','imageMessage',1779001247,'2026-05-17 07:00:47',NULL,NULL,NULL),
+(4134,'4A1BC17BE542868B4468','61413055246-1612572278@g.us',NULL,'Celia','210522234429522@lid','Celia',0,NULL,'image','imageMessage',1779001247,'2026-05-17 07:00:47',NULL,NULL,NULL),
+(4135,'4AD787407C0E231F4186','61413055246-1612572278@g.us',NULL,'Celia','210522234429522@lid','Celia',0,NULL,'image','imageMessage',1779001247,'2026-05-17 07:00:47',NULL,NULL,NULL),
+(4136,'4A84871C231A6AA23203','61413055246-1612572278@g.us',NULL,'Celia','210522234429522@lid','Celia',0,NULL,'image','imageMessage',1779001247,'2026-05-17 07:00:47',NULL,NULL,NULL),
+(4137,'ACDA0E63E28C10DB2345196B1E432414','61403505790-1587861828@g.us',NULL,'Jonny Welch','195549894570056@lid','Jonny Welch',0,NULL,NULL,'reactionMessage',1779001921,'2026-05-17 07:12:01',NULL,NULL,NULL),
+(4138,'3ACEACB8CE823B0ABA45','231335629164614@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'You sure are!',NULL,'conversation',1779010143,'2026-05-17 09:29:03',NULL,NULL,NULL),
+(4139,'3A553D8FC4CA83FF3538','231335629164614@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'Even if you broke it the first time',NULL,'conversation',1779010152,'2026-05-17 09:29:12',NULL,NULL,NULL),
+(4140,'3A6AC8177F47C8973C92','231335629164614@lid',NULL,'Regan','231335629164614@lid','Regan',0,'🤨',NULL,'conversation',1779010190,'2026-05-17 09:29:51',NULL,NULL,NULL),
+(4141,'3A552C6A9B65ED954B7F','231335629164614@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,NULL,'video','videoMessage',1779010226,'2026-05-17 09:30:27',NULL,NULL,NULL),
+(4142,'3A1879E1B2317F3ED3E4','231335629164614@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'Like your new WhatsApp status',NULL,'conversation',1779010705,'2026-05-17 09:38:25',NULL,NULL,NULL),
+(4143,'3A94385DD38C24BC4FCD','231335629164614@lid',NULL,'Regan','231335629164614@lid','Regan',0,'Huh?',NULL,'conversation',1779010728,'2026-05-17 09:38:48',NULL,NULL,NULL),
+(4144,'3A0CDFF86592AC59F822','144221143048242@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'Yeah I wasn’t going to tell him about it until tomorrow when I saw him but I guess he noticed the OS menu item',NULL,'conversation',1779010740,'2026-05-17 09:39:00',NULL,NULL,NULL),
+(4145,'3A5A9CBA626AE71A7345','231335629164614@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'*I like your new…',NULL,'conversation',1779010764,'2026-05-17 09:39:24',NULL,NULL,NULL),
+(4146,'3AB9B162345994C5CC03','231335629164614@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'Missed the I',NULL,'conversation',1779010768,'2026-05-17 09:39:28',NULL,NULL,NULL),
+(4147,'3A5B2773AC5ED79A228F','231335629164614@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'Retired Entrepreneur',NULL,'conversation',1779010776,'2026-05-17 09:39:36',NULL,NULL,NULL),
+(4148,'3A38B9217E3E620A67B3','231335629164614@lid',NULL,'Regan','231335629164614@lid','Regan',0,'Ahhh thanks. Sometimes I’m bored',NULL,'conversation',1779010790,'2026-05-17 09:39:50',NULL,NULL,NULL),
+(4149,'3A9E5052C6FF9ED09665','231335629164614@lid',NULL,'Regan','231335629164614@lid','Regan',0,'Actually I’m bored a lot now',NULL,'conversation',1779010846,'2026-05-17 09:40:46',NULL,NULL,NULL),
+(4150,'3A17DA58E66E764D59DD','231335629164614@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'Ha, well sounds like you’ll be great at piano soon then',NULL,'conversation',1779010879,'2026-05-17 09:41:20',NULL,NULL,NULL),
+(4151,'3A53CF5C11AD78B171E2','231335629164614@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'Learn chess so we can play when I’m over for a coffee ;)',NULL,'conversation',1779010897,'2026-05-17 09:41:37',NULL,NULL,NULL),
+(4152,'3A8A2200851D1C3E6E1D','231335629164614@lid',NULL,'Regan','231335629164614@lid','Regan',0,'Melissa is building a piano app for us',NULL,'conversation',1779010912,'2026-05-17 09:41:53',NULL,NULL,NULL),
+(4153,'3A48C793B28DF8F4DA38','231335629164614@lid',NULL,'Regan','231335629164614@lid','Regan',0,'Chess is boring. 😴',NULL,'conversation',1779010930,'2026-05-17 09:42:10',NULL,NULL,NULL),
+(4154,'3A08BFB96DFB67C99214','231335629164614@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,NULL,NULL,'reactionMessage',1779010984,'2026-05-17 09:43:04',NULL,NULL,NULL),
+(4155,'3AAE66A8C6AE2D9FE370','144221143048242@lid',NULL,'Dwayne Baird','144221143048242@lid','Dwayne Baird',0,'The App Builder statusbar update he had was overwritten. That’s how he noticed. My updated App Builder overwrote his.',NULL,'conversation',1779011483,'2026-05-17 09:51:24',NULL,NULL,NULL),
+(4156,'ACE02D958D1F1BD6EB2D82B620475C31','50732220870663@lid',NULL,'Jo','50732220870663@lid','Jo',0,'https://www.amazon.com/dp/B0C2KF9BF4/ref=cm_sw_r_as_gl_api_gl_i_JFG8BW25WT0WTZA7K0S5?linkCode=ml1&tag=oulcript-20&linkId=e25d6262345dcb1db639a824051a0e38',NULL,'extendedTextMessage',1779013128,'2026-05-17 10:18:49',NULL,NULL,NULL),
+(4157,'3EB058662E7ED299BB3FA3','144221143048242@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'ahhhh right right',NULL,'extendedTextMessage',1779020813,'2026-05-17 12:26:53',NULL,NULL,NULL),
+(4158,'3EB03BFF5942599D05687F','50732220870663@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'I\'ve just built a schedule into our Google Mesh, it\'ll turn off at 12:01am and on at 7am',NULL,'conversation',1779021327,'2026-05-17 12:35:27',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `whatsapp_messages` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -7580,4 +8060,4 @@ commit;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2026-05-17  3:00:01
+-- Dump completed on 2026-05-18  3:00:02
