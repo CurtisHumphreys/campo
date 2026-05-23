@@ -396,7 +396,7 @@ CREATE TABLE `browser_action_log` (
   PRIMARY KEY (`id`),
   KEY `idx_session` (`session_id`),
   KEY `idx_created` (`created_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -439,7 +439,15 @@ INSERT INTO `browser_action_log` VALUES
 (30,'auto-37','automation','Starting: Torn Daily Gym & Nerve (by schedule)',NULL,'2026-04-30 04:00:01'),
 (31,'auto-38','automation','Starting: Torn Daily Gym & Nerve (by schedule)',NULL,'2026-04-30 06:00:02'),
 (32,'auto-39','automation','Starting: Torn Daily Gym & Nerve (by schedule)',NULL,'2026-04-30 08:00:01'),
-(33,'auto-40','automation','Starting: Torn Daily Gym & Nerve (by schedule)',NULL,'2026-04-30 10:00:01');
+(33,'auto-40','automation','Starting: Torn Daily Gym & Nerve (by schedule)',NULL,'2026-04-30 10:00:01'),
+(34,'auto-33','error','Recovered stale running state',NULL,'2026-03-13 16:49:37'),
+(35,'auto-34','error','Recovered stale running state',NULL,'2026-03-13 16:49:37'),
+(36,'auto-35','error','Recovered stale running state',NULL,'2026-03-13 16:49:37'),
+(37,'auto-36','cancel','Stopped after stale run cleanup',NULL,'2026-03-13 16:49:37'),
+(38,'auto-37','error','Recovered stale running state',NULL,'2026-03-13 16:49:37'),
+(39,'auto-38','error','Recovered stale running state',NULL,'2026-03-13 16:49:37'),
+(40,'auto-39','error','Recovered stale running state',NULL,'2026-03-13 16:49:37'),
+(41,'auto-40','error','Recovered stale running state',NULL,'2026-03-13 16:49:37');
 /*!40000 ALTER TABLE `browser_action_log` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -505,14 +513,14 @@ INSERT INTO `browser_automation_runs` VALUES
 (30,1,'schedule','failed',NULL,0,'Automation process 1569987 is no longer running.','2026-04-25 04:00:01','2026-03-13 16:49:37'),
 (31,1,'schedule','canceled',NULL,1,'Stopped by user.','2026-04-25 06:00:01','2026-03-13 16:49:37'),
 (32,1,'manual','success',NULL,0,'I opened `https://www.torn.com/gym.php` in the visible headed Chromium session `browser-view`.\n\nBlocked: Torn is showing a Cloudflare “Verify you are human” checkbox. Please complete that manually in the VNC browser, then tell me it’s done and I’ll continue from the gym page using the same session.','2026-04-28 15:10:01','2026-04-28 15:11:10'),
-(33,1,'manual','running',1022034,0,NULL,'2026-04-28 22:50:01',NULL),
-(34,1,'schedule','running',1056658,0,NULL,'2026-04-29 00:00:01',NULL),
-(35,1,'schedule','running',1115577,0,NULL,'2026-04-29 02:00:01',NULL),
-(36,1,'schedule','running',1176313,1,NULL,'2026-04-29 04:00:01',NULL),
-(37,1,'schedule','running',1892920,0,NULL,'2026-04-30 04:00:01',NULL),
-(38,1,'schedule','running',1952145,0,NULL,'2026-04-30 06:00:02',NULL),
-(39,1,'schedule','running',2010804,0,NULL,'2026-04-30 08:00:01',NULL),
-(40,1,'schedule','running',2069512,0,NULL,'2026-04-30 10:00:01',NULL);
+(33,1,'manual','failed',NULL,0,'Automation process 1022034 is no longer running.','2026-04-28 22:50:01','2026-03-13 16:49:37'),
+(34,1,'schedule','failed',NULL,0,'Automation process 1056658 is no longer running.','2026-04-29 00:00:01','2026-03-13 16:49:37'),
+(35,1,'schedule','failed',NULL,0,'Automation process 1115577 is no longer running.','2026-04-29 02:00:01','2026-03-13 16:49:37'),
+(36,1,'schedule','canceled',NULL,1,'Stopped by user.','2026-04-29 04:00:01','2026-03-13 16:49:37'),
+(37,1,'schedule','failed',NULL,0,'Automation process 1892920 is no longer running.','2026-04-30 04:00:01','2026-03-13 16:49:37'),
+(38,1,'schedule','failed',NULL,0,'Automation process 1952145 is no longer running.','2026-04-30 06:00:02','2026-03-13 16:49:37'),
+(39,1,'schedule','failed',NULL,0,'Automation process 2010804 is no longer running.','2026-04-30 08:00:01','2026-03-13 16:49:37'),
+(40,1,'schedule','failed',NULL,0,'Automation process 2069512 is no longer running.','2026-04-30 10:00:01','2026-03-13 16:49:37');
 /*!40000 ALTER TABLE `browser_automation_runs` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -548,7 +556,7 @@ LOCK TABLES `browser_automations` WRITE;
 /*!40000 ALTER TABLE `browser_automations` DISABLE KEYS */;
 set autocommit=0;
 INSERT INTO `browser_automations` VALUES
-(1,'Torn Daily Gym & Nerve','Uses up all my energy and nerve','Firstly goto torn.com/gym.php and spend all my energy on training the Defense Skill if after doing this i\'m left with 0 energy then goto the torn.com/page.php?sid=points page and click on the refill energy bar box (if it\'s not greyed out) and then click continue. Then go back to the gym and spend all my energy on training the defnse skill again. Then goto the crimes page, to cracking crimes and spend all my nerve on the bottom most cracking crime that is still in the state of brute force, once that has moved to \"crack\" move up the list until you get to the next brute force and use nerve on that and continue up the list until you have used all nerve. Once done there i want you to goto the properties page and check if i have upkeep to pay https://www.torn.com/properties.php#/p=options&ID=197899&tab=upkeep and in the \"pay bills\" section click the \"Pay\" button.','0 */2 * * *',0,0,'2026-04-30 10:00:01','success','2026-04-23 00:13:28','2026-04-30 10:13:37');
+(1,'Torn Daily Gym & Nerve','Uses up all my energy and nerve','Firstly goto torn.com/gym.php and spend all my energy on training the Defense Skill if after doing this i\'m left with 0 energy then goto the torn.com/page.php?sid=points page and click on the refill energy bar box (if it\'s not greyed out) and then click continue. Then go back to the gym and spend all my energy on training the defnse skill again. Then goto the crimes page, to cracking crimes and spend all my nerve on the bottom most cracking crime that is still in the state of brute force, once that has moved to \"crack\" move up the list until you get to the next brute force and use nerve on that and continue up the list until you have used all nerve. Once done there i want you to goto the properties page and check if i have upkeep to pay https://www.torn.com/properties.php#/p=options&ID=197899&tab=upkeep and in the \"pay bills\" section click the \"Pay\" button.','0 */2 * * *',0,0,'2026-04-30 10:00:01','failed','2026-04-23 00:13:28','2026-03-13 16:49:37');
 /*!40000 ALTER TABLE `browser_automations` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -1933,8 +1941,8 @@ LOCK TABLES `home_adapters` WRITE;
 /*!40000 ALTER TABLE `home_adapters` DISABLE KEYS */;
 set autocommit=0;
 INSERT INTO `home_adapters` VALUES
-('ble','Bluetooth','ble','{\"id\": \"ble\", \"name\": \"Bluetooth\", \"protocol\": \"ble\", \"capabilities\": [], \"discovery\": \"scan\", \"mqtt_prefix\": \"fbhome/ble\"}','running','2026-05-23 05:29:54'),
-('wifi','Wi-Fi','wifi','{\"id\": \"wifi\", \"name\": \"Wi-Fi\", \"protocol\": \"wifi\", \"capabilities\": [\"on_off\"], \"discovery\": \"mdns\", \"mqtt_prefix\": \"fbhome/wifi\"}','running','2026-05-23 05:29:54');
+('ble','Bluetooth','ble','{\"id\": \"ble\", \"name\": \"Bluetooth\", \"protocol\": \"ble\", \"capabilities\": [], \"discovery\": \"scan\", \"mqtt_prefix\": \"fbhome/ble\"}','running','2026-03-14 03:19:48'),
+('wifi','Wi-Fi','wifi','{\"id\": \"wifi\", \"name\": \"Wi-Fi\", \"protocol\": \"wifi\", \"capabilities\": [\"on_off\"], \"discovery\": \"mdns\", \"mqtt_prefix\": \"fbhome/wifi\"}','running','2026-03-14 03:19:48');
 /*!40000 ALTER TABLE `home_adapters` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -3985,7 +3993,7 @@ CREATE TABLE `whatsapp_messages` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uq_msg` (`message_id`,`chat_jid`),
   KEY `idx_wa_account` (`wa_account`)
-) ENGINE=InnoDB AUTO_INCREMENT=5278 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5280 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -9271,7 +9279,9 @@ INSERT INTO `whatsapp_messages` VALUES
 (5274,'3EB0316D4375EA34860E1E','120363346032343642@g.us',NULL,'Dwayne Baird','144221143048242@lid','Dwayne Baird',0,'Short version, on the terminal press Func and enter 7410 ok',NULL,'conversation',1779469122,'2026-05-22 16:58:42',NULL,NULL,NULL),
 (5275,'3EB06FF761F2EDCF65B4D3','120363346032343642@g.us',NULL,'Dwayne Baird','144221143048242@lid','Dwayne Baird',0,'Terminal setup ok',NULL,'conversation',1779469134,'2026-05-22 16:58:54',NULL,NULL,NULL),
 (5276,'3EB0097D823A19EDEFED27','120363346032343642@g.us',NULL,'Dwayne Baird','144221143048242@lid','Dwayne Baird',0,'Begin ok\n2) Cloud Comms ok\nsetup wifi ok\nwifi network\nenter wifi pass\ncheck details and press next\n*tests the network*\nsetup complete ok\nCancel to return to home screen\n\nTerminal enters pin pairing mode press enter/ok\nPair code: 123456\nenter that in the pairing section on the POS\n\nDone','image','imageMessage',1779469414,'2026-05-22 17:03:34',NULL,NULL,NULL),
-(5277,'3EB0A083A82EAA28ED5DEB','120363346032343642@g.us',NULL,'Dwayne Baird','144221143048242@lid','Dwayne Baird',0,'ok, and back to bed for me',NULL,'conversation',1779469464,'2026-05-22 17:04:24',NULL,NULL,NULL);
+(5277,'3EB0A083A82EAA28ED5DEB','120363346032343642@g.us',NULL,'Dwayne Baird','144221143048242@lid','Dwayne Baird',0,'ok, and back to bed for me',NULL,'conversation',1779469464,'2026-05-22 17:04:24',NULL,NULL,NULL),
+(5278,'3A182CA0D121F2ABFCD3','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'Linkly on an mx51 terminal?',NULL,'conversation',1779476662,'2026-05-22 19:04:22',NULL,NULL,NULL),
+(5279,'3A0A3EFCC4614BEBB180','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'Alright, I believe I know what it is. The PC after power outage has switched the wifi to a public profile which is firewalling the local ports. I’ll switch back to private and that should hopefully fix it. Fingers crossed 🤞🏻',NULL,'conversation',1779477832,'2026-05-22 19:23:52',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `whatsapp_messages` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -9289,4 +9299,4 @@ commit;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2026-05-23  3:00:02
+-- Dump completed on 2026-05-23  9:46:26
