@@ -1941,8 +1941,8 @@ LOCK TABLES `home_adapters` WRITE;
 /*!40000 ALTER TABLE `home_adapters` DISABLE KEYS */;
 set autocommit=0;
 INSERT INTO `home_adapters` VALUES
-('ble','Bluetooth','ble','{\"id\": \"ble\", \"name\": \"Bluetooth\", \"protocol\": \"ble\", \"capabilities\": [], \"discovery\": \"scan\", \"mqtt_prefix\": \"fbhome/ble\"}','running','2026-03-14 03:19:48'),
-('wifi','Wi-Fi','wifi','{\"id\": \"wifi\", \"name\": \"Wi-Fi\", \"protocol\": \"wifi\", \"capabilities\": [\"on_off\"], \"discovery\": \"mdns\", \"mqtt_prefix\": \"fbhome/wifi\"}','running','2026-03-14 03:19:48');
+('ble','Bluetooth','ble','{\"id\": \"ble\", \"name\": \"Bluetooth\", \"protocol\": \"ble\", \"capabilities\": [], \"discovery\": \"scan\", \"mqtt_prefix\": \"fbhome/ble\"}','running','2026-05-24 02:59:59'),
+('wifi','Wi-Fi','wifi','{\"id\": \"wifi\", \"name\": \"Wi-Fi\", \"protocol\": \"wifi\", \"capabilities\": [\"on_off\"], \"discovery\": \"mdns\", \"mqtt_prefix\": \"fbhome/wifi\"}','running','2026-05-24 02:59:59');
 /*!40000 ALTER TABLE `home_adapters` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -3993,7 +3993,7 @@ CREATE TABLE `whatsapp_messages` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uq_msg` (`message_id`,`chat_jid`),
   KEY `idx_wa_account` (`wa_account`)
-) ENGINE=InnoDB AUTO_INCREMENT=5280 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5381 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -9281,7 +9281,106 @@ INSERT INTO `whatsapp_messages` VALUES
 (5276,'3EB0097D823A19EDEFED27','120363346032343642@g.us',NULL,'Dwayne Baird','144221143048242@lid','Dwayne Baird',0,'Begin ok\n2) Cloud Comms ok\nsetup wifi ok\nwifi network\nenter wifi pass\ncheck details and press next\n*tests the network*\nsetup complete ok\nCancel to return to home screen\n\nTerminal enters pin pairing mode press enter/ok\nPair code: 123456\nenter that in the pairing section on the POS\n\nDone','image','imageMessage',1779469414,'2026-05-22 17:03:34',NULL,NULL,NULL),
 (5277,'3EB0A083A82EAA28ED5DEB','120363346032343642@g.us',NULL,'Dwayne Baird','144221143048242@lid','Dwayne Baird',0,'ok, and back to bed for me',NULL,'conversation',1779469464,'2026-05-22 17:04:24',NULL,NULL,NULL),
 (5278,'3A182CA0D121F2ABFCD3','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'Linkly on an mx51 terminal?',NULL,'conversation',1779476662,'2026-05-22 19:04:22',NULL,NULL,NULL),
-(5279,'3A0A3EFCC4614BEBB180','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'Alright, I believe I know what it is. The PC after power outage has switched the wifi to a public profile which is firewalling the local ports. I’ll switch back to private and that should hopefully fix it. Fingers crossed 🤞🏻',NULL,'conversation',1779477832,'2026-05-22 19:23:52',NULL,NULL,NULL);
+(5279,'3A0A3EFCC4614BEBB180','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'Alright, I believe I know what it is. The PC after power outage has switched the wifi to a public profile which is firewalling the local ports. I’ll switch back to private and that should hopefully fix it. Fingers crossed 🤞🏻',NULL,'conversation',1779477832,'2026-05-22 19:23:52',NULL,NULL,NULL),
+(5280,'3A87971A85E1C944273F','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'Nope still\nNot connecting',NULL,'conversation',1779484523,'2026-05-23 00:16:33',NULL,NULL,NULL),
+(5281,'3AAA34F6373E4D40FC46','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'I need to enter 192.168.0.28 but where?','image','imageMessage',1779484573,'2026-05-23 00:16:33',NULL,NULL,NULL),
+(5282,'3EB071B6D60C7D5F6E853C','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,'Wait, this isn\'t setting up Screaming Seagulls new terminal?',NULL,'conversation',1779484946,'2026-05-23 00:16:33',NULL,NULL,NULL),
+(5283,'3A0D0AC9B38A656E76DA','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'No I’m at bubbly tea',NULL,'conversation',1779484996,'2026-05-23 00:16:33',NULL,NULL,NULL),
+(5284,'3A0A73173107B70F6A4D','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'Kiosk 2 on the pc is not working',NULL,'conversation',1779485013,'2026-05-23 00:16:33',NULL,NULL,NULL),
+(5285,'3EB034B6B6587A2812A1FE','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,'They put a new kiosk in? haha',NULL,'conversation',1779485064,'2026-05-23 00:16:53',NULL,NULL,NULL),
+(5286,'3EB03681DACABABB87A6C0','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,'nice',NULL,'conversation',1779485067,'2026-05-23 00:16:53',NULL,NULL,NULL),
+(5287,'3ADA65363270FC2BD559','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'No it’s the same one I had',NULL,'conversation',1779485109,'2026-05-23 00:16:53',NULL,NULL,NULL),
+(5288,'3AED79D18635F0CA44B8','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'It just now doesn’t work with any cba terminals',NULL,'conversation',1779485124,'2026-05-23 00:16:53',NULL,NULL,NULL),
+(5289,'3ABF01A639B4C29C8347','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'None will pair with the pc',NULL,'conversation',1779485137,'2026-05-23 00:16:53',NULL,NULL,NULL),
+(5290,'3EB043C9EF207BC039D271','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,'is 192.168.0.28 the ip of the new eftpos terminal on the network?',NULL,'extendedTextMessage',1779485421,'2026-05-23 00:16:53','3AAA34F6373E4D40FC46',NULL,NULL),
+(5291,'3AFD4BC50CA95B6ECEA3','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'The terminals are talking as I’ve done all the checks through powershell. It’s just not handing off at the pairing screens',NULL,'conversation',1779485460,'2026-05-23 00:16:53',NULL,NULL,NULL),
+(5292,'3A672786B942C724438A','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,NULL,'video','videoMessage',1779485496,'2026-05-23 00:16:53',NULL,NULL,NULL),
+(5293,'3A06B045E03634430961','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'This is very frustrating',NULL,'conversation',1779485787,'2026-05-23 00:16:53',NULL,NULL,NULL),
+(5294,'3EB05A48B9A6B16ADB5984','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,'The new Kiosk is that a pc or?',NULL,'conversation',1779485837,'2026-05-23 00:16:53',NULL,NULL,NULL),
+(5295,'3AFCEE5C7857CF5E8302','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'It’s the pc I setup',NULL,'conversation',1779485849,'2026-05-23 00:16:53',NULL,NULL,NULL),
+(5296,'3EB0ABD22C9DBE49E64AD5','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,'Press F12 to see the error console while you\'re connecting and film it',NULL,'conversation',1779485876,'2026-05-23 00:16:53',NULL,NULL,NULL),
+(5297,'3AE5FE99BA9AE03EE09F','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,NULL,'image','imageMessage',1779485921,'2026-05-23 00:16:53',NULL,NULL,NULL),
+(5298,'3A4F0B6C6A02036FCFBB','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,NULL,'image','imageMessage',1779485939,'2026-05-23 00:16:53',NULL,NULL,NULL),
+(5299,'3A942C526E03B454ABA5','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,NULL,'video','videoMessage',1779486035,'2026-05-23 00:16:53',NULL,NULL,NULL),
+(5300,'3EB0508BA283906B752C04','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,NULL,NULL,'editedMessage',1779486094,'2026-05-23 00:16:53',NULL,NULL,NULL),
+(5301,'3EB04B9CE4E41E8FBC44','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,NULL,NULL,'protocolMessage',1779486094,'2026-05-23 00:16:53',NULL,NULL,NULL),
+(5302,'3EB0AB7053088BB1D6F657','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,'Is it Microsoft Edge',NULL,'conversation',1779486170,'2026-05-23 00:16:53',NULL,NULL,NULL),
+(5303,'3EB075770B69EA14680175','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,'If it is open edge://flags search \"Local Network Access\", and disable the block-checks flag, then restart Edge and retry pairing.',NULL,'conversation',1779486218,'2026-05-23 00:16:53',NULL,NULL,NULL),
+(5304,'3EB0293A879CA133BB655B','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,'Can you please do one of 2 things; install the POS as a PWA on that pc and try. OR install firefox and use that instead. You could install Chrome but the new versions of Chrome might have the same issue.',NULL,'conversation',1779486836,'2026-05-23 00:16:53',NULL,NULL,NULL),
+(5305,'3A8B8EA7C7AD53E0FA30','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'I FIXED IT!!!!!! IAM THE GREATEST',NULL,'conversation',1779486906,'2026-05-23 00:16:53',NULL,NULL,NULL),
+(5306,'3AAC91B3E607F1683DA9','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'🤣🤣🤣🤣🤣🤣🤣',NULL,'conversation',1779486918,'2026-05-23 00:16:53',NULL,NULL,NULL),
+(5307,'3EB0F51C570B2F06B09AE5','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,'Oh how?',NULL,'conversation',1779486925,'2026-05-23 00:16:53',NULL,NULL,NULL),
+(5308,'3EB01D3A05689D012EE4D8','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,'I\'d love the intimate details of how, since it\'s a problem with new customers using mx51 on the POS...',NULL,'conversation',1779487044,'2026-05-23 00:16:53',NULL,NULL,NULL),
+(5309,'3EB02883958FBDBCC9E0CD','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,'From my end, it\'s a new Chromium browser based issue.\nNew installs of Edge or Chrome block Local Network Access to cloud services.\n\nIt seems like a combined issue, no access to local variables to store the secret keys for the terminal and no local_network_access which is a new thing on Chromium to stop your PC connecting to remote locations and running viruses.',NULL,'conversation',1779487375,'2026-05-23 00:16:53',NULL,NULL,NULL),
+(5310,'3A97EC90AC8E74F41364','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,NULL,'video','videoMessage',1779487403,'2026-05-23 00:16:53',NULL,NULL,NULL),
+(5311,'3EB0E87347942FD061F600','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,'Ok, so easy permissions thing.',NULL,'conversation',1779487512,'2026-05-23 00:16:53',NULL,NULL,NULL),
+(5312,'3EB0B0992B75317893D15F','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,'There\'s going to be a heck of a lot more website permissions things in future, since AI can control pcs now',NULL,'conversation',1779487543,'2026-05-23 00:16:53',NULL,NULL,NULL),
+(5313,'3A3963F86B7E5A0F3B92','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'Well I’m glad we’ve experienced it',NULL,'conversation',1779487562,'2026-05-23 00:16:53',NULL,NULL,NULL),
+(5314,'3EB06E6A5FDDD517276EFF','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,'But good to know it\'s very accessible to fix, even for a future PC iliterate customer.',NULL,'conversation',1779487587,'2026-05-23 00:16:53',NULL,NULL,NULL),
+(5315,'3EB0048E44C5D1D56E2CC8','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,'In other news, MULTIPLE KIOSKS at bubbly! hehe exciting to see if that results in increased ability to handle busy times.',NULL,'conversation',1779487666,'2026-05-23 00:16:53',NULL,NULL,NULL),
+(5316,'3A17EDA3F95D4F3F8E41','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'Yep. Stupid updates!',NULL,'conversation',1779487782,'2026-05-23 00:16:53',NULL,NULL,NULL),
+(5317,'3A68866790C92E8933BD','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'Bro I had multiple kiosks when I was there',NULL,'conversation',1779487798,'2026-05-23 00:16:53',NULL,NULL,NULL),
+(5318,'3A1BC69589B925E902BC','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'Shows how much interest you take in me 🤨☹️',NULL,'conversation',1779487835,'2026-05-23 00:16:53',NULL,NULL,NULL),
+(5319,'3EB02ABA35407A89FE6F1F','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,'Whaat I thought it was a POS display? So it just used the terminal at the front desk until this new terminal?',NULL,'conversation',1779487894,'2026-05-23 00:16:53',NULL,NULL,NULL),
+(5320,'3EB05C8A68210C882C55EA','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,NULL,NULL,'messageContextInfo',1779487906,'2026-05-23 00:16:53',NULL,'😮','3A1BC69589B925E902BC'),
+(5321,'3A2370FAFF1577E8B019','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'No I had it setup as a kiosk from day one that I got it',NULL,'conversation',1779487931,'2026-05-23 00:16:53',NULL,NULL,NULL),
+(5322,'3AE4D86FFB48B92A9BFA','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'The only thing is, is the pay at eftpos screen arrow is pointing the wrong way on that kiosk only',NULL,'conversation',1779487968,'2026-05-23 00:16:53',NULL,NULL,NULL),
+(5323,'3A593B0F7C41BABC98EC','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'The terminal is on the right not the left 🤓',NULL,'conversation',1779487994,'2026-05-23 00:16:53',NULL,NULL,NULL),
+(5324,'3EB089F500EE34D7E49405','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,NULL,NULL,'messageContextInfo',1779490345,'2026-05-23 00:16:53',NULL,'👍','3A593B0F7C41BABC98EC'),
+(5325,'3A19EA544A174EDE0327','61434832614-1447029557@g.us',NULL,'Benny','281299470274701@lid','Benny',0,NULL,NULL,'senderKeyDistributionMessage',1779492082,'2026-05-23 00:16:53',NULL,'❤️','ACFEBA36ACAB30EFC71B1A6507A25DF3'),
+(5326,'3A1DDAF969226E0A0B33','61434832614-1447029557@g.us',NULL,'Benny','8444392304643@lid','Mitch',0,NULL,NULL,'senderKeyDistributionMessage',1779494209,'2026-05-23 00:16:53',NULL,'😂','3A6A0BB21EFBDA31532E'),
+(5327,'3A426FE90EFF01394419','61434832614-1447029557@g.us',NULL,'Benny','8444392304643@lid','Mitch',0,NULL,NULL,'protocolMessage',1779494290,'2026-05-23 00:16:53',NULL,NULL,NULL),
+(5328,'3AD8ED26FE7035658EFA','61434832614-1447029557@g.us',NULL,'Benny','8444392304643@lid','Mitch',0,NULL,NULL,'reactionMessage',1779494323,'2026-05-23 00:16:53',NULL,'❤️','3A0FD18D1E854EB158F2'),
+(5329,'3EB04C07E876CBA86DC645','120363346032343642@g.us',NULL,'Regan','61466848838:16@s.whatsapp.net','Me',1,'Busy morning boys for you boys',NULL,'conversation',1779495808,'2026-05-23 00:23:29',NULL,NULL,NULL),
+(5330,'3A8BA6182A26AB47370E','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,'All sorted though, and that is exactly what we want.',NULL,'conversation',1779495841,'2026-05-23 00:24:01',NULL,NULL,NULL),
+(5331,'3A886B75E5E4277F1870','120363346032343642@g.us',NULL,'Regan','61466848838:16@s.whatsapp.net','Me',1,'Oh this was a linkly conversion got it',NULL,'conversation',1779495896,'2026-05-23 00:24:56',NULL,NULL,NULL),
+(5332,'3A6137F6AF8A8D222D90','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,'Nope, I thought it was',NULL,'conversation',1779496152,'2026-05-23 00:29:13',NULL,NULL,NULL),
+(5333,'3A08320AF05B6F783C94','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,'But no',NULL,'conversation',1779496155,'2026-05-23 00:29:15',NULL,NULL,NULL),
+(5334,'3A4606B1BBFD7E209BBE','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,'It was a new browser misbehaving with permissions',NULL,'conversation',1779496199,'2026-05-23 00:29:59',NULL,NULL,NULL),
+(5335,'3EB004850B0254E2FD7E50','120363346032343642@g.us',NULL,'Regan','61466848838:16@s.whatsapp.net','Me',1,'Hahaha',NULL,'conversation',1779496398,'2026-05-23 00:33:18',NULL,NULL,NULL),
+(5336,'3EB003382F3A7110987D27','120363346032343642@g.us',NULL,'Regan','61466848838:16@s.whatsapp.net','Me',1,'well damn',NULL,'conversation',1779496400,'2026-05-23 00:33:20',NULL,NULL,NULL),
+(5337,'3A523846C1A1FF1D1B23','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'It’s the kinda thing you’d send an email to all your subscribers and let them know that this is a fix for a potential problem they will more than likely face in the near future.',NULL,'conversation',1779496716,'2026-05-23 00:38:37',NULL,NULL,NULL),
+(5338,'AC20AA6F2DBA271AF3857E98BB901DFF','61434832614-1447029557@g.us',NULL,'Benny','83146489995469@lid','Shelley Treml',0,NULL,NULL,'reactionMessage',1779497108,'2026-05-23 00:45:08',NULL,'👍','3A476D4A66B7624E94B1'),
+(5339,'3EB0A1B49E79401DF6D55D','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,'Not the way I function. Never inform all users of a possible flaw in a system on the off chance they may experience it.\n\nInstead write code that detects a lack of connection because of permissions, which browser they\'re using, and displays a modal to that customer explaining how to allow permissions on their specific browser. Which disappears when they follow the instruction.',NULL,'extendedTextMessage',1779500047,'2026-05-23 01:34:08','3A523846C1A1FF1D1B23',NULL,NULL),
+(5340,'3A8AA87EB510BFA15692','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,NULL,NULL,'reactionMessage',1779502052,'2026-05-23 02:07:32',NULL,'🙏','3EB0A1B49E79401DF6D55D'),
+(5341,'3A71CC4A28F7D5B730FD','120363346032343642@g.us',NULL,'Regan','61466848838:16@s.whatsapp.net','Me',1,'lol yeah let the clients experience failure first. What could go wrong ;)',NULL,'conversation',1779503081,'2026-05-23 02:24:42',NULL,NULL,NULL),
+(5342,'3A839FC8A6A993105A2F','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,NULL,NULL,'reactionMessage',1779503175,'2026-05-23 02:26:15',NULL,'😂','3A71CC4A28F7D5B730FD'),
+(5343,'3EB05E39B9125B23B2964A','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,'Detecting the failure condition prior to it occurring and giving the specific user exactly what they need to fix it, in context, without anyone else ever knowing it happened. \n\nI\'d label it proactive handling pre-failure, not passive acceptance of failure.',NULL,'extendedTextMessage',1779503413,'2026-05-23 02:30:13','3A71CC4A28F7D5B730FD',NULL,NULL),
+(5344,'3AED68A408AD457DA9F6','61434832614-1447029557@g.us',NULL,'Benny','39668385062944@lid','Sooz Ilona',0,NULL,NULL,'senderKeyDistributionMessage',1779503461,'2026-05-23 02:31:01',NULL,'❤️','3AEDBD1AF7CB052C470C'),
+(5345,'3A3D579CB12A69CE9AC9','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,NULL,NULL,'reactionMessage',1779503484,'2026-05-23 02:31:24',NULL,'🔥','3EB05E39B9125B23B2964A'),
+(5346,'3A50CB775880341A1D6C','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,NULL,'video','videoMessage',1779503511,'2026-05-23 02:31:51',NULL,NULL,NULL),
+(5347,'3A437299561D09FF6E68','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'https://x.com/i/grok/share/6af5c6a35c22442e8a68d25b2593b374',NULL,'conversation',1779503589,'2026-05-23 02:33:09',NULL,NULL,NULL),
+(5348,'3EB033EB6BFB30DCC641DF','120363346032343642@g.us',NULL,'Regan','61466848838:16@s.whatsapp.net','Me',1,NULL,NULL,'messageContextInfo',1779503640,'2026-05-23 02:34:01',NULL,'😂','3EB05E39B9125B23B2964A'),
+(5349,'3EB079ED633AB9EBCBC8D5','120363346032343642@g.us',NULL,'Regan','61466848838:16@s.whatsapp.net','Me',1,'Haha i\'m stiring',NULL,'conversation',1779503646,'2026-05-23 02:34:06',NULL,NULL,NULL),
+(5350,'3EB044AAB30050D9EB5B8E','120363346032343642@g.us',NULL,'Regan','61466848838:16@s.whatsapp.net','Me',1,'It\'s a solid plan',NULL,'conversation',1779503649,'2026-05-23 02:34:09',NULL,NULL,NULL),
+(5351,'3ABAD11DADCBC6496452','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'The weekend is when we have have fun 🤩',NULL,'conversation',1779503676,'2026-05-23 02:34:36',NULL,NULL,NULL),
+(5352,'3EB0E2B3FFC42DC736C506','120363346032343642@g.us',NULL,'Regan','61466848838:16@s.whatsapp.net','Me',1,'Regan how lates your coffee shop open today?',NULL,'conversation',1779504764,'2026-05-23 02:52:45',NULL,NULL,NULL),
+(5353,'3A1BEB0D26BDF4465BAA','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'It’s closed',NULL,'conversation',1779504813,'2026-05-23 02:53:33',NULL,NULL,NULL),
+(5354,'3AB92E5656BEDDC1DAF0','120363346032343642@g.us',NULL,'Regan','61466848838:16@s.whatsapp.net','Me',1,'Well then',NULL,'conversation',1779504857,'2026-05-23 02:54:17',NULL,NULL,NULL),
+(5355,'3EB0A1F98D96B2CA89C8F7','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,NULL,NULL,'messageContextInfo',1779505095,'2026-05-23 02:58:16',NULL,'😂','3AB92E5656BEDDC1DAF0'),
+(5356,'3EB0DBDD4ADD95ED5B8A3D','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,'What\'s the current latest on the Seagull terminals? Have you tried the Linkly connection method to see if it works over local network without cloud?',NULL,'extendedTextMessage',1779505218,'2026-05-23 03:00:18','3EB08407C48B38C6438713',NULL,NULL),
+(5357,'3EB06EC5C9616A0DEEA173','120363410264854129@g.us',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'Seems like it was a pretty technical fix in the end. Good thing Regan could come out',NULL,'conversation',1779505950,'2026-05-23 03:12:30',NULL,NULL,NULL),
+(5358,'AC8F72BD69BAB25B38CAEC7211D80E71','120363410264854129@g.us',NULL,'Curtis','75983021453421@lid','Steven Quinn',0,'Yeah was actually really simple but hidden 🤣',NULL,'conversation',1779506316,'2026-05-23 03:18:37',NULL,NULL,NULL),
+(5359,'3AC745458B8A2991888E','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'No haven’t been there in 5 weeks 🤣.\nMaybe I’ll try this week coming',NULL,'conversation',1779506548,'2026-05-23 03:22:29',NULL,NULL,NULL),
+(5360,'3A847D3446B11B576EA4','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,'All g. Was just wondering if it’s worth testing the original units with the knowlege you have to press function 7410 enter to start it',NULL,'conversation',1779507062,'2026-05-23 03:31:03',NULL,NULL,NULL),
+(5361,'3A91A57BF1870B2EEB5C','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'Yeah I think the same. Might as well give it a go and see. It’s all learning',NULL,'conversation',1779507094,'2026-05-23 03:31:34',NULL,NULL,NULL),
+(5362,'3A41E702B448FFE767FB','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,'Exactly',NULL,'conversation',1779507102,'2026-05-23 03:31:42',NULL,NULL,NULL),
+(5363,'3EB0D41EE903F8778EF199','120363410264854129@g.us',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'It\'s always the little things haha',NULL,'conversation',1779511171,'2026-05-23 04:39:31',NULL,NULL,NULL),
+(5364,'3EB0F39B707BFECC81E308','120363346032343642@g.us',NULL,'Regan','61466848838:16@s.whatsapp.net','Me',1,'Pod coffee...',NULL,'conversation',1779511219,'2026-05-23 04:40:19',NULL,NULL,NULL),
+(5365,'3EB0EC43946BD315751B17','120363346032343642@g.us',NULL,'Regan','61466848838:16@s.whatsapp.net','Me',1,'Dwayne, can you make us rich already so I can buy a nice coffee machine',NULL,'conversation',1779511232,'2026-05-23 04:40:32',NULL,NULL,NULL),
+(5366,'3EB0B469733142ED176DEF','120363346032343642@g.us',NULL,'Regan','61466848838:16@s.whatsapp.net','Me',1,'Or a barista to come and live at my house....',NULL,'conversation',1779511255,'2026-05-23 04:40:55',NULL,NULL,NULL),
+(5367,'3A51F7629118B7B750AC','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'Ummm he has. POSFORGE i guarantee you is valued over $1billion already. So rest easy my brother………it’s coming.',NULL,'conversation',1779511303,'2026-05-23 04:41:43',NULL,NULL,NULL),
+(5368,'3EB0F9C569508CA721D37F','120363346032343642@g.us',NULL,'Regan','61466848838:16@s.whatsapp.net','Me',1,'Fine then sell so i can bank my split ;)',NULL,'conversation',1779511721,'2026-05-23 04:48:42',NULL,NULL,NULL),
+(5369,'3A430ADEA127C34D567A','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'🙄',NULL,'conversation',1779511743,'2026-05-23 04:49:03',NULL,NULL,NULL),
+(5370,'3A8FD9BA12B147086DB4','120363346032343642@g.us',NULL,'Regan','61466848838:16@s.whatsapp.net','Me',1,'Well you’re the one who shut your coffee shop earlier today….',NULL,'conversation',1779511835,'2026-05-23 04:50:35',NULL,NULL,NULL),
+(5371,'3A3F79529323EDABC2FC','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'Mamma and papa time!',NULL,'conversation',1779511858,'2026-05-23 04:50:58',NULL,NULL,NULL),
+(5372,'3A5BE8F894CA67ACB5AA','120363346032343642@g.us',NULL,'Regan','61466848838:16@s.whatsapp.net','Me',1,'Meh I wouldn’t have been able to come anyway ;)',NULL,'conversation',1779511896,'2026-05-23 04:51:37',NULL,NULL,NULL),
+(5373,'3A7E3D99ABB1A978F3A5','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'That’s right. So there you go.',NULL,'conversation',1779511924,'2026-05-23 04:52:04',NULL,NULL,NULL),
+(5374,'3A1E92E0F3759F36D66E','61434832614-1447029557@g.us',NULL,'Benny','248386598994059@lid','Carla Verstappen',0,'hey whats the address sorry? couldn’t find it in any messages',NULL,'extendedTextMessage',1779514243,'2026-05-23 05:30:44','3A476D4A66B7624E94B1',NULL,NULL),
+(5375,'3AD0B274A6896A07BC4E','61434832614-1447029557@g.us',NULL,'Benny','148421184864304@lid','Jessica Mclean',0,'66 Bains road',NULL,'senderKeyDistributionMessage',1779514260,'2026-05-23 05:31:01',NULL,NULL,NULL),
+(5376,'3A0685D87477CC638566','61434832614-1447029557@g.us',NULL,'Benny','267911553888274@lid','Isaac.G',0,NULL,NULL,'reactionMessage',1779514276,'2026-05-23 05:31:16',NULL,'🙏','3AD0B274A6896A07BC4E'),
+(5377,'AC42665E9CF5FB2300F3DA9B3CF39117','61434832614-1447029557@g.us',NULL,'Benny','206901912563844@lid','Karen Hutchings',0,NULL,NULL,'protocolMessage',1779533710,'2026-05-23 10:56:09',NULL,NULL,NULL),
+(5379,'6AF69F249262CAEB8510','61466848838@s.whatsapp.net',NULL,NULL,'61466848838@s.whatsapp.net',NULL,0,NULL,NULL,'protocolMessage',1779533778,'2026-05-23 10:56:18',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `whatsapp_messages` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -9299,4 +9398,4 @@ commit;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2026-05-23  9:46:26
+-- Dump completed on 2026-05-24  3:00:02
