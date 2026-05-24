@@ -1941,8 +1941,8 @@ LOCK TABLES `home_adapters` WRITE;
 /*!40000 ALTER TABLE `home_adapters` DISABLE KEYS */;
 set autocommit=0;
 INSERT INTO `home_adapters` VALUES
-('ble','Bluetooth','ble','{\"id\": \"ble\", \"name\": \"Bluetooth\", \"protocol\": \"ble\", \"capabilities\": [], \"discovery\": \"scan\", \"mqtt_prefix\": \"fbhome/ble\"}','running','2026-05-24 02:59:59'),
-('wifi','Wi-Fi','wifi','{\"id\": \"wifi\", \"name\": \"Wi-Fi\", \"protocol\": \"wifi\", \"capabilities\": [\"on_off\"], \"discovery\": \"mdns\", \"mqtt_prefix\": \"fbhome/wifi\"}','running','2026-05-24 02:59:59');
+('ble','Bluetooth','ble','{\"id\": \"ble\", \"name\": \"Bluetooth\", \"protocol\": \"ble\", \"capabilities\": [], \"discovery\": \"scan\", \"mqtt_prefix\": \"fbhome/ble\"}','running','2026-05-25 02:59:54'),
+('wifi','Wi-Fi','wifi','{\"id\": \"wifi\", \"name\": \"Wi-Fi\", \"protocol\": \"wifi\", \"capabilities\": [\"on_off\"], \"discovery\": \"mdns\", \"mqtt_prefix\": \"fbhome/wifi\"}','running','2026-05-25 02:59:55');
 /*!40000 ALTER TABLE `home_adapters` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -3993,7 +3993,7 @@ CREATE TABLE `whatsapp_messages` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uq_msg` (`message_id`,`chat_jid`),
   KEY `idx_wa_account` (`wa_account`)
-) ENGINE=InnoDB AUTO_INCREMENT=5381 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5418 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -9380,7 +9380,44 @@ INSERT INTO `whatsapp_messages` VALUES
 (5375,'3AD0B274A6896A07BC4E','61434832614-1447029557@g.us',NULL,'Benny','148421184864304@lid','Jessica Mclean',0,'66 Bains road',NULL,'senderKeyDistributionMessage',1779514260,'2026-05-23 05:31:01',NULL,NULL,NULL),
 (5376,'3A0685D87477CC638566','61434832614-1447029557@g.us',NULL,'Benny','267911553888274@lid','Isaac.G',0,NULL,NULL,'reactionMessage',1779514276,'2026-05-23 05:31:16',NULL,'🙏','3AD0B274A6896A07BC4E'),
 (5377,'AC42665E9CF5FB2300F3DA9B3CF39117','61434832614-1447029557@g.us',NULL,'Benny','206901912563844@lid','Karen Hutchings',0,NULL,NULL,'protocolMessage',1779533710,'2026-05-23 10:56:09',NULL,NULL,NULL),
-(5379,'6AF69F249262CAEB8510','61466848838@s.whatsapp.net',NULL,NULL,'61466848838@s.whatsapp.net',NULL,0,NULL,NULL,'protocolMessage',1779533778,'2026-05-23 10:56:18',NULL,NULL,NULL);
+(5379,'6AF69F249262CAEB8510','61466848838@s.whatsapp.net',NULL,NULL,'61466848838@s.whatsapp.net',NULL,0,NULL,NULL,'protocolMessage',1779533778,'2026-05-23 10:56:18',NULL,NULL,NULL),
+(5381,'AC786780171629CC9C0DA4DAC0443599','61403505790-1587861828@g.us',NULL,'Cameron','115139567186165@lid','Cameron',0,'Reminders for Sunday 24th May\n\nSound: @Michiele G\nAV: @101657715167265 \n\n\nPlease note that if you are able to make your turn to respond with a 👍🏻 or unable to make your turn reply with a 👎🏻 or a 😢 to the message sent ASAP.',NULL,'extendedTextMessage',1779583189,'2026-05-24 00:39:50',NULL,NULL,NULL),
+(5382,'3A072E5EA7A543A50AF6','61403505790-1587861828@g.us',NULL,'Cameron','101657715167265@lid','David Provis',0,NULL,NULL,'senderKeyDistributionMessage',1779587502,'2026-05-24 01:51:42',NULL,'👍','AC786780171629CC9C0DA4DAC0443599'),
+(5383,'AC4EA5A36C4C0B2D79EAB20CAAAF8C51','120363029922398465@g.us',NULL,'Tomas Treml','63819170742378@lid','Tomas Treml',0,'Hi Everyone, sorry for late notice. \n\nHere is the roster for 24.5. Sunday. Please give thumbs 👍👎\n\nPiano @120465360203908 , will hanaford\nDrums -@143202917023758   Ryan hanaford\nGuitars @163419294552259 , matt rose, @199067523088447 , Geoff faulkner\nFlutes - @147343231951050 Erin Berkefeld⁩ Erin B & @83146489995469 ,Shelley⁩ \nSingers - @181892016017442  Liz day @38994159079481  , jo Eliot.',NULL,'extendedTextMessage',1779588248,'2026-05-24 02:04:08',NULL,NULL,NULL),
+(5384,'AC29C369BA5C52C9CA3B75FF61B92792','120363029922398465@g.us',NULL,'Tomas Treml','163419294552259@lid','Matt Rose',0,NULL,NULL,'reactionMessage',1779588360,'2026-05-24 02:06:00',NULL,'👍','AC4EA5A36C4C0B2D79EAB20CAAAF8C51'),
+(5385,'3AA4161F3173150299CF','120363042147644587@g.us',NULL,'Sam','215049599754483@lid','Sam',0,'Would most of you guys be free if we got together for 30 mins in the break today in the prayer room to learn a new chorus or two? \n(Just seems like the easiest way logistically rather then coming down to the hall on a dedicated night)',NULL,'senderKeyDistributionMessage',1779588417,'2026-05-24 02:06:57',NULL,NULL,NULL),
+(5386,'ACE38112E6AE0BA0FA69E38C79963756','120363029922398465@g.us',NULL,'Tomas Treml','63819170742378@lid','Tomas Treml',0,'Base guitar @203650219675864  Ryan',NULL,'extendedTextMessage',1779588439,'2026-05-24 02:07:19',NULL,NULL,NULL),
+(5387,'3A125897EBCE950AA7CE','120363029922398465@g.us',NULL,'Tomas Treml','203650219675864@lid','Ryan Williams',0,NULL,NULL,'messageContextInfo',1779588474,'2026-05-24 02:07:55',NULL,'👍','ACE38112E6AE0BA0FA69E38C79963756'),
+(5388,'ACCF04531624922E1AD739B01E20BEF1','120363042147644587@g.us',NULL,'Sam','2388035428499@lid','Andrew Blacket',0,NULL,NULL,'senderKeyDistributionMessage',1779588551,'2026-05-24 02:09:11',NULL,'👍','3AA4161F3173150299CF'),
+(5389,'AC98C2C3732CBC4D5593C4011103C691','120363029922398465@g.us',NULL,'Tomas Treml','143202917023758@lid','Ryan H',0,NULL,NULL,'reactionMessage',1779588867,'2026-05-24 02:14:27',NULL,'👍','AC4EA5A36C4C0B2D79EAB20CAAAF8C51'),
+(5390,'3A5747FD63F557C77AE4','120363029922398465@g.us',NULL,'Tomas Treml','120465360203908@lid','Will Hannaford',0,NULL,NULL,'senderKeyDistributionMessage',1779590545,'2026-05-24 02:42:25',NULL,'👍','AC4EA5A36C4C0B2D79EAB20CAAAF8C51'),
+(5391,'AC731BB327C07D52BDDEB70907329DB1','120363029922398465@g.us',NULL,'Tomas Treml','83146489995469@lid','Shelley Treml',0,NULL,NULL,'reactionMessage',1779592777,'2026-05-24 03:19:38',NULL,'👍','AC4EA5A36C4C0B2D79EAB20CAAAF8C51'),
+(5392,'ACFC09A62BA20998A2584CB38FAA778A','61403505790-1587861828@g.us',NULL,'Cameron','115139567186165@lid','Cameron',0,'All good @101657715167265',NULL,'extendedTextMessage',1779596446,'2026-05-24 04:20:47',NULL,NULL,NULL),
+(5393,'ACF3C08A15D47C9C6B602BEE19273D18','61403505790-1587861828@g.us',NULL,'Cameron','115139567186165@lid','Cameron',0,'?',NULL,'conversation',1779596448,'2026-05-24 04:20:48',NULL,NULL,NULL),
+(5394,'3A1B8EDEC88A95E44668','61434832614-1447029557@g.us',NULL,'Benny','144834954293333@lid','Angie',0,'Hi girls, we have a bag of things left at our house last night.\nSome white shoes, some berks. A jacket  and a couple of other random items.',NULL,'senderKeyDistributionMessage',1779602076,'2026-05-24 05:54:36',NULL,NULL,NULL),
+(5395,'3A380D59C68B32CB0311','61434832614-1447029557@g.us',NULL,'Benny','281299470274701@lid','Benny',0,NULL,NULL,'reactionMessage',1779602093,'2026-05-24 05:54:54',NULL,'👍','3A1B8EDEC88A95E44668'),
+(5396,'3A3D88A60DF777BC00BA','61434832614-1447029557@g.us',NULL,'Benny','256478367744241@lid','Jesse',0,'That’s mine thanks',NULL,'senderKeyDistributionMessage',1779602586,'2026-05-24 06:03:07',NULL,NULL,NULL),
+(5397,'3AB2527EFB8F0A78369D','61434832614-1447029557@g.us',NULL,'Benny','109474471772274@lid','Billy',0,NULL,NULL,'reactionMessage',1779602604,'2026-05-24 06:03:24',NULL,'❤️','3A3D88A60DF777BC00BA'),
+(5398,'ACEFF22745DBBC009D2AA786734EC01B','120363042147644587@g.us',NULL,'Sam','64020866449656@lid','Brendan',0,NULL,NULL,'reactionMessage',1779603446,'2026-05-24 06:17:26',NULL,'👍','3AA4161F3173150299CF'),
+(5399,'3A3013B4E5FB01914111','120363042147644587@g.us',NULL,'Sam','215049599754483@lid','Sam',0,'Chorus leaders: ASSEMBLE! 😉',NULL,'conversation',1779603595,'2026-05-24 06:19:56',NULL,NULL,NULL),
+(5400,'AC2F3C3BC17AB9BBD52EE3D434DA4EAD','120363042147644587@g.us',NULL,'Sam','199222091599939@lid','AndyP',0,NULL,'video','videoMessage',1779603975,'2026-05-24 06:26:15',NULL,NULL,NULL),
+(5401,'AC62BE670B064E9FD5B7DE265387F3B4','120363042147644587@g.us',NULL,'Sam','2388035428499@lid','Andrew Blacket',0,NULL,'audio','audioMessage',1779604193,'2026-05-24 06:29:54',NULL,NULL,NULL),
+(5402,'ACCAACCE050845DF371C5884287B8412','120363042147644587@g.us',NULL,'Sam','2388035428499@lid','Andrew Blacket',0,'508 Don\'t be afraid',NULL,'conversation',1779604207,'2026-05-24 06:30:08',NULL,NULL,NULL),
+(5403,'AC8DDF04B36D4CCB54E137B00DE5ABF8','120363042147644587@g.us',NULL,'Sam','2388035428499@lid','Andrew Blacket',0,'👊',NULL,'conversation',1779604220,'2026-05-24 06:30:21',NULL,NULL,NULL),
+(5404,'ACE70B704AF70A3E7350F2C47B9EF75B','120363042147644587@g.us',NULL,'Sam','2388035428499@lid','Andrew Blacket',0,NULL,'audio','audioMessage',1779604716,'2026-05-24 06:38:36',NULL,NULL,NULL),
+(5405,'AC01EF8C8DDE669CB7110BBA9B5479D6','120363042147644587@g.us',NULL,'Sam','2388035428499@lid','Andrew Blacket',0,'933 After all this life is over',NULL,'conversation',1779604717,'2026-05-24 06:38:37',NULL,NULL,NULL),
+(5406,'3A4C1CC44ACB413EFE24','61403505790-1587861828@g.us',NULL,'Cameron','101657715167265@lid','David Provis',0,'Cam - problems wi YouTube',NULL,'conversation',1779606013,'2026-05-24 07:00:13',NULL,NULL,NULL),
+(5407,'AC52468BD60CAA505E8A2D1916F3E4D7','61403505790-1587861828@g.us',NULL,'Cameron','115139567186165@lid','Cameron',0,'Whats it saying, is it flashing yellow??',NULL,'conversation',1779606254,'2026-05-24 07:04:14',NULL,NULL,NULL),
+(5408,'3A2C06C9DE4342C1D979','61403505790-1587861828@g.us',NULL,'Cameron','101657715167265@lid','David Provis',0,'Had that probably broke it',NULL,'conversation',1779606307,'2026-05-24 07:05:08',NULL,NULL,NULL),
+(5409,'ACA36DB5CD3CF5FDE9E3D2C61D7A5163','61403505790-1587861828@g.us',NULL,'Cameron','115139567186165@lid','Cameron',0,'If its flashing yellow it could we are probably not sending enough video',NULL,'conversation',1779606424,'2026-05-24 07:07:04',NULL,NULL,NULL),
+(5410,'ACB33F7DE88EFF448905C7E6677E8B57','61403505790-1587861828@g.us',NULL,'Cameron','115139567186165@lid','Cameron',0,'To youtube',NULL,'conversation',1779606431,'2026-05-24 07:07:11',NULL,NULL,NULL),
+(5411,'3A5298C8AEA93B4E77E0','61434832614-1447029557@g.us',NULL,'Benny','281299470274701@lid','Benny',0,NULL,NULL,'reactionMessage',1779608638,'2026-05-24 07:43:58',NULL,'🔥','3A3D88A60DF777BC00BA'),
+(5412,'3A7C151EC53371A039D9','61434832614-1447029557@g.us',NULL,'Benny','164085366820991@lid','Wayne Davies',0,NULL,NULL,'senderKeyDistributionMessage',1779611253,'2026-05-24 08:27:33',NULL,'😂','3A3D88A60DF777BC00BA'),
+(5413,'3A954CD91B0DA9425645','178924042600533@lid',NULL,'Steve','178924042600533@lid','Steve',0,'You wouldn’t believe this we are having an it problem',NULL,'conversation',1779611616,'2026-05-24 08:33:36',NULL,NULL,NULL),
+(5414,'3A54DE393547C6B39807','178924042600533@lid',NULL,'Steve','61466848838:16@s.whatsapp.net','Me',1,'Hahaha',NULL,'conversation',1779611726,'2026-05-24 08:35:27',NULL,NULL,NULL),
+(5415,'3A7C73DF546B0DC0A521','178924042600533@lid',NULL,'Steve','61466848838:16@s.whatsapp.net','Me',1,'Perfect!',NULL,'conversation',1779611731,'2026-05-24 08:35:31',NULL,NULL,NULL),
+(5416,'3ADD9C033D346F1E11E3','178924042600533@lid',NULL,'Steve','61466848838:16@s.whatsapp.net','Me',1,'How’d you go?',NULL,'conversation',1779622351,'2026-05-24 11:32:31',NULL,NULL,NULL),
+(5417,'3A2239314F61AF83938A','178924042600533@lid',NULL,'Steve','178924042600533@lid','Steve',0,'It went shit, nothing but dead ends, wrote uber a strongly worded letter, if ya in the area tomorrow it would be amazing if you could swing through!',NULL,'conversation',1779622871,'2026-05-24 11:41:11',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `whatsapp_messages` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -9398,4 +9435,4 @@ commit;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2026-05-24  3:00:02
+-- Dump completed on 2026-05-25  3:00:01
