@@ -1941,8 +1941,8 @@ LOCK TABLES `home_adapters` WRITE;
 /*!40000 ALTER TABLE `home_adapters` DISABLE KEYS */;
 set autocommit=0;
 INSERT INTO `home_adapters` VALUES
-('ble','Bluetooth','ble','{\"id\": \"ble\", \"name\": \"Bluetooth\", \"protocol\": \"ble\", \"capabilities\": [], \"discovery\": \"scan\", \"mqtt_prefix\": \"fbhome/ble\"}','running','2026-05-26 03:00:00'),
-('wifi','Wi-Fi','wifi','{\"id\": \"wifi\", \"name\": \"Wi-Fi\", \"protocol\": \"wifi\", \"capabilities\": [\"on_off\"], \"discovery\": \"mdns\", \"mqtt_prefix\": \"fbhome/wifi\"}','running','2026-05-26 03:00:02');
+('ble','Bluetooth','ble','{\"id\": \"ble\", \"name\": \"Bluetooth\", \"protocol\": \"ble\", \"capabilities\": [], \"discovery\": \"scan\", \"mqtt_prefix\": \"fbhome/ble\"}','running','2026-05-27 02:59:56'),
+('wifi','Wi-Fi','wifi','{\"id\": \"wifi\", \"name\": \"Wi-Fi\", \"protocol\": \"wifi\", \"capabilities\": [\"on_off\"], \"discovery\": \"mdns\", \"mqtt_prefix\": \"fbhome/wifi\"}','running','2026-05-27 02:59:58');
 /*!40000 ALTER TABLE `home_adapters` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -3993,7 +3993,7 @@ CREATE TABLE `whatsapp_messages` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uq_msg` (`message_id`,`chat_jid`),
   KEY `idx_wa_account` (`wa_account`)
-) ENGINE=InnoDB AUTO_INCREMENT=5524 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5578 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -9523,7 +9523,61 @@ INSERT INTO `whatsapp_messages` VALUES
 (5520,'3EB00E67197482E8293DB5','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'ok',NULL,'conversation',1779694231,'2026-05-25 07:30:31',NULL,NULL,NULL),
 (5521,'3EB084BBBBCBE54E3937DD','120363346032343642@g.us',NULL,'Regan','61466848838:16@s.whatsapp.net','Me',1,'Might come visit tomorrow if you\'re not too busy for me ;)',NULL,'conversation',1779694248,'2026-05-25 07:30:48',NULL,NULL,NULL),
 (5522,'3EB0BFD4D71F7EA192B546','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'dont think we\'re busy tomorrow😁',NULL,'conversation',1779694276,'2026-05-25 07:31:17',NULL,NULL,NULL),
-(5523,'ACDC2E55AFC4681D0B717E6DDDAF74F3','61434832614-1447029557@g.us',NULL,'Benny','154151308763316@lid','Eric Lambo',0,NULL,NULL,'senderKeyDistributionMessage',1779696382,'2026-05-25 08:06:23',NULL,'❤️','AC504E7DBF275D4FB13110E0B3D6E0E1');
+(5523,'ACDC2E55AFC4681D0B717E6DDDAF74F3','61434832614-1447029557@g.us',NULL,'Benny','154151308763316@lid','Eric Lambo',0,NULL,NULL,'senderKeyDistributionMessage',1779696382,'2026-05-25 08:06:23',NULL,'❤️','AC504E7DBF275D4FB13110E0B3D6E0E1'),
+(5524,'3A4872366101D3343724','231335629164614@lid',NULL,'Regan','61466848838:16@s.whatsapp.net','Me',1,'Awake?',NULL,'conversation',1779752055,'2026-05-25 23:34:16',NULL,NULL,NULL),
+(5525,'3A8B3261A68785127B35','231335629164614@lid',NULL,'Regan','231335629164614@lid','Regan',0,'Yeah sorry was washing dogs',NULL,'conversation',1779753126,'2026-05-25 23:52:06',NULL,NULL,NULL),
+(5526,'3A05251C91F5F6BFA739','231335629164614@lid',NULL,'Regan','231335629164614@lid','Regan',0,'All done',NULL,'conversation',1779753132,'2026-05-25 23:52:12',NULL,NULL,NULL),
+(5527,'3EB08438C29992C5E133FF','121066638844004@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'Hey mate',NULL,'conversation',1779755517,'2026-05-26 00:31:57',NULL,NULL,NULL),
+(5528,'3EB0CCEE8E1552928D9616','121066638844004@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'Incase you were interested, I created an app to help me seamlessly created polls inside of presentations and then provide a secondary presenter view screen for use when presenting.',NULL,'conversation',1779755555,'2026-05-26 00:32:35',NULL,NULL,NULL),
+(5529,'3EB080F9913BAD4344A78C','121066638844004@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'live.urbantek.online',NULL,'conversation',1779755564,'2026-05-26 00:32:45',NULL,NULL,NULL),
+(5530,'3EB028EC452DF0A3676180','121066638844004@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'it\'s what i used on sunday to run the presentation',NULL,'conversation',1779755570,'2026-05-26 00:32:51',NULL,NULL,NULL),
+(5531,'3BCD950F53664F47E787','121066638844004@lid',NULL,'Curtis','121066638844004@lid','Ben Campbell',0,'Hey mate, thanks for sharing.  I’ve embedded Slido before, which is OK - but super keen to check this out.  👍',NULL,'conversation',1779755721,'2026-05-26 00:35:22',NULL,NULL,NULL),
+(5532,'3EB0B936B682833FDFE2F3','121066638844004@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'Yeah i wanted something that A) didn\'t cost to have a subscription and B) could have more partcipants, i\'ve coded this one to allow up to 200 per session',NULL,'conversation',1779755828,'2026-05-26 00:37:09',NULL,NULL,NULL),
+(5533,'3EB05E33026FBA1E36F27A','121066638844004@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'The main limitation at the moment is that this doesn\'t have slide creation (coming) you build out your deck in ppt or google slides, then export to PDF. When you import into Slidea then it splits each page of the PDF into a slide. Then you add your notes underneath each slide for the Presenter view screen',NULL,'conversation',1779755900,'2026-05-26 00:38:20',NULL,NULL,NULL),
+(5534,'3EB0B34A0707D8E68869CB','121066638844004@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'The other benefit of this is once it\'s setup, if the IT operator gets distracted you can still control the screen as the screen contols are in the presenter view, so no more getting stuck on a slide because the IT guy has clicked somehwhere else on the computer haha',NULL,'conversation',1779755947,'2026-05-26 00:39:08',NULL,NULL,NULL),
+(5535,'3BA164411594688F8957','121066638844004@lid',NULL,'Curtis','121066638844004@lid','Ben Campbell',0,NULL,NULL,'messageContextInfo',1779756086,'2026-05-26 00:41:27',NULL,'👍','3EB0B34A0707D8E68869CB'),
+(5536,'3EB0E6ACFD7145FB93098A','121066638844004@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'(Also just an FYI I\'ve got some dev going on in the back end of SLIDEA at the moment so it may be down)',NULL,'conversation',1779756097,'2026-05-26 00:41:38',NULL,NULL,NULL),
+(5537,'3B26591F0D94077304A2','121066638844004@lid',NULL,'Curtis','121066638844004@lid','Ben Campbell',0,NULL,NULL,'messageContextInfo',1779756106,'2026-05-26 00:41:47',NULL,'👍','3EB0E6ACFD7145FB93098A'),
+(5538,'3BE4BDB83F0669C23F43','121066638844004@lid',NULL,'Curtis','121066638844004@lid','Ben Campbell',0,'Is there any limitation to the number of slides?  Given it will be run off PDF, for animations (i.e, only showing each dot point on a slide when needed), would need to add additional slides to do this…which could see a normal PPT be 4-5 times as many slides as normal',NULL,'conversation',1779756178,'2026-05-26 00:42:58',NULL,NULL,NULL),
+(5539,'3EB05D5430BAD65377ED52','121066638844004@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'yes that\'s the key limitation at the moment, no animations',NULL,'conversation',1779756331,'2026-05-26 00:45:32',NULL,NULL,NULL),
+(5540,'3EB00D78B2CC1313890DDA','121066638844004@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'It\'s on the road map. either the whole presentation would get built on slidea and can be exported out after if needed OR you\'d be able to import a PPT or google slide with animations. but at the moment, no animation (like last night)',NULL,'conversation',1779756385,'2026-05-26 00:46:25',NULL,NULL,NULL),
+(5541,'3EB09284C5FB944745315B','121066638844004@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'Obviously there was the poll animations as that\'s a live data visual',NULL,'conversation',1779756401,'2026-05-26 00:46:41',NULL,NULL,NULL),
+(5542,'3EB0F14D134FA8A350689D','231335629164614@lid',NULL,'Regan','61466848838:16@s.whatsapp.net','Me',1,NULL,'image','imageMessage',1779756772,'2026-05-26 00:52:53',NULL,NULL,NULL),
+(5543,'3B3DDA6ADF9086C7CF17','121066638844004@lid',NULL,'Curtis','121066638844004@lid','Ben Campbell',0,NULL,NULL,'messageContextInfo',1779756777,'2026-05-26 00:52:57',NULL,'👍','3EB00D78B2CC1313890DDA'),
+(5544,'3EB050EAE612BD4FC4EB46','178924042600533@lid',NULL,'Steve','61466848838:16@s.whatsapp.net','Me',1,'Still want me to come over today and checkout that uber integration issue',NULL,'conversation',1779757963,'2026-05-26 01:12:43',NULL,NULL,NULL),
+(5545,'3EB0736CFFE0935AE55B36','178924042600533@lid',NULL,'Steve','61466848838:16@s.whatsapp.net','Me',1,'If so it\'ll be around 12:30',NULL,'conversation',1779757968,'2026-05-26 01:12:48',NULL,NULL,NULL),
+(5546,'3A8EB41BAFADC93121DA','178924042600533@lid',NULL,'Steve','178924042600533@lid','Steve',0,'Pls',NULL,'conversation',1779757982,'2026-05-26 01:13:02',NULL,NULL,NULL),
+(5547,'3A875EB53F30FCA0C167','178924042600533@lid',NULL,'Steve','178924042600533@lid','Steve',0,'Spoke to there tech support this morning and they were useless!',NULL,'conversation',1779758020,'2026-05-26 01:13:40',NULL,NULL,NULL),
+(5548,'3EB0D8FFC3B53375F10ED4','178924042600533@lid',NULL,'Steve','61466848838:16@s.whatsapp.net','Me',1,'Ha, well then',NULL,'conversation',1779759543,'2026-05-26 01:39:04',NULL,NULL,NULL),
+(5549,'3EB03C04C61624EF347DDC','178924042600533@lid',NULL,'Steve','61466848838:16@s.whatsapp.net','Me',1,'No worries mate, i\'ll see you in just over an hour',NULL,'conversation',1779759550,'2026-05-26 01:39:10',NULL,NULL,NULL),
+(5550,'3EB07DD276F631C58F6C67','120363346032343642@g.us',NULL,'Regan','61466848838:16@s.whatsapp.net','Me',1,'Morning all',NULL,'conversation',1779761766,'2026-05-26 02:16:06',NULL,NULL,NULL),
+(5551,'3EB09A200B52199015F6A9','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'Waddup Dawyno!',NULL,'conversation',1779762720,'2026-05-26 02:32:00',NULL,NULL,NULL),
+(5552,'3EB07751E49266152CA095','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,'Afternoon peoples!',NULL,'conversation',1779763843,'2026-05-26 02:50:43',NULL,NULL,NULL),
+(5553,'3EB089FEEF98D595602A08','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'how goes your day? have you chewed through a million tokens yet?',NULL,'conversation',1779763984,'2026-05-26 02:53:05',NULL,NULL,NULL),
+(5554,'3EB06798A5CAFEEE835698','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,'Mate, I so much as blink and i\'ve chewed a million tokens',NULL,'conversation',1779764182,'2026-05-26 02:56:22',NULL,NULL,NULL),
+(5555,'3EB073EB2F2AF8BAB5DB77','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'i will get there one day',NULL,'conversation',1779764334,'2026-05-26 02:58:54',NULL,NULL,NULL),
+(5556,'3AE71311024926AAB3C8','120363377826687982@g.us',NULL,'Asher','148932319531171@lid','Asher',0,'No presh covers just wondering if big dog is on or house stuff busy atm 🙏',NULL,'conversation',1779771381,'2026-05-26 04:56:22',NULL,NULL,NULL),
+(5557,'3EB09FA52E8C7D13568A91','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'i have had multiple dropouts from orion today. internet is fine but it has disconnected multiple sessions. 🧐',NULL,'conversation',1779772207,'2026-05-26 05:10:08',NULL,NULL,NULL),
+(5558,'3AD1E828DDE2BAECE400','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,'Tell him to up his game',NULL,'senderKeyDistributionMessage',1779774488,'2026-05-26 05:48:08',NULL,NULL,NULL),
+(5559,'3A5421C74FB00AC8D7B6','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,'lol jk, tell him to up the swap file to 9GB',NULL,'conversation',1779774519,'2026-05-26 05:48:39',NULL,NULL,NULL),
+(5560,'3EB0C2AECD77AD2F88BDF8','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'in claude code, just say, up the swap file to 9GB?',NULL,'conversation',1779775912,'2026-05-26 06:11:53',NULL,NULL,NULL),
+(5561,'3AC4AB4EC6BADCAC6274','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,'Yup',NULL,'conversation',1779777710,'2026-05-26 06:41:51',NULL,NULL,NULL),
+(5562,'3AFBBBC054C17B897D10','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,'That’ll eliminate the most likely cause of it having issues.',NULL,'conversation',1779777737,'2026-05-26 06:42:18',NULL,NULL,NULL),
+(5563,'ACDD3E15733B260EB053E86ECDB32A2C','120363377826687982@g.us',NULL,'Asher','51956420726959@lid','Tom Covers',0,'Hey bro! And yeah sorry fellas we are busy and cooked first night back in 😅',NULL,'conversation',1779779777,'2026-05-26 07:16:17',NULL,NULL,NULL),
+(5564,'ACE6B523C363C63F4A2418D189D85FE4','120363377826687982@g.us',NULL,'Asher','51956420726959@lid','Tom Covers',0,'I think next week we\'ll be back on!',NULL,'conversation',1779779792,'2026-05-26 07:16:33',NULL,NULL,NULL),
+(5565,'3A1D8F8A10E4BCEEF0DE','120363377826687982@g.us',NULL,'Asher','62096821735544@lid','Emmanuel Christofidis',0,'All good bro I’m sick anyway was gonna pass on tonight. Got that Premier League hangover',NULL,'conversation',1779779851,'2026-05-26 07:17:32',NULL,NULL,NULL),
+(5566,'AC24202E8503F8296FA92835FD1E88DE','120363377826687982@g.us',NULL,'Asher','51956420726959@lid','Tom Covers',0,NULL,NULL,'reactionMessage',1779782716,'2026-05-26 08:05:16',NULL,'🙏','3A1D8F8A10E4BCEEF0DE'),
+(5567,'3AF4CF38D9DCBEE60142','51956420726959@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'Hey bro, how’s jarrah going? Haven’t seen him in a while?',NULL,'conversation',1779790637,'2026-05-26 10:17:17',NULL,NULL,NULL),
+(5568,'AC96E99D7EABD964B6E0D222A720CFE7','51956420726959@lid',NULL,'Curtis','51956420726959@lid','Tom Covers',0,'Hey bro, hes in sunny coast at the moment',NULL,'conversation',1779792350,'2026-05-26 10:45:50',NULL,NULL,NULL),
+(5569,'ACD9EC9DCF308A83BC79CCF8A3A5BDD5','51956420726959@lid',NULL,'Curtis','51956420726959@lid','Tom Covers',0,'But yeah idk, he seems fine but i think his family life is hard at the moment with the 3 kids and hes got a lot going on, he said the problems with oversight put them off going a bit but unsure about now. Deffs worth a follow up though, although sunny coast will do them wonders i thinn',NULL,'conversation',1779792466,'2026-05-26 10:47:46',NULL,NULL,NULL),
+(5570,'ACFF28938601E79DC6239C8B35DC1A2E','51956420726959@lid',NULL,'Curtis','51956420726959@lid','Tom Covers',0,'Think*',NULL,'conversation',1779792469,'2026-05-26 10:47:50',NULL,NULL,NULL),
+(5571,'ACE2509D011A5A688994271AE7856C76','120363377826687982@g.us',NULL,'Asher','51956420726959@lid','Tom Covers',0,'But of big dog uplift co. Reading thr story of simon the sorcerer, makes it really clear about why some haven\'t received yet but also without saying they spoke it tongues st this time it clearly reads as there is a clear distinction for who is filled the holy spirit or not. Anyway happy tuesday, keep big dogging the uplift',NULL,'conversation',1779793755,'2026-05-26 11:09:15',NULL,NULL,NULL),
+(5572,'AC560DF677CE53E26F41F0A9561594FC','120363042147644587@g.us',NULL,'Sam','64020866449656@lid','Brendan',0,'@281299470274701  you good for tomorrow night?\nRemember pants and a shirt 🕴',NULL,'extendedTextMessage',1779796167,'2026-05-26 11:49:28',NULL,NULL,NULL),
+(5573,'3AF1D331A9911A09DE2F','61403505790-1587861828@g.us',NULL,'Cameron','153480807334041@lid','Rowan Barnett',0,'Reminders for Wednesday 27th May\n\nSound: @⁨David Catley⁩ \nAV: @66838432075952 \n\n\nPlease note that if you are able to make your turn to respond with a 👍🏻 or unable to make your turn reply with a 👎🏻 or a 😢 to the message sent ASAP.',NULL,'senderKeyDistributionMessage',1779797222,'2026-05-26 12:07:03',NULL,NULL,NULL),
+(5574,'3A4E2D903455F706D745','120363042147644587@g.us',NULL,'Sam','281299470274701@lid','Benny',0,'Are paint on pants acceptable? I’ll do a tie aswell to make up for it',NULL,'senderKeyDistributionMessage',1779801398,'2026-05-26 13:16:39',NULL,NULL,NULL),
+(5575,'3EB003D333612F11DB8F1C','120363377826687982@g.us',NULL,'Asher','61466848838:16@s.whatsapp.net','Me',1,NULL,NULL,'messageContextInfo',1779801461,'2026-05-26 13:17:41',NULL,'❤️','ACE2509D011A5A688994271AE7856C76'),
+(5576,'ACFD72D9283D14826B289450159CA589','120363029922398465@g.us',NULL,'Tomas Treml','63819170742378@lid','Tomas Treml',0,'Hi Everyone,\n\nHere is the roster for 27.5. Wednesday. Please give thumbs 👍👎\n\nPiano @150688994730134 , yvonne\nDrums  @brodie day\nGuitar @206600946069600 , larisa  @199067523088447  Geoff faulkner\nFlutes - @214761702699054 , corey& @83146489995469  ,Shelley⁩',NULL,'extendedTextMessage',1779801632,'2026-05-26 13:20:32',NULL,NULL,NULL),
+(5577,'ACCDC732F4A5E770B91DC24D2518F7EA','120363042147644587@g.us',NULL,'Sam','78232980328596@lid','Jason Thompson',0,NULL,NULL,'senderKeyDistributionMessage',1779802653,'2026-05-26 13:37:34',NULL,'😂','3A4E2D903455F706D745');
 /*!40000 ALTER TABLE `whatsapp_messages` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -9541,4 +9595,4 @@ commit;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2026-05-26  3:00:02
+-- Dump completed on 2026-05-27  3:00:01
