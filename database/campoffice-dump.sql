@@ -1088,7 +1088,7 @@ CREATE TABLE `faim_audit_log` (
   KEY `idx_faim_audit_event_type` (`event_type`),
   KEY `idx_faim_audit_thread_id` (`thread_id`),
   KEY `idx_faim_audit_draft_id` (`draft_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1119,7 +1119,31 @@ INSERT INTO `faim_audit_log` VALUES
 (24,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-28 14:00:20'),
 (25,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-28 15:00:20'),
 (26,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-28 16:00:20'),
-(27,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-28 17:00:20');
+(27,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-28 17:00:20'),
+(28,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-28 18:00:20'),
+(29,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-28 19:00:20'),
+(30,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-28 20:00:20'),
+(31,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-28 21:00:20'),
+(32,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-28 22:00:20'),
+(33,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-28 23:00:20'),
+(34,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-29 00:00:20'),
+(35,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-29 01:00:21'),
+(36,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-29 02:00:21'),
+(37,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-29 03:00:21'),
+(38,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-29 04:00:21'),
+(39,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-29 05:00:21'),
+(40,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-29 06:00:21'),
+(41,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-29 07:00:21'),
+(42,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-29 08:00:21'),
+(43,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-29 09:00:21'),
+(44,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-29 10:00:21'),
+(45,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-29 11:00:21'),
+(46,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-29 12:00:21'),
+(47,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-29 13:00:21'),
+(48,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-29 14:00:21'),
+(49,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-29 15:00:21'),
+(50,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-29 16:00:21'),
+(51,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-29 17:00:21');
 /*!40000 ALTER TABLE `faim_audit_log` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -2130,8 +2154,8 @@ LOCK TABLES `home_adapters` WRITE;
 /*!40000 ALTER TABLE `home_adapters` DISABLE KEYS */;
 set autocommit=0;
 INSERT INTO `home_adapters` VALUES
-('ble','Bluetooth','ble','{\"id\": \"ble\", \"name\": \"Bluetooth\", \"protocol\": \"ble\", \"capabilities\": [], \"discovery\": \"scan\", \"mqtt_prefix\": \"fbhome/ble\"}','running','2026-05-29 02:59:57'),
-('wifi','Wi-Fi','wifi','{\"id\": \"wifi\", \"name\": \"Wi-Fi\", \"protocol\": \"wifi\", \"capabilities\": [\"on_off\"], \"discovery\": \"mdns\", \"mqtt_prefix\": \"fbhome/wifi\"}','running','2026-05-29 03:00:00');
+('ble','Bluetooth','ble','{\"id\": \"ble\", \"name\": \"Bluetooth\", \"protocol\": \"ble\", \"capabilities\": [], \"discovery\": \"scan\", \"mqtt_prefix\": \"fbhome/ble\"}','running','2026-05-30 02:59:52'),
+('wifi','Wi-Fi','wifi','{\"id\": \"wifi\", \"name\": \"Wi-Fi\", \"protocol\": \"wifi\", \"capabilities\": [\"on_off\"], \"discovery\": \"mdns\", \"mqtt_prefix\": \"fbhome/wifi\"}','running','2026-05-30 02:59:56');
 /*!40000 ALTER TABLE `home_adapters` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -2690,7 +2714,7 @@ CREATE TABLE `inv_invoice_items` (
   PRIMARY KEY (`id`),
   KEY `idx_inv_item_invoice` (`invoice_id`),
   CONSTRAINT `fk_inv_item_invoice` FOREIGN KEY (`invoice_id`) REFERENCES `inv_invoices` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=109 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=110 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2796,7 +2820,8 @@ INSERT INTO `inv_invoice_items` VALUES
 (103,37,'Updates','• Divi theme Updated\n• Wordpress Version Updated\n\nPHP checked and working after updates\n\nPlugins updated:\n• Akismet Anti-spam\n• LiteSpeed Cache\n• Speed Optimizer',0.25,120.00,30.00,'GST',0.00,0.00,2),
 (104,37,'Testing, Configuration & Handover','Website functionality testing including homepage, navigation, forms, buttons, login areas, images, plugins and key website features. - 0.25 hr\n\nEmail send and receive testing including inbound and outbound mail, mailbox login, spam records and mail client connection settings. - 0.25 hr\n\nPerformance and error checks including site speed, broken links, console errors, server errors and basic hosting performance. - 0.25 hrs',0.75,120.00,90.00,'GST',0.00,0.00,3),
 (107,40,'Social media management','Social media management',0.00,480.00,0.00,'GST',0.00,0.00,0),
-(108,41,'website speed fix','',1.00,250.00,250.00,'GST',0.00,0.00,0);
+(108,41,'website speed fix','',1.00,250.00,250.00,'GST',0.00,0.00,0),
+(109,42,'website speed fix','',1.00,250.00,250.00,'GST',0.00,0.00,0);
 /*!40000 ALTER TABLE `inv_invoice_items` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -2841,7 +2866,7 @@ CREATE TABLE `inv_invoices` (
   KEY `idx_inv_status` (`status`),
   KEY `idx_inv_issue_date` (`issue_date`),
   CONSTRAINT `fk_inv_customer` FOREIGN KEY (`customer_id`) REFERENCES `inv_customers` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2890,7 +2915,8 @@ INSERT INTO `inv_invoices` VALUES
 (36,'139',19,'Advanced Cylinder Testing','2026-03-17','2026-03-31','paid',230.00,0.00,NULL,0.00,0.00,'',230.00,'AUD','',NULL,'bank_transfer','2026-03-17 00:00:00',NULL,NULL,'2489975445483812660','2026-05-17 13:22:33','2026-05-17 13:22:33','Qty','Rate'),
 (37,'140',20,'The Bubbly Tea And Coffee Co','2026-05-11','2026-05-25','paid',960.00,0.00,'percent',50.00,480.00,'Friends & Family',480.00,'AUD','','','bank_transfer','2025-01-01 00:00:00',NULL,'','2529766421731341630','2026-05-17 13:22:33','2026-05-28 10:34:10','Qty','Rate'),
 (40,'201',20,'The Bubbly Tea And Coffee Co','2026-05-28','2026-06-11','void',0.00,0.00,NULL,0.00,0.00,'',0.00,'AUD','','','bank_transfer','2026-05-28 00:00:00',NULL,'TEST-CLEANUP',NULL,'2026-05-28 07:50:02','2026-05-28 10:34:23','Qty','Rate'),
-(41,'202',9,'Healthy Feet Podiatry','2026-05-28',NULL,'void',250.00,0.00,NULL,0.00,0.00,'',250.00,'AUD','',NULL,NULL,NULL,NULL,NULL,NULL,'2026-05-28 11:10:19','2026-05-28 11:11:26','Qty','Rate');
+(41,'202',9,'Healthy Feet Podiatry','2026-05-28',NULL,'void',250.00,0.00,NULL,0.00,0.00,'',250.00,'AUD','',NULL,NULL,NULL,NULL,NULL,NULL,'2026-05-28 11:10:19','2026-05-28 11:11:26','Qty','Rate'),
+(42,'203',9,'Healthy Feet Podiatry','2026-05-28',NULL,'sent',250.00,0.00,NULL,0.00,0.00,'',250.00,'AUD','',NULL,NULL,NULL,'2026-05-28 23:54:19',NULL,NULL,'2026-05-28 23:53:54','2026-05-28 23:54:19','Qty','Rate');
 /*!40000 ALTER TABLE `inv_invoices` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -2942,7 +2968,7 @@ CREATE TABLE `inv_settings` (
   `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`),
   UNIQUE KEY `uq_inv_setting_key` (`setting_key`)
-) ENGINE=InnoDB AUTO_INCREMENT=90 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=91 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2965,7 +2991,7 @@ INSERT INTO `inv_settings` VALUES
 (10,'bank_account_number','304774640','2026-05-17 13:21:58'),
 (11,'currency','AUD','2026-05-17 13:21:58'),
 (12,'invoice_prefix','','2026-05-17 13:21:58'),
-(13,'next_invoice_number','203','2026-05-28 11:10:19'),
+(13,'next_invoice_number','204','2026-05-28 23:53:54'),
 (14,'default_due_days','14','2026-05-17 13:21:58'),
 (15,'tax_rate','0','2026-05-17 13:21:58'),
 (16,'tax_name','GST','2026-05-17 13:21:58'),
@@ -4334,7 +4360,7 @@ CREATE TABLE `whatsapp_messages` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uq_msg` (`message_id`,`chat_jid`),
   KEY `idx_wa_account` (`wa_account`)
-) ENGINE=InnoDB AUTO_INCREMENT=6022 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6071 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -10334,7 +10360,56 @@ INSERT INTO `whatsapp_messages` VALUES
 (6018,'3A19820BD5C72EC0AC12','61434832614-1447029557@g.us',NULL,'Benny','148932319531171@lid','Asher',0,NULL,NULL,'senderKeyDistributionMessage',1779976010,'2026-05-28 13:46:51',NULL,'😂','3A54265D2B1539FF5359'),
 (6019,'3EB07855367081A29019D1','2388035428499@lid',NULL,'Andrew Blacket','61466848838:16@s.whatsapp.net','Me',1,'Pulling it back together :D',NULL,'conversation',1779976949,'2026-05-28 14:02:29',NULL,NULL,NULL),
 (6020,'3EB07378367B8BA817682C','231335629164614@lid',NULL,'Regan','61466848838:16@s.whatsapp.net','Me',1,'If you\'re free after school drop off i\'ll come round and give you an update on PosForge',NULL,'extendedTextMessage',1779976957,'2026-05-28 14:02:37',NULL,NULL,NULL),
-(6021,'3EB0145C3CAE8CA6924A7A','231335629164614@lid',NULL,'Regan','61466848838:16@s.whatsapp.net','Me',1,'fair bit actually happened in the last week.',NULL,'extendedTextMessage',1779976967,'2026-05-28 14:02:47',NULL,NULL,NULL);
+(6021,'3EB0145C3CAE8CA6924A7A','231335629164614@lid',NULL,'Regan','61466848838:16@s.whatsapp.net','Me',1,'fair bit actually happened in the last week.',NULL,'extendedTextMessage',1779976967,'2026-05-28 14:02:47',NULL,NULL,NULL),
+(6022,'3A643B2364FC2DE1CC1E','231335629164614@lid',NULL,'Regan','231335629164614@lid','Regan',0,'Absolutely',NULL,'conversation',1780006358,'2026-05-28 22:12:39',NULL,NULL,NULL),
+(6023,'AC7759A62CB68876B25598506BCE99C7','61434832614-1447029557@g.us',NULL,'Benny','154151308763316@lid','Eric Lambo',0,NULL,NULL,'senderKeyDistributionMessage',1780006502,'2026-05-28 22:15:02',NULL,'❤️','3A54265D2B1539FF5359'),
+(6024,'AC1092419489C9E45B7C9D314111F26E','61434832614-1447029557@g.us',NULL,'Benny','154151308763316@lid','Eric Lambo',0,NULL,NULL,'reactionMessage',1780006509,'2026-05-28 22:15:10',NULL,'😍','3A24EA709AD159EA4522'),
+(6025,'3AE0F724C88590753ED2','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'https://x.com/claudedevs/status/2060043208277811437?s=48&t=KpffsLLG8DP3wA7EpdXrLg',NULL,'extendedTextMessage',1780006533,'2026-05-28 22:15:34',NULL,NULL,NULL),
+(6026,'3AB365F0C56162747154','61434832614-1447029557@g.us',NULL,'Benny','22501384057034@lid','AlexEdw',0,NULL,NULL,'senderKeyDistributionMessage',1780007168,'2026-05-28 22:26:09',NULL,'❤️','ACAAD3F228CA1F8621CC209094A67913'),
+(6027,'3ADEF348AED76CF85F34','61434832614-1447029557@g.us',NULL,'Benny','22501384057034@lid','AlexEdw',0,NULL,NULL,'senderKeyDistributionMessage',1780007173,'2026-05-28 22:26:13',NULL,'❤️','AC7E53606998D16978E233C22A895CEE'),
+(6028,'3AD73001D997BA2FD536','231335629164614@lid',NULL,'Regan','231335629164614@lid','Regan',0,'What time will that be. Ned to make sure I’m modest',NULL,'conversation',1780007214,'2026-05-28 22:26:54',NULL,NULL,NULL),
+(6029,'3AD5CF33FEEA1D50664B','61434832614-1447029557@g.us',NULL,'Benny','126602818101267@lid','Rachel',0,NULL,NULL,'senderKeyDistributionMessage',1780008125,'2026-05-28 22:42:05',NULL,'❤️','ACAAD3F228CA1F8621CC209094A67913'),
+(6030,'3EB08BDD496B598A8959A4','231335629164614@lid',NULL,'Regan','61466848838:16@s.whatsapp.net','Me',1,'Drop Koa off at between 8:45 - 9:00am so probably around 9:10. but i can text you when i leave his childcare which would give you 10 minutes',NULL,'extendedTextMessage',1780008188,'2026-05-28 22:43:08',NULL,NULL,NULL),
+(6031,'3AE699285B2EB0B36925','231335629164614@lid',NULL,'Regan','231335629164614@lid','Regan',0,'Ok',NULL,'conversation',1780008658,'2026-05-28 22:50:58',NULL,NULL,NULL),
+(6032,'3A99D8F5496F9BA63B75','231335629164614@lid',NULL,'Regan','61466848838:16@s.whatsapp.net','Me',1,'Leaving now',NULL,'conversation',1780010896,'2026-05-28 23:28:16',NULL,NULL,NULL),
+(6033,'3EB09533C7680F52707185','120363406200300258@g.us',NULL,'Duncan','37692700131431@lid','Duncan',0,'David Fleetwood has indicated that his gear is \"the rubble, pavers and the small shed on my side, which I can move and will try to lay asap\"',NULL,'conversation',1780011025,'2026-05-28 23:30:25',NULL,NULL,NULL),
+(6034,'3A839FBDDCBE88053423','231335629164614@lid',NULL,'Regan','231335629164614@lid','Regan',0,NULL,NULL,'messageContextInfo',1780011149,'2026-05-28 23:32:29',NULL,'👍','3A99D8F5496F9BA63B75'),
+(6035,'3EB00FA8F8F6B3EA15ADEE','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'how do i get 4.8?','image','imageMessage',1780013373,'2026-05-29 00:09:33',NULL,NULL,NULL),
+(6036,'3EB041A09F32B2A5A5F279','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,'open powershell',NULL,'conversation',1780013439,'2026-05-29 00:10:39',NULL,NULL,NULL),
+(6037,'3EB0826CB06B5675303C5C','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,'ssh admin@orion.local',NULL,'conversation',1780013449,'2026-05-29 00:10:50',NULL,NULL,NULL),
+(6038,'3EB0F40F8301A80D2C164F','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,'Pass: Forgebox3.b',NULL,'conversation',1780013456,'2026-05-29 00:10:56',NULL,NULL,NULL),
+(6039,'3EB0923E55410997904EAA','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,'claude',NULL,'conversation',1780013467,'2026-05-29 00:11:08',NULL,NULL,NULL),
+(6040,'3EB0474E08F35D6AB52724','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,'or type: claude --dangerously-skip-permissions',NULL,'conversation',1780013488,'2026-05-29 00:11:28',NULL,NULL,NULL),
+(6041,'3EB0681DEFFF7EFE09AAC5','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,'enter',NULL,'conversation',1780013489,'2026-05-29 00:11:30',NULL,NULL,NULL),
+(6042,'3EB098DABD58F648B2CBD9','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,'It should self-update, which in turn will update the App Builder console.',NULL,'conversation',1780013512,'2026-05-29 00:11:52',NULL,NULL,NULL),
+(6043,'3EB091048B0B62D55A3D3A','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'done! Woo hoo',NULL,'conversation',1780013583,'2026-05-29 00:13:03',NULL,NULL,NULL),
+(6044,'3EB0BDFB2B36F550134E4D','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'thanks Dwayne',NULL,'conversation',1780013592,'2026-05-29 00:13:12',NULL,NULL,NULL),
+(6045,'3ADFA30495E43F86638C','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,NULL,'video','videoMessage',1780016390,'2026-05-29 00:59:51',NULL,NULL,NULL),
+(6046,'ACEDCFEBD5542DB92F8FC4DB5EC2E909','50732220870663@lid',NULL,'Curtis','50732220870663@lid','Jo',0,'Did you get an eta from mum and dad? \nCan you make their bed soon pls?',NULL,'conversation',1780020637,'2026-05-29 02:10:37',NULL,NULL,NULL),
+(6047,'3EB0FF9DF1ED58592AB43A','50732220870663@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'Didn\'t ask them i only asked you. And i\'ll make their bed after this meeting',NULL,'conversation',1780020658,'2026-05-29 02:10:58',NULL,NULL,NULL),
+(6048,'3EB03F9F2264B82237B2CD','120363400908812783@g.us',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'Hello Hello',NULL,'conversation',1780022609,'2026-05-29 02:43:29',NULL,NULL,NULL),
+(6049,'3EB031CA1E60BAC19CD173','120363400908812783@g.us',NULL,'Curtis','144221143048242@lid','Dwayne Baird',0,'Hiya',NULL,'conversation',1780022619,'2026-05-29 02:43:40',NULL,NULL,NULL),
+(6050,'3A321F7715BC1AB04C76','120363400908812783@g.us',NULL,'Curtis','73053132329042@lid','Kelly',0,NULL,'video','senderKeyDistributionMessage',1780022642,'2026-05-29 02:44:03',NULL,NULL,NULL),
+(6051,'3EB025F9C30D151F203DE6','120363400908812783@g.us',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'So Katie has just come back saying that we\'ll have to revert back to 50% Fin Year split',NULL,'senderKeyDistributionMessage',1780022649,'2026-05-29 02:44:09',NULL,NULL,NULL),
+(6052,'3EB0CF841FF9D6AC1D9638','120363400908812783@g.us',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'50% now and 50% July/August',NULL,'conversation',1780022667,'2026-05-29 02:44:28',NULL,NULL,NULL),
+(6053,'3EB09F99167DFD5874B20E','120363400908812783@g.us',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'Are you able to send new invoices for split payment?',NULL,'conversation',1780022687,'2026-05-29 02:44:47',NULL,NULL,NULL),
+(6054,'3A9A623B0E8ED4792577','120363400908812783@g.us',NULL,'Curtis','73053132329042@lid','Kelly',0,'Do you need a credit note to nullify the original',NULL,'conversation',1780022995,'2026-05-29 02:49:55',NULL,NULL,NULL),
+(6055,'3EB0BB2EF86207D5876C6A','120363400908812783@g.us',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'mmm i don\'t think so',NULL,'conversation',1780023234,'2026-05-29 02:53:54',NULL,NULL,NULL),
+(6056,'3EB00BF0CD94AA7F5566BB','120363400908812783@g.us',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'just the 2 new invoices with split payment should do',NULL,'conversation',1780023241,'2026-05-29 02:54:01',NULL,NULL,NULL),
+(6057,'3EB0CF6D42D408B7F32D80','120363400908812783@g.us',NULL,'Curtis','144221143048242@lid','Dwayne Baird',0,'DataForge Invoice INV 10937.pdf','document','senderKeyDistributionMessage',1780023715,'2026-05-29 03:01:55',NULL,NULL,NULL),
+(6058,'3EB0EA05C3C3688DF9DC2C','120363400908812783@g.us',NULL,'Curtis','144221143048242@lid','Dwayne Baird',0,'DataForge Credit Note CN-10935.pdf','document','documentMessage',1780023715,'2026-05-29 03:01:55',NULL,NULL,NULL),
+(6059,'3EB0881B9DFD031B639ACF','120363400908812783@g.us',NULL,'Curtis','144221143048242@lid','Dwayne Baird',0,'DataForge Invoice INV 10936.pdf','document','documentMessage',1780023715,'2026-05-29 03:01:55',NULL,NULL,NULL),
+(6060,'3EB09A2D4E53C08BEB4263','120363400908812783@g.us',NULL,'Curtis','144221143048242@lid','Dwayne Baird',0,'The original invoice has been lodged with the digital finance system. Did you need me to contact: accountspayable@news.com.au',NULL,'conversation',1780023811,'2026-05-29 03:03:31',NULL,NULL,NULL),
+(6061,'3EB06E0E4F8D55E9B6A576','120363400908812783@g.us',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'Ahh ok it must have been processed when Sri sent created the PO. I\'ll send her these, thanks',NULL,'conversation',1780023885,'2026-05-29 03:04:45',NULL,NULL,NULL),
+(6062,'3EB09664F4EE9DE2023596','120363400908812783@g.us',NULL,'Curtis','144221143048242@lid','Dwayne Baird',0,'Ok. Keep me posted on anything you need done on our end and we\'ll see to it.',NULL,'conversation',1780023917,'2026-05-29 03:05:18',NULL,NULL,NULL),
+(6063,'3EB0DA9C7EE9D64F89DB8C','120363400908812783@g.us',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,NULL,NULL,'messageContextInfo',1780024023,'2026-05-29 03:07:03',NULL,'👍','3EB09664F4EE9DE2023596'),
+(6064,'ACDD1224C526D2C201CA45D8F336C322','61421923363-1518310837@g.us',NULL,'Larissa','206600946069600@lid','Larissa',0,NULL,NULL,'senderKeyDistributionMessage',1780024808,'2026-05-29 03:20:08',NULL,NULL,NULL),
+(6065,'AC4FA180B3EFF0DE5391481CA607BAB8','61421923363-1518310837@g.us',NULL,'Larissa','206600946069600@lid','Larissa',0,'Found these pirate eye patches. Let me know if you\'d like these and I can bring them Sunday.','image','imageMessage',1780024808,'2026-05-29 03:20:09',NULL,NULL,NULL),
+(6066,'AC4DD3381A35B1224EEC599359AA5246','61421923363-1518310837@g.us',NULL,'Larissa','206600946069600@lid','Larissa',0,'Also have a pair of blow-up arm floaties. Let me know if you\'d like these 😊','image','imageMessage',1780024909,'2026-05-29 03:21:49',NULL,NULL,NULL),
+(6067,'AC0AA1DEB64B4E08BD7126BAE82887EC','50732220870663@lid',NULL,'Curtis','50732220870663@lid','Jo',0,'Hello??',NULL,'conversation',1780042150,'2026-05-29 08:09:10',NULL,NULL,NULL),
+(6068,'3EB076F368DA58C7CB4BB5','50732220870663@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'hello?',NULL,'conversation',1780042160,'2026-05-29 08:09:20',NULL,NULL,NULL),
+(6069,'3EB0230972B79DCAD113EB','50732220870663@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'Oh man i\'ve got my phone volumne turned on and it\'s not even ringing?',NULL,'conversation',1780042176,'2026-05-29 08:09:36',NULL,NULL,NULL),
+(6070,'3EB03F98FB3C0E85F07230','50732220870663@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'I\'ve got it sitting up infront of me looking at me so i can see if it calls',NULL,'conversation',1780042188,'2026-05-29 08:09:48',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `whatsapp_messages` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -10352,4 +10427,4 @@ commit;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2026-05-29  3:00:02
+-- Dump completed on 2026-05-30  3:00:01
