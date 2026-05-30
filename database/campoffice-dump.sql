@@ -1088,7 +1088,7 @@ CREATE TABLE `faim_audit_log` (
   KEY `idx_faim_audit_event_type` (`event_type`),
   KEY `idx_faim_audit_thread_id` (`thread_id`),
   KEY `idx_faim_audit_draft_id` (`draft_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=76 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1143,7 +1143,31 @@ INSERT INTO `faim_audit_log` VALUES
 (48,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-29 14:00:21'),
 (49,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-29 15:00:21'),
 (50,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-29 16:00:21'),
-(51,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-29 17:00:21');
+(51,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-29 17:00:21'),
+(52,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-29 18:00:21'),
+(53,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-29 19:00:21'),
+(54,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-29 20:00:21'),
+(55,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-29 21:00:21'),
+(56,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-29 22:00:21'),
+(57,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-29 23:00:21'),
+(58,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-30 00:00:21'),
+(59,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-30 01:00:21'),
+(60,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-30 02:00:21'),
+(61,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-30 03:00:21'),
+(62,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-30 04:00:21'),
+(63,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-30 05:00:21'),
+(64,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-30 06:00:21'),
+(65,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-30 07:00:21'),
+(66,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-30 08:00:21'),
+(67,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-30 09:00:21'),
+(68,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-30 10:00:21'),
+(69,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-30 11:00:21'),
+(70,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-30 12:00:21'),
+(71,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-30 13:00:21'),
+(72,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-30 14:00:21'),
+(73,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-30 15:00:21'),
+(74,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-30 16:00:21'),
+(75,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; skipped 0 automated threads.','{\"created\": 0, \"skipped\": 0}','2026-05-30 17:00:21');
 /*!40000 ALTER TABLE `faim_audit_log` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -2154,8 +2178,8 @@ LOCK TABLES `home_adapters` WRITE;
 /*!40000 ALTER TABLE `home_adapters` DISABLE KEYS */;
 set autocommit=0;
 INSERT INTO `home_adapters` VALUES
-('ble','Bluetooth','ble','{\"id\": \"ble\", \"name\": \"Bluetooth\", \"protocol\": \"ble\", \"capabilities\": [], \"discovery\": \"scan\", \"mqtt_prefix\": \"fbhome/ble\"}','running','2026-05-30 02:59:52'),
-('wifi','Wi-Fi','wifi','{\"id\": \"wifi\", \"name\": \"Wi-Fi\", \"protocol\": \"wifi\", \"capabilities\": [\"on_off\"], \"discovery\": \"mdns\", \"mqtt_prefix\": \"fbhome/wifi\"}','running','2026-05-30 02:59:56');
+('ble','Bluetooth','ble','{\"id\": \"ble\", \"name\": \"Bluetooth\", \"protocol\": \"ble\", \"capabilities\": [], \"discovery\": \"scan\", \"mqtt_prefix\": \"fbhome/ble\"}','running','2026-05-31 02:59:58'),
+('wifi','Wi-Fi','wifi','{\"id\": \"wifi\", \"name\": \"Wi-Fi\", \"protocol\": \"wifi\", \"capabilities\": [\"on_off\"], \"discovery\": \"mdns\", \"mqtt_prefix\": \"fbhome/wifi\"}','running','2026-05-31 02:59:52');
 /*!40000 ALTER TABLE `home_adapters` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -4360,7 +4384,7 @@ CREATE TABLE `whatsapp_messages` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uq_msg` (`message_id`,`chat_jid`),
   KEY `idx_wa_account` (`wa_account`)
-) ENGINE=InnoDB AUTO_INCREMENT=6071 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6118 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -10409,7 +10433,54 @@ INSERT INTO `whatsapp_messages` VALUES
 (6067,'AC0AA1DEB64B4E08BD7126BAE82887EC','50732220870663@lid',NULL,'Curtis','50732220870663@lid','Jo',0,'Hello??',NULL,'conversation',1780042150,'2026-05-29 08:09:10',NULL,NULL,NULL),
 (6068,'3EB076F368DA58C7CB4BB5','50732220870663@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'hello?',NULL,'conversation',1780042160,'2026-05-29 08:09:20',NULL,NULL,NULL),
 (6069,'3EB0230972B79DCAD113EB','50732220870663@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'Oh man i\'ve got my phone volumne turned on and it\'s not even ringing?',NULL,'conversation',1780042176,'2026-05-29 08:09:36',NULL,NULL,NULL),
-(6070,'3EB03F98FB3C0E85F07230','50732220870663@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'I\'ve got it sitting up infront of me looking at me so i can see if it calls',NULL,'conversation',1780042188,'2026-05-29 08:09:48',NULL,NULL,NULL);
+(6070,'3EB03F98FB3C0E85F07230','50732220870663@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'I\'ve got it sitting up infront of me looking at me so i can see if it calls',NULL,'conversation',1780042188,'2026-05-29 08:09:48',NULL,NULL,NULL),
+(6071,'AC513BA5685FAFB751259D6725ED409C','50732220870663@lid',NULL,'Curtis','50732220870663@lid','Jo',0,'Can you get the boys drink bottles and rain jackets ready and by the door pls? I will get their clothes when I get home.',NULL,'conversation',1780093595,'2026-05-29 22:26:35',NULL,NULL,NULL),
+(6072,'3EB02D83583CC31DCDA685','50732220870663@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'kk',NULL,'conversation',1780093604,'2026-05-29 22:26:45',NULL,NULL,NULL),
+(6073,'AC39345723965003599B54320A9D12C8','50732220870663@lid',NULL,'Curtis','50732220870663@lid','Jo',0,'Im going to get really wet on the way home 😬',NULL,'conversation',1780094234,'2026-05-29 22:37:14',NULL,NULL,NULL),
+(6074,'3EB0E86A1C1D652227C33C','50732220870663@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'Ha yep, theres a good chance',NULL,'conversation',1780094612,'2026-05-29 22:43:32',NULL,NULL,NULL),
+(6075,'3EB094A3231D0FFF7D6F03','50732220870663@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'you\'re not taking anything in the boot i assume? So i can take the trolley?',NULL,'conversation',1780094636,'2026-05-29 22:43:56',NULL,NULL,NULL),
+(6076,'ACC1B77D90854CD0B649AC4631B64B14','50732220870663@lid',NULL,'Curtis','50732220870663@lid','Jo',0,'Yep can take the trolley. Take an umbrella too! Do we have 2 umbrellas so I can have 1 too?',NULL,'conversation',1780094674,'2026-05-29 22:44:34',NULL,NULL,NULL),
+(6077,'3EB089D572660EFEA102CC','50732220870663@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'I\'m not sure we even have 1 functioning umberlla',NULL,'conversation',1780094692,'2026-05-29 22:44:52',NULL,NULL,NULL),
+(6078,'AC267097DC8BE3C819E9172252AC6556','50732220870663@lid',NULL,'Curtis','50732220870663@lid','Jo',0,NULL,NULL,'messageContextInfo',1780094700,'2026-05-29 22:45:00',NULL,'😢','3EB089D572660EFEA102CC'),
+(6079,'AC2265E1DAC8845629D8154427010120','50732220870663@lid',NULL,'Curtis','50732220870663@lid','Jo',0,'Where did they go!? We had 2 or 3 big ones, just 1 broken but still usable.',NULL,'conversation',1780094722,'2026-05-29 22:45:22',NULL,NULL,NULL),
+(6080,'3A03617D0384A6C2F8CA','50732220870663@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'Kids are ruthless. Couldn’t find koas jacket also need market list',NULL,'conversation',1780096541,'2026-05-29 23:15:42',NULL,NULL,NULL),
+(6081,'ACF70A4CA5DB5F676916C911B5885347','50732220870663@lid',NULL,'Curtis','50732220870663@lid','Jo',0,'Ruthless? 🤔',NULL,'conversation',1780096585,'2026-05-29 23:16:25',NULL,NULL,NULL),
+(6082,'AC3BF78BA546F97C4AF69DE32CBBB438','50732220870663@lid',NULL,'Curtis','50732220870663@lid','Jo',0,'- strawberries\n- pears x 8\n\n- mushroom x 2\n- broccoli \n- cucumber x 4\n- zuchinni x 4\n- capsicum x 1\n- cauliflower\n- eggs x 30\n\n- Mince x 5\n- salmon x 3\n- steak x 2\n- sausages \n\n- milk x 1 yellow, 1 gold\n\n- sour kraut\n- relish',NULL,'conversation',1780096695,'2026-05-29 23:18:16',NULL,NULL,NULL),
+(6083,'ACEE0385DA779A8001AA74EF5FD3A03C','50732220870663@lid',NULL,'Curtis','50732220870663@lid','Jo',0,'Wear your rain jacket!',NULL,'conversation',1780096700,'2026-05-29 23:18:20',NULL,NULL,NULL),
+(6084,'AC860BC5BECC3F2661F3D164DDA59762','61419807085-1517197220@g.us',NULL,'Chas Hilder','183519825383666@lid','Chas Hilder',0,'Don\'t forget the Monday night meeting at Woodcroft in the atrium 7-30pm\nDiscussion \n\nBaptism and prayer room \nYounger men for leadership.\nAny questions',NULL,'senderKeyDistributionMessage',1780112077,'2026-05-30 03:34:37',NULL,NULL,NULL),
+(6085,'3A51A27D7932B7F3313A','61419807085-1517197220@g.us',NULL,'Chas Hilder','164085366820991@lid','Wayne Davies',0,NULL,NULL,'senderKeyDistributionMessage',1780112157,'2026-05-30 03:35:57',NULL,'👍','AC860BC5BECC3F2661F3D164DDA59762'),
+(6086,'3A1D438D7BA7DA5D11C4','61419807085-1517197220@g.us',NULL,'Chas Hilder','254992241963225@lid','Phil Capel',0,NULL,NULL,'senderKeyDistributionMessage',1780113115,'2026-05-30 03:51:56',NULL,'👍','AC860BC5BECC3F2661F3D164DDA59762'),
+(6087,'3AE7D5220D005C4D2B0C','61419807085-1517197220@g.us',NULL,'Chas Hilder','49160296378403@lid','Darren Barnett',0,NULL,NULL,'senderKeyDistributionMessage',1780115625,'2026-05-30 04:33:45',NULL,'👍','AC860BC5BECC3F2661F3D164DDA59762'),
+(6088,'AC3133495E0F391AD2455D85A800134B','61419807085-1517197220@g.us',NULL,'Chas Hilder','143202917023758@lid','Ryan H',0,NULL,NULL,'senderKeyDistributionMessage',1780121458,'2026-05-30 06:10:58',NULL,'👍','AC860BC5BECC3F2661F3D164DDA59762'),
+(6089,'4AEFB8AB311BF8F08D2C','120363042147644587@g.us',NULL,'Sam','215049599754483@lid','Sam',0,NULL,'audio','audioMessage',1780126295,'2026-05-30 07:31:36',NULL,NULL,NULL),
+(6090,'3ABFB1EC9CBF8E40C017','120363042147644587@g.us',NULL,'Sam','215049599754483@lid','Sam',0,'Tom N sent me this - a version of the UK crew singing it. As with 508, much faster then I ‘taught’ it to you last weekend. (And prob sounds much better faster)',NULL,'conversation',1780126394,'2026-05-30 07:33:14',NULL,NULL,NULL),
+(6091,'ACDCEF6B8DFDC503F34822FA06E7B752','120363042147644587@g.us',NULL,'Sam','64020866449656@lid','Brendan',0,'@96357691949124  you good for tomorrow',NULL,'extendedTextMessage',1780126447,'2026-05-30 07:34:08',NULL,NULL,NULL),
+(6092,'3AABE7A9E42487D77418','61419807085-1517197220@g.us',NULL,'Chas Hilder','245040903405612@lid','Lawrence Bills',0,'Re your comments about younger men for leadership, \nA is this a discussion night?,\nB or are you outlaying a new plan, \nC It’s common knowledge Paul was working towards changes, and  had organized some new personal to help . \nMy reason for saying this is the previous programme was too busy, and if we want the young men to be successful, there needs to be more time available for us to use  for outreach on various levels. \nWe all know how to run meetings, the future is found in outreach. \nI’m encouraging P Chas to write a new programme with spaces to O/R \nJesus said “the fields are white into harvest “.',NULL,'senderKeyDistributionMessage',1780130934,'2026-05-30 08:48:54',NULL,NULL,NULL),
+(6093,'3AD47D2BA6F35D1A87E6','61419807085-1517197220@g.us',NULL,'Chas Hilder','101657715167265@lid','David Provis',0,NULL,NULL,'senderKeyDistributionMessage',1780131151,'2026-05-30 08:52:31',NULL,'👍','AC860BC5BECC3F2661F3D164DDA59762'),
+(6094,'AC34971A6B903B52E655D7608975B159','61419807085-1517197220@g.us',NULL,'Chas Hilder','64020866449656@lid','Brendan',0,NULL,NULL,'senderKeyDistributionMessage',1780132777,'2026-05-30 09:19:37',NULL,'👍','AC860BC5BECC3F2661F3D164DDA59762'),
+(6095,'ACD81AA8A398DEA7A43DE4A40D08FFA8','61419807085-1517197220@g.us',NULL,'Chas Hilder','183519825383666@lid','Chas Hilder',0,'It\'s a discussion about who we have,  we will be looking at the future programme to allow  the opportunity for outreaching, but that will be over the next month or so',NULL,'conversation',1780133809,'2026-05-30 09:36:49',NULL,NULL,NULL),
+(6096,'3A1FC37C92B33F427005','61419807085-1517197220@g.us',NULL,'Chas Hilder','49160296378403@lid','Darren Barnett',0,NULL,NULL,'reactionMessage',1780133996,'2026-05-30 09:39:56',NULL,'👍','ACD81AA8A398DEA7A43DE4A40D08FFA8'),
+(6097,'3A14A59512ED5F27DB9E','61419807085-1517197220@g.us',NULL,'Chas Hilder','164085366820991@lid','Wayne Davies',0,NULL,NULL,'senderKeyDistributionMessage',1780134983,'2026-05-30 09:56:24',NULL,'👍','ACD81AA8A398DEA7A43DE4A40D08FFA8'),
+(6098,'3A85020AEFE791E3066C','61419807085-1517197220@g.us',NULL,'Chas Hilder','148932319531171@lid','Asher',0,NULL,NULL,'senderKeyDistributionMessage',1780135181,'2026-05-30 09:59:41',NULL,'👍','ACD81AA8A398DEA7A43DE4A40D08FFA8'),
+(6099,'3A0A86691010D6646829','61419807085-1517197220@g.us',NULL,'Chas Hilder','148932319531171@lid','Asher',0,NULL,NULL,'reactionMessage',1780135185,'2026-05-30 09:59:45',NULL,'👍','AC860BC5BECC3F2661F3D164DDA59762'),
+(6100,'ACC0E6A93A39CF20091AFE2D66CEA233','120363042147644587@g.us',NULL,'Sam','64020866449656@lid','Brendan',0,NULL,NULL,'protocolMessage',1780138484,'2026-05-30 10:54:44',NULL,NULL,NULL),
+(6101,'AC6B665DF3EACB7E48AF0DFB90296DB8','120363042147644587@g.us',NULL,'Sam','64020866449656@lid','Brendan',0,'@215049599754483  is on tomorrow',NULL,'extendedTextMessage',1780138491,'2026-05-30 10:54:51',NULL,NULL,NULL),
+(6102,'AC7E3C09D8460ABFBB648B1F580D3C74','120363042147644587@g.us',NULL,'Sam','78232980328596@lid','Jason Thompson',0,'Pearcy numero uno!!😃',NULL,'extendedTextMessage',1780138642,'2026-05-30 10:57:22','AC6B665DF3EACB7E48AF0DFB90296DB8',NULL,NULL),
+(6103,'ACA4CA4C7DDF2C3467CDEDE17BA1D702','61403505790-1587861828@g.us',NULL,'Cameron','115139567186165@lid','Cameron',0,'Reminders for Sunday 31st May\n\nSound: @Steve R\nAV: @198973470036073 \n\n\nPlease note that if you are able to make your turn to respond with a 👍🏻 or unable to make your turn reply with a 👎🏻 or a 😢 to the message sent ASAP.',NULL,'senderKeyDistributionMessage',1780146821,'2026-05-30 13:13:41',NULL,NULL,NULL),
+(6104,'4AA0A921DF07E350E2C8','61434832614-1447029557@g.us',NULL,'Benny','281299470274701@lid','Benny',0,NULL,'video','videoMessage',1780149673,'2026-05-30 14:01:13',NULL,NULL,NULL),
+(6105,'3A0EC19A9C5059DDA483','61434832614-1447029557@g.us',NULL,'Benny','71288303390956@lid','lexi',0,NULL,NULL,'senderKeyDistributionMessage',1780149686,'2026-05-30 14:01:26',NULL,'😂','4AA0A921DF07E350E2C8'),
+(6106,'AC7B3ED369BBD6F7D71F99F7FD816C89','61434832614-1447029557@g.us',NULL,'Benny','70450919022601@lid','Abby',0,NULL,NULL,'senderKeyDistributionMessage',1780149731,'2026-05-30 14:02:11',NULL,'😂','4AA0A921DF07E350E2C8'),
+(6107,'3AE183F536352D56A6C8','61434832614-1447029557@g.us',NULL,'Benny','153480807334041@lid','Rowan Barnett',0,NULL,NULL,'senderKeyDistributionMessage',1780149778,'2026-05-30 14:02:58',NULL,'😂','4AA0A921DF07E350E2C8'),
+(6108,'AC8D0E14FCD1628F7809DCD8AADC0B8B','61434832614-1447029557@g.us',NULL,'Benny','60254247231738@lid','Amanda polgreen',0,NULL,NULL,'senderKeyDistributionMessage',1780149904,'2026-05-30 14:05:05',NULL,'😂','4AA0A921DF07E350E2C8'),
+(6109,'3ABC95AB477C64953A13','61434832614-1447029557@g.us',NULL,'Benny','71288303390956@lid','lexi',0,NULL,NULL,'senderKeyDistributionMessage',1780149926,'2026-05-30 14:05:26',NULL,'😂','3A24EA709AD159EA4522'),
+(6110,'3A71BC592059405F93F7','61434832614-1447029557@g.us',NULL,'Benny','71288303390956@lid','lexi',0,NULL,NULL,'reactionMessage',1780149932,'2026-05-30 14:05:33',NULL,NULL,'3A24EA709AD159EA4522'),
+(6111,'3A56CC9A46A9A71962FC','61434832614-1447029557@g.us',NULL,'Benny','71288303390956@lid','lexi',0,NULL,NULL,'reactionMessage',1780149935,'2026-05-30 14:05:35',NULL,'😂','3A54265D2B1539FF5359'),
+(6112,'AC83168B97B5AF2F328728CCF66DBD3F','61434832614-1447029557@g.us',NULL,'Benny','154151308763316@lid','Eric Lambo',0,NULL,NULL,'senderKeyDistributionMessage',1780150705,'2026-05-30 14:18:25',NULL,'😂','4AA0A921DF07E350E2C8'),
+(6113,'3A28A17CCE2BDFB00252','61434832614-1447029557@g.us',NULL,'Benny','199497053405256@lid','Joel.M',0,NULL,NULL,'senderKeyDistributionMessage',1780151422,'2026-05-30 14:30:22',NULL,'😂','4AA0A921DF07E350E2C8'),
+(6114,'3A1121D37887FB9D10CB','61434832614-1447029557@g.us',NULL,'Benny','267911553888274@lid','Isaac.G',0,NULL,NULL,'senderKeyDistributionMessage',1780151755,'2026-05-30 14:35:56',NULL,'😂','4AA0A921DF07E350E2C8'),
+(6115,'ACF05FC75053950BE8AFAE955268F930','61434832614-1447029557@g.us',NULL,'Benny','161246678622436@lid','Bradley Provis',0,NULL,NULL,'senderKeyDistributionMessage',1780152448,'2026-05-30 14:47:28',NULL,'😂','4AA0A921DF07E350E2C8'),
+(6116,'3A546A457E61B2ADF129','61434832614-1447029557@g.us',NULL,'Benny','138337105006827@lid','Malik Jones',0,NULL,NULL,'senderKeyDistributionMessage',1780152488,'2026-05-30 14:48:09',NULL,'❤️','4AA0A921DF07E350E2C8'),
+(6117,'3A20E4152C0C53AF94B5','61434832614-1447029557@g.us',NULL,'Benny','252870679109842@lid','Lauren',0,NULL,NULL,'senderKeyDistributionMessage',1780153884,'2026-05-30 15:11:25',NULL,'😂','4AA0A921DF07E350E2C8');
 /*!40000 ALTER TABLE `whatsapp_messages` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -10427,4 +10498,4 @@ commit;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2026-05-30  3:00:01
+-- Dump completed on 2026-05-31  3:00:01
