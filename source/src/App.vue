@@ -72,21 +72,14 @@
       </div>
     </aside>
 
-    <!-- Mobile top bar -->
+    <!-- Mobile top bar (title only — navigation lives in the bottom bar) -->
     <div v-if="auth.isAuth" class="lg:hidden fixed top-0 left-0 right-0 z-40
       bg-surface-900/90 backdrop-blur-md border-b border-surface-600 flex items-center
-      justify-between px-4 py-3 pt-safe">
-      <div class="flex items-center gap-2">
-        <div class="w-7 h-7 rounded-lg bg-ember-500 flex items-center justify-center">
-          <span class="text-surface-900 font-black text-xs">C</span>
-        </div>
-        <span class="font-bold text-sm text-ink-100">CAMPO Admin</span>
+      gap-2 px-4 py-3 pt-safe">
+      <div class="w-7 h-7 rounded-lg bg-ember-500 flex items-center justify-center">
+        <span class="text-surface-900 font-black text-xs">C</span>
       </div>
-      <button @click="mobileMenu = true" class="btn-ghost btn p-1.5 rounded-lg">
-        <svg class="w-5 h-5 text-ink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-        </svg>
-      </button>
+      <span class="font-bold text-sm text-ink-100">CAMPO Admin</span>
     </div>
 
     <!-- Mobile menu drawer -->
@@ -143,8 +136,28 @@
       </Transition>
     </Teleport>
 
+    <!-- Mobile bottom tab bar -->
+    <nav v-if="auth.isAuth" class="lg:hidden fixed bottom-0 left-0 right-0 z-40
+      bg-surface-900/95 backdrop-blur-md border-t border-surface-600
+      flex items-stretch justify-around px-1 pt-1 pb-safe">
+      <RouterLink v-for="item in bottomNav.filter(canSeeBottom)" :key="item.path" :to="item.path"
+        class="flex-1 flex flex-col items-center justify-center gap-0.5 py-1.5 rounded-lg transition-colors"
+        :class="isActive(item.path) ? 'text-ember-400' : 'text-ink-500 hover:text-ink-300'">
+        <span class="text-xl leading-none">{{ item.icon }}</span>
+        <span class="text-[10px] font-medium leading-none">{{ item.label }}</span>
+      </RouterLink>
+      <button @click="mobileMenu = true"
+        class="flex-1 flex flex-col items-center justify-center gap-0.5 py-1.5 rounded-lg transition-colors"
+        :class="mobileMenu ? 'text-ember-400' : 'text-ink-500 hover:text-ink-300'">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+        <span class="text-[10px] font-medium leading-none">Menu</span>
+      </button>
+    </nav>
+
     <!-- Main content -->
-    <main class="flex-1 min-w-0" :class="auth.isAuth ? 'lg:ml-0 pt-14 lg:pt-0' : ''">
+    <main class="flex-1 min-w-0" :class="auth.isAuth ? 'pt-14 lg:pt-0 pb-24 lg:pb-0' : ''">
       <RouterView v-slot="{ Component }">
         <Transition name="page" mode="out-in">
           <component :is="Component" />
@@ -179,7 +192,6 @@ const navGroups = [
       { path: '/members', label: 'Members', icon: '👥' },
       { path: '/rates',   label: 'Rates',   icon: '🏷️' },
       { path: '/sites',      label: 'Sites',      icon: '🏠' },
-      { path: '/allocation', label: 'Allocation', icon: '📋' },
       { path: '/map',        label: 'Map',        icon: '🗺️' },
       { path: '/import',       label: 'Import',      icon: '📥' },
       { path: '/prepayments',  label: 'Prepayments', icon: '💰' },
@@ -206,8 +218,18 @@ const navGroups = [
   },
 ]
 
+// Mobile bottom tab bar — quick access to the main operations pages.
+// (The "Menu" button opens the full role-filtered drawer for everything else.)
+const bottomNav = [
+  { path: '/dashboard', label: 'Dashboard', icon: '📊', roles: ['full_admin','admin'] },
+  { path: '/sites',     label: 'Sites',     icon: '🏠', roles: ['full_admin','admin'] },
+  { path: '/map',       label: 'Map',       icon: '🗺️', roles: ['full_admin','admin'] },
+  { path: '/members',   label: 'Members',   icon: '👥', roles: ['full_admin','admin'] },
+]
+
 function canSeeGroup(g)  { return g.roles.includes(auth.user?.role) }
 function canSeeItem(item){ return true }
+function canSeeBottom(item){ return item.roles.includes(auth.user?.role) }
 function isActive(path)  { return route.path === path || route.path.startsWith(path + '/') }
 
 function handleAction(action) {}

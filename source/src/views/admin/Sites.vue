@@ -5,16 +5,19 @@
     <div class="flex items-center justify-between gap-4">
       <div>
         <h1 class="text-2xl font-bold text-ink-100">Sites</h1>
-        <p class="text-sm text-ink-500 mt-0.5">{{ activeView === 'waitlist' ? 'Site allocation waitlist' : 'Physical site registry' }}</p>
+        <p class="text-sm text-ink-500 mt-0.5">{{ viewSubtitle }}</p>
       </div>
-      <div class="flex gap-2">
-        <button v-if="activeView !== 'waitlist'" @click="openNew" class="btn btn-primary btn-sm">+ Add Site</button>
-        <button @click="activeView === 'waitlist' ? (activeView = 'sites') : (activeView = 'waitlist', loadWaitlist())"
-          :class="['btn btn-sm', activeView === 'waitlist' ? 'btn-primary' : 'btn-ghost text-ink-400']">
-          Waitlist
-          <span v-if="waitlistActiveCount" class="ml-1.5 bg-ember-500 text-surface-900 text-xs font-bold rounded-full w-4 h-4 inline-flex items-center justify-center">{{ waitlistActiveCount }}</span>
-        </button>
-      </div>
+      <button v-if="activeView === 'sites'" @click="openNew" class="btn btn-primary btn-sm">+ Add Site</button>
+    </div>
+
+    <!-- Tabs -->
+    <div class="flex gap-1 border-b border-surface-600">
+      <button v-for="t in viewTabs" :key="t.value"
+        @click="switchView(t.value)"
+        :class="['btn btn-sm rounded-b-none', activeView === t.value ? 'btn-primary' : 'btn-ghost text-ink-400']">
+        {{ t.label }}
+        <span v-if="t.count" class="ml-1.5 bg-ember-500 text-surface-900 text-xs font-bold rounded-full min-w-4 h-4 px-1 inline-flex items-center justify-center">{{ t.count }}</span>
+      </button>
     </div>
 
     <!-- ── WAITLIST VIEW ───────────────────────────────────────────────────── -->
@@ -114,6 +117,24 @@
               <button @click="deleteWlItem(item)" class="btn btn-ghost text-red-400 hover:text-red-300 btn-sm ml-auto">Delete</button>
             </div>
           </div>
+        </div>
+      </div>
+    </template>
+
+    <!-- ── UNALLOCATED VIEW ───────────────────────────────────────────────── -->
+    <template v-else-if="activeView === 'unallocated'">
+      <div class="flex gap-2 items-center">
+        <input v-model="unallocSearch" type="text" placeholder="Search household name…" class="flex-1 text-sm" />
+        <span class="text-sm text-ink-500 shrink-0">{{ filteredUnalloc.length }} household{{ filteredUnalloc.length !== 1 ? 's' : '' }}</span>
+      </div>
+      <EmptyState v-if="!unassignedHouseholds.length" icon="✅" title="All households allocated"
+        subtitle="Every household has at least one site." />
+      <EmptyState v-else-if="!filteredUnalloc.length" icon="🔍" title="No matches" subtitle="Try a different search." />
+      <div v-else class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        <div v-for="h in filteredUnalloc" :key="h.id" class="card p-4 flex flex-col gap-2">
+          <div class="font-semibold text-ink-100 truncate">{{ h.name }}</div>
+          <div class="text-xs text-ink-500">👥 {{ h.member_count }} member{{ h.member_count !== 1 ? 's' : '' }}</div>
+          <button @click="openAssignSite(h)" class="btn btn-primary btn-sm mt-auto">Assign to site →</button>
         </div>
       </div>
     </template>
@@ -236,25 +257,84 @@
           <span v-if="detailData.site.notes" class="text-xs text-ink-500">{{ detailData.site.notes }}</span>
         </div>
 
-        <!-- Allocation -->
-        <div v-if="detailData.alloc" class="space-y-3">
+        <!-- Allocation management -->
+        <div class="space-y-3">
           <div class="flex items-center justify-between">
             <h3 class="text-sm font-semibold text-ink-300 uppercase tracking-wide">Household</h3>
-            <span class="badge bg-sky-500/20 text-sky-300">Allocated</span>
+            <span v-if="detailData.alloc" class="badge bg-sky-500/20 text-sky-300">Allocated</span>
+            <span v-else class="badge bg-emerald-500/20 text-emerald-400">Empty</span>
           </div>
-          <div class="text-base font-bold text-ink-100">{{ detailData.alloc.household_name }}</div>
 
-          <!-- Members -->
-          <div class="grid grid-cols-2 gap-2">
-            <div v-for="m in detailData.members" :key="m.id"
-              class="flex items-center gap-2 bg-surface-800 rounded-lg px-3 py-2">
-              <span :class="memberTypeBadge(m.member_type)" class="shrink-0">{{ memberTypeLabel(m.member_type) }}</span>
-              <span class="text-sm text-ink-200 truncate">{{ m.first_name }} {{ m.last_name }}</span>
+          <!-- Current household + members -->
+          <div v-if="detailData.alloc" class="space-y-2">
+            <div class="flex items-center justify-between gap-2">
+              <div class="text-base font-bold text-ink-100">{{ detailData.alloc.household_name }}</div>
+              <button @click="unassignCurrent" :disabled="allocSaving"
+                class="btn btn-ghost btn-sm text-red-400 hover:text-red-300 shrink-0">Unassign</button>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <div v-for="m in detailData.members" :key="m.id"
+                class="flex items-center gap-2 bg-surface-800 rounded-lg px-3 py-2">
+                <span :class="memberTypeBadge(m.member_type)" class="shrink-0">{{ memberTypeLabel(m.member_type) }}</span>
+                <span class="text-sm text-ink-200 truncate">{{ m.first_name }} {{ m.last_name }}</span>
+              </div>
             </div>
           </div>
-        </div>
-        <div v-else class="text-sm text-ink-500 italic">
-          This site is not allocated for the selected camp.
+          <div v-else class="text-sm text-ink-500 italic">No household assigned to this site.</div>
+
+          <!-- Household picker -->
+          <div class="pt-1 space-y-2">
+            <label class="field-label">{{ detailData.alloc ? 'Change household' : 'Assign household' }}</label>
+            <input v-model="hhSearch" type="text" placeholder="Search household name…" class="text-sm w-full" />
+            <div class="max-h-52 overflow-y-auto rounded-lg border border-surface-600 divide-y divide-surface-700">
+              <button v-for="h in filteredHouseholds" :key="h.id"
+                @click="selectHousehold(h)"
+                :class="['w-full text-left px-3 py-2 flex items-center justify-between gap-2 transition-colors',
+                  pendingHousehold?.id === h.id ? 'bg-ember-500/15'
+                    : h.id === currentHouseholdId ? 'bg-surface-800' : 'hover:bg-surface-700']">
+                <span class="min-w-0 truncate">
+                  <span class="text-sm text-ink-200">{{ h.name }}</span>
+                  <span class="text-xs text-ink-600 ml-1">({{ h.member_count }})</span>
+                  <span v-if="h.id === currentHouseholdId" class="text-[10px] text-ember-400 ml-1">· current</span>
+                </span>
+                <span v-if="h.sites.length" class="badge bg-surface-600 text-ink-400 shrink-0 text-[10px]">
+                  Site {{ h.sites.join(', ') }}
+                </span>
+                <span v-else class="text-[10px] text-emerald-400 shrink-0">Unallocated</span>
+              </button>
+              <div v-if="!filteredHouseholds.length" class="px-3 py-3 text-sm text-ink-600 italic">No households match.</div>
+            </div>
+
+            <!-- Allocation notes -->
+            <div v-if="pendingChanged || detailData.alloc">
+              <label class="field-label">Allocation notes</label>
+              <input v-model="allocNotes" type="text" placeholder="Optional notes for this allocation" class="text-sm w-full" />
+            </div>
+
+            <!-- Conflict resolution: household already on another site -->
+            <div v-if="pendingConflict" class="card p-3 border border-amber-500/30 bg-amber-500/5 space-y-2">
+              <div class="text-sm text-amber-400">
+                <span class="font-semibold">{{ pendingHousehold.name }}</span> is already allocated to
+                Site {{ pendingConflict.join(', ') }}.
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <button @click="commitAllocation('transfer')" :disabled="allocSaving" class="btn btn-primary btn-sm">
+                  Transfer to Site {{ detailData.site.site_number }}
+                </button>
+                <button @click="commitAllocation('both')" :disabled="allocSaving"
+                  class="btn btn-ghost btn-sm border border-surface-500">Keep on both sites</button>
+                <button @click="pendingHousehold = null" :disabled="allocSaving"
+                  class="btn btn-ghost btn-sm text-ink-400">Cancel</button>
+              </div>
+            </div>
+
+            <!-- Plain assign (no conflict) -->
+            <div v-else-if="pendingChanged" class="flex justify-end">
+              <button @click="commitAllocation('')" :disabled="allocSaving" class="btn btn-primary btn-sm">
+                {{ allocSaving ? 'Saving…' : (detailData.alloc ? `Change to ${pendingHousehold.name}` : `Assign ${pendingHousehold.name}`) }}
+              </button>
+            </div>
+          </div>
         </div>
 
         <!-- Payment history -->
@@ -349,6 +429,29 @@
 
     </template><!-- end sites view -->
 
+    <!-- ── Assign-to-site modal (from Unallocated tab) ────────────────────── -->
+    <AppModal v-model="showAssignSite" :title="`Assign ${assignCtx?.household_name ?? ''}`" width="sm:max-w-lg">
+      <div class="space-y-3">
+        <input v-model="siteSearch" type="text" placeholder="Search site # or type…" class="text-sm w-full" />
+        <div class="max-h-72 overflow-y-auto rounded-lg border border-surface-600 divide-y divide-surface-700">
+          <button v-for="s in filteredVacantSites" :key="s.site_id"
+            @click="assignToSite(s)" :disabled="allocSaving"
+            class="w-full text-left px-3 py-2 flex items-center justify-between gap-2 hover:bg-surface-700 transition-colors">
+            <span class="font-semibold text-ink-100">{{ s.site_number }}</span>
+            <span class="text-xs text-ink-500 flex items-center gap-2">
+              <span :class="typeBadge(s.site_type)">{{ s.site_type || 'General' }}</span>
+              <span v-if="s.power" class="text-amber-400">⚡</span>
+              <span>👥 {{ s.capacity }}</span>
+            </span>
+          </button>
+          <div v-if="!filteredVacantSites.length" class="px-3 py-3 text-sm text-ink-600 italic">No vacant sites match.</div>
+        </div>
+      </div>
+      <template #footer>
+        <button @click="showAssignSite = false" class="btn btn-ghost ml-auto">Close</button>
+      </template>
+    </AppModal>
+
   </div>
 </template>
 
@@ -388,6 +491,72 @@ const wlSortBy         = ref('rank')   // 'rank' | 'date'
 const wlStatuses       = ['Active', 'Contacted', 'Allocated', 'Archived']
 const wlPriorities     = ['High', 'Medium', 'Low']
 const wlStatusFilters  = ['All', 'Active', 'Contacted', 'Allocated', 'Archived']
+
+// ── Allocation state (merged from the former Allocation page) ───────────────────
+const allocRows            = ref([])    // every site → household row (perpetual)
+const unassignedHouseholds = ref([])    // households with no site
+const hhSearch             = ref('')    // household picker search (site detail)
+const pendingHousehold     = ref(null)  // staged household selection in site detail
+const allocNotes           = ref('')    // notes for the allocation being edited
+const allocSaving          = ref(false)
+const unallocSearch        = ref('')    // Unallocated tab search
+const showAssignSite       = ref(false) // Unallocated → pick-a-site modal
+const assignCtx            = ref(null)  // { household_id, household_name }
+const siteSearch           = ref('')    // vacant-site picker search
+
+const viewTabs = computed(() => [
+  { value: 'sites',       label: 'Sites',       count: 0 },
+  { value: 'unallocated', label: 'Unallocated', count: unassignedHouseholds.value.length },
+  { value: 'waitlist',    label: 'Waitlist',    count: waitlistActiveCount.value },
+])
+const viewSubtitle = computed(() => ({
+  sites:       'Physical site registry',
+  unallocated: 'Households without a site',
+  waitlist:    'Site allocation waitlist',
+}[activeView.value] ?? ''))
+
+// Deduped household list (with the site numbers each one occupies) for the picker
+const allHouseholds = computed(() => {
+  const map = new Map()
+  for (const a of allocRows.value) {
+    if (!a.household_id) continue
+    if (!map.has(a.household_id))
+      map.set(a.household_id, { id: a.household_id, name: a.household_name, member_count: a.member_count, sites: [] })
+    map.get(a.household_id).sites.push(a.site_number)
+  }
+  for (const u of unassignedHouseholds.value) {
+    if (!map.has(u.id))
+      map.set(u.id, { id: u.id, name: u.name, member_count: u.member_count, sites: [] })
+  }
+  return [...map.values()].sort((a, b) => String(a.name).localeCompare(String(b.name)))
+})
+const filteredHouseholds = computed(() => {
+  const q = hhSearch.value.trim().toLowerCase()
+  return q ? allHouseholds.value.filter(h => String(h.name).toLowerCase().includes(q)) : allHouseholds.value
+})
+const filteredUnalloc = computed(() => {
+  const q = unallocSearch.value.trim().toLowerCase()
+  return q ? unassignedHouseholds.value.filter(h => String(h.name).toLowerCase().includes(q)) : unassignedHouseholds.value
+})
+const vacantSites = computed(() => allocRows.value.filter(a => !a.household_id))
+const filteredVacantSites = computed(() => {
+  const q = siteSearch.value.trim().toLowerCase()
+  if (!q) return vacantSites.value
+  return vacantSites.value.filter(s =>
+    String(s.site_number).toLowerCase().includes(q) || String(s.site_type ?? '').toLowerCase().includes(q))
+})
+
+const currentSiteNumber  = computed(() => detailData.value?.site?.site_number)
+const currentHouseholdId = computed(() => detailData.value?.alloc?.household_id ?? null)
+const pendingChanged     = computed(() =>
+  !!pendingHousehold.value && pendingHousehold.value.id !== currentHouseholdId.value)
+// Other sites the staged household already occupies (→ requires user resolution)
+const pendingConflict = computed(() => {
+  if (!pendingChanged.value) return null
+  const others = (pendingHousehold.value.sites || [])
+    .filter(sn => String(sn) !== String(currentSiteNumber.value))
+  return others.length ? others : null
+})
 
 const detailCamps = computed(() => {
   if (!detailData.value?.payments) return []
@@ -567,11 +736,107 @@ async function openDetail(s) {
   detailData.value    = null
   detailLoading.value = true
   detailCampFilter.value = ''
+  pendingHousehold.value = null
+  hhSearch.value      = ''
+  allocNotes.value    = ''
   showDetail.value    = true
   try {
     detailData.value = await api.get('/site/detail', { site_id: s.id })
+    allocNotes.value = detailData.value?.alloc?.notes ?? ''
   } catch {}
   detailLoading.value = false
+}
+
+// ── Allocation actions ──────────────────────────────────────────────────────────
+async function loadAllocations() {
+  try {
+    const res = await api.siteAllocations.list()
+    allocRows.value            = res.allocations          ?? []
+    unassignedHouseholds.value = res.unassigned_households ?? []
+  } catch {}
+}
+
+function switchView(v) {
+  activeView.value = v
+  if (v === 'waitlist' && !waitlistItems.value.length) loadWaitlist()
+}
+
+function selectHousehold(h) {
+  pendingHousehold.value = pendingHousehold.value?.id === h.id ? null : h
+}
+
+async function refreshAfterAlloc(siteId) {
+  await Promise.all([loadAllocations(), load()])
+  try {
+    detailData.value = await api.get('/site/detail', { site_id: siteId })
+    allocNotes.value = detailData.value?.alloc?.notes ?? ''
+  } catch {}
+}
+
+async function commitAllocation(mode = '') {
+  const site = detailData.value?.site
+  const h    = pendingHousehold.value
+  if (!site || !h) return
+  allocSaving.value = true
+  try {
+    await api.siteAllocations.create({
+      site_id:      site.id,
+      household_id: h.id,
+      notes:        allocNotes.value,
+      conflict:     mode,
+    })
+    toast?.add('Household allocated', 'success')
+    pendingHousehold.value = null
+    hhSearch.value = ''
+    await refreshAfterAlloc(site.id)
+  } catch (e) {
+    toast?.add(e?.data?.message || 'Allocation failed', 'error')
+  } finally {
+    allocSaving.value = false
+  }
+}
+
+async function unassignCurrent() {
+  const allocId = detailData.value?.alloc?.id
+  const siteId  = detailData.value?.site?.id
+  if (!allocId || !siteId) return
+  if (!confirm('Unassign this household from the site?')) return
+  allocSaving.value = true
+  try {
+    await api.siteAllocations.delete(allocId)
+    toast?.add('Site unassigned', 'success')
+    await refreshAfterAlloc(siteId)
+  } catch {
+    toast?.add('Failed to unassign', 'error')
+  } finally {
+    allocSaving.value = false
+  }
+}
+
+// Unallocated tab → pick a vacant site for a household
+function openAssignSite(h) {
+  assignCtx.value = { household_id: h.id, household_name: h.name }
+  siteSearch.value = ''
+  showAssignSite.value = true
+}
+async function assignToSite(siteRow) {
+  if (!assignCtx.value) return
+  allocSaving.value = true
+  try {
+    await api.siteAllocations.create({
+      site_id:      siteRow.site_id,
+      household_id: assignCtx.value.household_id,
+      notes:        '',
+      conflict:     '',
+    })
+    toast?.add('Household allocated', 'success')
+    showAssignSite.value = false
+    await Promise.all([loadAllocations(), load()])
+  } catch (e) {
+    toast?.add(e?.data?.message || 'Allocation failed', 'error')
+  } finally {
+    allocSaving.value = false
+  }
 }
 
 function openEditFromDetail() {
@@ -619,6 +884,6 @@ async function doDelete() {
 
 onMounted(async () => {
   await loadCamps()
-  await load()
+  await Promise.all([load(), loadAllocations()])
 })
 </script>

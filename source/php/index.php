@@ -3752,6 +3752,11 @@ $router->post('/api/site-allocations', $protected('access_operations', function 
     $siteId      = (int)($data['site_id']      ?? 0);
     $householdId = (int)($data['household_id'] ?? 0);
     $notes       = trim($data['notes']         ?? '');
+    // Conflict resolution when the household is already allocated to another site:
+    //   ''         → block (409) — safety net; the UI resolves conflicts before sending
+    //   'transfer' → move the household here (remove its other-site allocations first)
+    //   'both'     → keep existing allocations and add this site too (households may own 2+ sites)
+    $conflictMode = trim($data['conflict'] ?? '');
     if ($siteId <= 0 || $householdId <= 0) {
         http_response_code(400); echo json_encode(['message' => 'Site and household are required']); return;
     }
@@ -3759,7 +3764,15 @@ $router->post('/api/site-allocations', $protected('access_operations', function 
     $conflict = $db->prepare("SELECT id FROM site_allocations WHERE household_id=? AND site_id<>? LIMIT 1");
     $conflict->execute([$householdId, $siteId]);
     if ($conflict->fetchColumn()) {
-        http_response_code(409); echo json_encode(['message' => 'Household already allocated to another site']); return;
+        if ($conflictMode === 'transfer') {
+            $db->prepare("DELETE FROM site_allocations WHERE household_id=? AND site_id<>?")
+               ->execute([$householdId, $siteId]);
+        } elseif ($conflictMode !== 'both') {
+            http_response_code(409);
+            echo json_encode(['message' => 'Household already allocated to another site', 'conflict' => true]);
+            return;
+        }
+        // 'both' falls through: the household keeps its other sites and gains this one.
     }
 
     $existing = $db->prepare("SELECT id FROM site_allocations WHERE site_id=? LIMIT 1");

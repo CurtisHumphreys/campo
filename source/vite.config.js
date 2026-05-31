@@ -11,7 +11,7 @@ export default defineConfig({
       injectRegister: false,
       filename: 'sw.js',
       // Only the intranet entry gets the PWA treatment
-      includeAssets: ['favicon.ico', 'icons/*.png'],
+      includeAssets: ['favicon.ico', 'pwa-icons/*.png'],
       manifest: {
         name: 'CAMPO Intranet',
         short_name: 'CAMPO',
@@ -23,9 +23,9 @@ export default defineConfig({
         start_url: '/intranet/',
         scope: '/intranet/',
         icons: [
-          { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png' },
-          { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png' },
-          { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' }
+          { src: '/pwa-icons/icon-192.png', sizes: '192x192', type: 'image/png' },
+          { src: '/pwa-icons/icon-512.png', sizes: '512x512', type: 'image/png' },
+          { src: '/pwa-icons/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' }
         ]
       },
       workbox: {

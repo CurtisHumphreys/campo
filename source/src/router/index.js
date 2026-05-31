@@ -12,7 +12,7 @@ const routes = [
   { path: '/members',    component: () => import('@/views/admin/Members.vue'),   name: 'members' },
   { path: '/rates',      component: () => import('@/views/admin/Rates.vue'),     name: 'rates' },
   { path: '/sites',      component: () => import('@/views/admin/Sites.vue'),       name: 'sites' },
-  { path: '/allocation', component: () => import('@/views/admin/Allocation.vue'),  name: 'allocation' },
+  { path: '/allocation', redirect: '/sites' },
   { path: '/import',       component: () => import('@/views/admin/Import.vue'),       name: 'import' },
   { path: '/map',          component: () => import('@/views/admin/MapAdmin.vue'),     name: 'map' },
   { path: '/payments',         component: () => import('@/views/admin/Payments.vue'),       name: 'payments' },

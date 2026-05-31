@@ -5,6 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CAMPO Admin</title>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <meta name="theme-color" content="#f59e0b">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="CAMPO Admin">
+  <link rel="apple-touch-icon" href="/pwa-icons/icon-192.png">
+  <!-- Admin PWA manifest. Declared first so it takes precedence over the
+       intranet manifest that vite-plugin-pwa injects at the end of <head>
+       (browsers use the first <link rel="manifest">). start_url is /dashboard
+       so signed-in users land on the dashboard and the router guard sends
+       signed-out users to /login. (Avoid "/" — its redirect record bounces
+       authenticated users to /login on a cold load.) -->
+  <link rel="manifest" href="/admin.webmanifest">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
