@@ -9,7 +9,7 @@ Automated backup of the CampOffice app from ForgeBox.
 | API files | `api/` |
 | Database dump | `database/campoffice-dump.sql` |
 
-**Last backup:** 2026-06-04 03:00:02 ACST
+**Last backup:** 2026-06-05 03:00:01 ACST
 
 ## Restore
 
