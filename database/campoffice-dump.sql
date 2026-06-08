@@ -1090,7 +1090,7 @@ CREATE TABLE `faim_audit_log` (
   KEY `idx_faim_audit_event_type` (`event_type`),
   KEY `idx_faim_audit_thread_id` (`thread_id`),
   KEY `idx_faim_audit_draft_id` (`draft_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=609 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=658 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1702,7 +1702,56 @@ INSERT INTO `faim_audit_log` VALUES
 (605,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-09T11:12:59\", \"repeated_context\": false}','2026-06-07 15:43:06'),
 (606,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-07 15:43:06'),
 (607,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-09T11:12:59\", \"repeated_context\": false}','2026-06-07 16:43:06'),
-(608,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-07 16:43:06');
+(608,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-07 16:43:06'),
+(609,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-09T11:12:59\", \"repeated_context\": false}','2026-06-07 17:43:07'),
+(610,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-07 17:43:07'),
+(611,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-09T11:12:59\", \"repeated_context\": false}','2026-06-07 18:43:07'),
+(612,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-07 18:43:07'),
+(613,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-09T11:12:59\", \"repeated_context\": false}','2026-06-07 19:43:07'),
+(614,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-07 19:43:07'),
+(615,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-09T11:12:59\", \"repeated_context\": false}','2026-06-07 20:43:08'),
+(616,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-07 20:43:08'),
+(617,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-09T11:12:59\", \"repeated_context\": false}','2026-06-07 21:43:08'),
+(618,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-07 21:43:08'),
+(619,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-09T11:12:59\", \"repeated_context\": false}','2026-06-07 22:43:09'),
+(620,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-07 22:43:09'),
+(621,'digest','info',NULL,NULL,NULL,'daily_digest','sent','FAIM digest — 2 for you, 2 promises overdue, 3 follow-ups due','{\"auto_sent\": 1, \"candidates\": 17, \"flags\": 0, \"held\": 2, \"lapsed\": 2, \"overdue\": 3}','2026-06-07 22:43:09'),
+(622,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-09T11:12:59\", \"repeated_context\": false}','2026-06-07 23:43:10'),
+(623,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-07 23:43:10'),
+(624,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-09T11:12:59\", \"repeated_context\": false}','2026-06-08 00:43:10'),
+(625,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-08 00:43:10'),
+(626,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-09T11:12:59\", \"repeated_context\": false}','2026-06-08 01:43:10'),
+(627,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-08 01:43:10'),
+(628,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-09T11:12:59\", \"repeated_context\": false}','2026-06-08 02:43:11'),
+(629,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-08 02:43:11'),
+(630,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-09T11:12:59\", \"repeated_context\": false}','2026-06-08 03:43:11'),
+(631,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-08 03:43:11'),
+(632,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-09T11:12:59\", \"repeated_context\": false}','2026-06-08 04:43:12'),
+(633,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-08 04:43:12'),
+(634,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-09T11:12:59\", \"repeated_context\": false}','2026-06-08 05:43:12'),
+(635,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-08 05:43:12'),
+(636,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-09T11:12:59\", \"repeated_context\": false}','2026-06-08 06:43:13'),
+(637,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-08 06:43:13'),
+(638,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-09T11:12:59\", \"repeated_context\": false}','2026-06-08 07:43:13'),
+(639,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-08 07:43:13'),
+(640,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-09T11:12:59\", \"repeated_context\": false}','2026-06-08 08:43:14'),
+(641,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-08 08:43:14'),
+(642,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-09T11:12:59\", \"repeated_context\": false}','2026-06-08 09:43:14'),
+(643,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-08 09:43:14'),
+(644,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-09T11:12:59\", \"repeated_context\": false}','2026-06-08 10:43:14'),
+(645,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-08 10:43:14'),
+(646,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-09T11:12:59\", \"repeated_context\": false}','2026-06-08 11:43:15'),
+(647,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-08 11:43:15'),
+(648,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-09T11:12:59\", \"repeated_context\": false}','2026-06-08 12:43:15'),
+(649,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-08 12:43:15'),
+(650,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-09T11:12:59\", \"repeated_context\": false}','2026-06-08 13:43:16'),
+(651,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-08 13:43:16'),
+(652,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-09T11:12:59\", \"repeated_context\": false}','2026-06-08 14:43:16'),
+(653,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-08 14:43:16'),
+(654,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-09T11:12:59\", \"repeated_context\": false}','2026-06-08 15:43:17'),
+(655,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-08 15:43:17'),
+(656,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-09T11:12:59\", \"repeated_context\": false}','2026-06-08 16:43:17'),
+(657,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-08 16:43:17');
 /*!40000 ALTER TABLE `faim_audit_log` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -2949,8 +2998,8 @@ LOCK TABLES `home_adapters` WRITE;
 /*!40000 ALTER TABLE `home_adapters` DISABLE KEYS */;
 set autocommit=0;
 INSERT INTO `home_adapters` VALUES
-('ble','Bluetooth','ble','{\"id\": \"ble\", \"name\": \"Bluetooth\", \"protocol\": \"ble\", \"capabilities\": [], \"discovery\": \"scan\", \"mqtt_prefix\": \"fbhome/ble\"}','running','2026-06-08 03:00:00'),
-('wifi','Wi-Fi','wifi','{\"id\": \"wifi\", \"name\": \"Wi-Fi\", \"protocol\": \"wifi\", \"capabilities\": [\"on_off\"], \"discovery\": \"mdns\", \"mqtt_prefix\": \"fbhome/wifi\"}','running','2026-06-08 02:59:52');
+('ble','Bluetooth','ble','{\"id\": \"ble\", \"name\": \"Bluetooth\", \"protocol\": \"ble\", \"capabilities\": [], \"discovery\": \"scan\", \"mqtt_prefix\": \"fbhome/ble\"}','running','2026-06-09 02:59:55'),
+('wifi','Wi-Fi','wifi','{\"id\": \"wifi\", \"name\": \"Wi-Fi\", \"protocol\": \"wifi\", \"capabilities\": [\"on_off\"], \"discovery\": \"mdns\", \"mqtt_prefix\": \"fbhome/wifi\"}','running','2026-06-09 02:59:58');
 /*!40000 ALTER TABLE `home_adapters` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -5333,7 +5382,7 @@ CREATE TABLE `whatsapp_messages` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uq_msg` (`message_id`,`chat_jid`),
   KEY `idx_wa_account` (`wa_account`)
-) ENGINE=InnoDB AUTO_INCREMENT=6927 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6949 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -12235,7 +12284,29 @@ INSERT INTO `whatsapp_messages` VALUES
 (6923,'AC4EF4369FFE65AF14148DE67CC27DB5','120363400149665337@g.us',NULL,'Jo','174998509637808@lid','Sally',0,'Rachel had a baby boy yesterday. About 8pounds. No name as yet.👶🥰',NULL,'conversation',1780839653,'2026-06-07 13:40:53',NULL,NULL,NULL),
 (6924,'AC37361F39C276EE647332FFC3DFFFE3','120363400149665337@g.us',NULL,'Jo','50732220870663@lid','Jo',0,NULL,NULL,'reactionMessage',1780842700,'2026-06-07 14:31:40',NULL,'❤️','3A74C3C147D0352ADF52'),
 (6925,'AC8FD3CC94834A6EEFEB9100C263EBF5','120363400149665337@g.us',NULL,'Jo','50732220870663@lid','Jo',0,NULL,NULL,'reactionMessage',1780842709,'2026-06-07 14:31:50',NULL,'❤️','AC4EF4369FFE65AF14148DE67CC27DB5'),
-(6926,'AC31E1151502412013F10034D15EDA57','120363400149665337@g.us',NULL,'Jo','50732220870663@lid','Jo',0,NULL,NULL,'reactionMessage',1780842711,'2026-06-07 14:31:51',NULL,'❤️','AC1010B97421AD20F8025A25EDE69461');
+(6926,'AC31E1151502412013F10034D15EDA57','120363400149665337@g.us',NULL,'Jo','50732220870663@lid','Jo',0,NULL,NULL,'reactionMessage',1780842711,'2026-06-07 14:31:51',NULL,'❤️','AC1010B97421AD20F8025A25EDE69461'),
+(6927,'AC10E193F558A9EEE535D02BBBDF0512','61419807085-1517197220@g.us',NULL,'Chas Hilder','2388035428499@lid','Andrew Blacket',0,'https://www.youtube.com/live/uYGPWf9Jqmo?si=WbayhUQeOW3_BzSl',NULL,'senderKeyDistributionMessage',1780873647,'2026-06-07 23:07:27',NULL,NULL,NULL),
+(6928,'ACDF8B52F45A7F373AECD0E5496A9305','61419807085-1517197220@g.us',NULL,'Chas Hilder','2388035428499@lid','Andrew Blacket',0,'For those unable to make it in person today here is the livestream link. 11am start',NULL,'conversation',1780873647,'2026-06-07 23:07:27',NULL,NULL,NULL),
+(6929,'3AF46F4FB6E2B13D8114','61419807085-1517197220@g.us',NULL,'Chas Hilder','164085366820991@lid','Wayne Davies',0,NULL,NULL,'reactionMessage',1780873850,'2026-06-07 23:10:51',NULL,'🙏','ACDF8B52F45A7F373AECD0E5496A9305'),
+(6930,'3BAE63CB250A3480A176','61419807085-1517197220@g.us',NULL,'Chas Hilder','121066638844004@lid','Ben Campbell',0,NULL,NULL,'reactionMessage',1780874055,'2026-06-07 23:14:16',NULL,'👍','AC10E193F558A9EEE535D02BBBDF0512'),
+(6931,'3A6FDF1F70A52CAEDE42','61419807085-1517197220@g.us',NULL,'Chas Hilder','254992241963225@lid','Phil Capel',0,NULL,NULL,'reactionMessage',1780874991,'2026-06-07 23:29:51',NULL,'👍','AC10E193F558A9EEE535D02BBBDF0512'),
+(6932,'AC4FB03E0D005ED9BCEB6FAC809CC7E9','61419807085-1517197220@g.us',NULL,'Chas Hilder','163419294552259@lid','Matt Rose',0,NULL,NULL,'reactionMessage',1780876864,'2026-06-08 00:01:04',NULL,'❤️','AC10E193F558A9EEE535D02BBBDF0512'),
+(6933,'3A67AC9F50701A3DB230','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'Sorry to be a pain Dwayne but can I get a short answer on the above and also the loyalty system, as I want to go back to screaming seagull this week and give them an update if I can. Thanks bro',NULL,'conversation',1780883307,'2026-06-08 01:48:27',NULL,NULL,NULL),
+(6934,'3AA33F61ED988049DDEC','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,'Both don’t currently exist in the system. But soon, very soon. I’m only working on VMS at the moment.',NULL,'conversation',1780883695,'2026-06-08 01:54:55',NULL,NULL,NULL),
+(6935,'3AA16B076E45FC1B3EA1','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'Ok. Cheers for that.',NULL,'conversation',1780883774,'2026-06-08 01:56:14',NULL,NULL,NULL),
+(6936,'AC5ED666F4D1370B9B592670713FBD46','120363400149665337@g.us',NULL,'Jo','174998509637808@lid','Sally',0,NULL,'video','videoMessage',1780886041,'2026-06-08 02:34:01',NULL,NULL,NULL),
+(6937,'ACDDDA44EF52BC9C26E8707C93CA520D','61403505790-1587861828@g.us',NULL,'Cameron','195549894570056@lid','Jonny Welch',0,'Atrium (Small) Lectern Birddog Play - Main NDI Source is middle monitor from Atrium AV PC - Failover NDI Source is vMix Stream output from Main Hall AV PC. \n\nThis setup when Atrium AV PC turned on, allows Thurs C&C etc to project Presenter Mode from PowerPoint as Main NDI feed to lectern, and when used in Main Hall for Wednesdays, the Atrium AV PC *MUST* be turned *OFF*, to allow it to pickup Failover NDI feed to send vMix to lectern.\n\nWhen returning to Atrium, please plug in lectern and turn on Atrium AV PC to check correct connections.\n\nThanks!\n\nGB Jonny','image','imageMessage',1780889486,'2026-06-08 03:31:26',NULL,NULL,NULL),
+(6938,'3A01768242760EEC3427','22784851845171@lid',NULL,'Khaleedbbv','22784851845171@lid','Khaleedbbv',0,'Solar Report & Recommendations for 6 Parker St.xlsx','document','documentMessage',1780892756,'2026-06-08 04:25:56',NULL,NULL,NULL),
+(6939,'3A99FCE5FA45738AFB5D','22784851845171@lid',NULL,'Khaleedbbv','22784851845171@lid','Khaleedbbv',0,'Solar Report & Recommendations for 51 North Parade.xlsx','document','documentMessage',1780892757,'2026-06-08 04:25:57',NULL,NULL,NULL),
+(6940,'3A320E477A42B1389884','22784851845171@lid',NULL,'Khaleedbbv','22784851845171@lid','Khaleedbbv',0,NULL,'image','imageMessage',1780892757,'2026-06-08 04:25:57',NULL,NULL,NULL),
+(6941,'3ABECE15134AD9524C9E','22784851845171@lid',NULL,'Khaleedbbv','22784851845171@lid','Khaleedbbv',0,NULL,'image','imageMessage',1780892757,'2026-06-08 04:25:57',NULL,NULL,NULL),
+(6942,'3A8A40582D973028B315','22784851845171@lid',NULL,'Khaleedbbv','22784851845171@lid','Khaleedbbv',0,NULL,'image','imageMessage',1780892757,'2026-06-08 04:25:57',NULL,NULL,NULL),
+(6943,'3AE0D846590F75955294','22784851845171@lid',NULL,'Khaleedbbv','22784851845171@lid','Khaleedbbv',0,'‏and if you move from any other company to AGL they give you $250 credits.',NULL,'extendedTextMessage',1780894042,'2026-06-08 04:47:22',NULL,NULL,NULL),
+(6944,'AC85EB9A0CF6A1730EDAA08B7DF2546F','120363400149665337@g.us',NULL,'Jo','174998509637808@lid','Sally',0,'Hi all.Correct details now from Anne.Rachel had Oscar William Clarke at 5.40pm on Friday afternoon,5th June, weighing 3.8kgs.( At Mt Barker Hospital) 🥰',NULL,'conversation',1780898079,'2026-06-08 05:54:40',NULL,NULL,NULL),
+(6945,'AC7C36D67690B3917739DD307041755F','120363400149665337@g.us',NULL,'Jo','174998509637808@lid','Sally',0,'P.S 🤣 Congratulations to James too.😊',NULL,'conversation',1780900889,'2026-06-08 06:41:29',NULL,NULL,NULL),
+(6946,'3A8B437A4C8F09714796','265600895029305@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,NULL,NULL,'reactionMessage',1780907845,'2026-06-08 08:37:25',NULL,'😂','3ACF162B055C69A79BFA'),
+(6947,'AC9A0E8B419BECE3B2576615E2747FA6','50732220870663@lid',NULL,'Curtis','50732220870663@lid','Jo',0,'Seaside spit closes in 25min!! You gotta go!!',NULL,'conversation',1780913157,'2026-06-08 10:05:58',NULL,NULL,NULL),
+(6948,'3A8149E02EDC85A6F434','143958747394076@lid',NULL,'Curtis','143958747394076@lid','Peter Goodrich',0,'This is soo good. \nThank you again. \nThe edit I was wondering is,\n‘The Drift’\nthen, below that wording,\n‘A Study Through Hebrews’\nIs that possible?',NULL,'extendedTextMessage',1780921279,'2026-06-08 12:21:19','4A661778951B8E86C28D',NULL,NULL);
 /*!40000 ALTER TABLE `whatsapp_messages` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -12253,4 +12324,4 @@ commit;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2026-06-08  3:00:01
+-- Dump completed on 2026-06-09  3:00:03
