@@ -785,7 +785,7 @@ $router->post('/api/user/change-password', $protected('access_operations', funct
 
 // Config endpoint — serves non-secret config to any logged-in user
 $router->get('/api/config/maps', function () {
-    Auth::requireLogin();
+    if (!Auth::requireLogin()) return;
     $db = Database::connect();
     try {
         $key = $db->query("SELECT setting_value FROM app_settings WHERE setting_key='google_maps_api_key'")->fetchColumn();
@@ -2545,7 +2545,7 @@ $router->get('/api/site/detail', $protected('access_operations', function () {
 
 // ── Dashboard v2: summary ─────────────────────────────────────────────────────
 $router->get('/api/dashboard/summary', function() {
-    Auth::requireLogin();
+    if (!Auth::requireLogin()) return;
     $db  = Database::connect();
     $cid = isset($_GET['camp_id']) ? (int)$_GET['camp_id'] : 0;
 
@@ -2638,7 +2638,7 @@ $router->get('/api/dashboard/summary', function() {
 
 // ── Dashboard v2: reconciliation ──────────────────────────────────────────────
 $router->get('/api/dashboard/reconciliation', function() {
-    Auth::requireLogin();
+    if (!Auth::requireLogin()) return;
     $db        = Database::connect();
     $cid       = (int)($_GET['camp_id'] ?? 0);
     $dateFrom  = $_GET['date_from'] ?? null;
@@ -2678,7 +2678,7 @@ $router->get('/api/dashboard/reconciliation', function() {
 
 // ── Dashboard v2: chart data ──────────────────────────────────────────────────
 $router->get('/api/dashboard/chart-data', function() {
-    Auth::requireLogin();
+    if (!Auth::requireLogin()) return;
     $db  = Database::connect();
     $cid = (int)($_GET['camp_id'] ?? 0);
 
@@ -5046,6 +5046,153 @@ $router->get('/api/household/payment-history', $protected('access_operations', f
     }
     unset($r);
     echo json_encode(['payments' => $rows, 'household_id' => $householdId]);
+}));
+
+// ── Intranet schedule CSV template + import (ported 2026-06-11 from stale /var/www/html/api/campoffice copy) ──
+$router->get('/api/intranet/sessions/template', $protected('access_intranet', function () {
+    if (!headers_sent()) {
+        header('Content-Type: text/csv; charset=utf-8');
+        header('Content-Disposition: attachment; filename="schedule-template.csv"');
+        header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+        header('Pragma: no-cache');
+    }
+    $out = fopen('php://output', 'w');
+    $rows = [
+        ['title', 'date', 'start_time', 'end_time', 'location', 'session_type', 'description'],
+        ['Morning Worship', '2025-01-06', '08:30', '09:30', 'Chapel', 'worship', 'Opening worship session'],
+        ['Breakfast', '2025-01-06', '09:30', '10:30', 'Dining Hall', 'meal', ''],
+        ['Speaker Session 1', '2025-01-06', '10:30', '12:00', 'Main Hall', 'speaker', ''],
+        ['Free Time', '2025-01-06', '14:00', '16:00', '', 'free_time', ''],
+        ['Evening Meal', '2025-01-06', '18:00', '19:00', 'Dining Hall', 'meal', ''],
+    ];
+    foreach ($rows as $row) fputcsv($out, $row);
+    fclose($out);
+}));
+
+$router->post('/api/intranet/sessions/import', $protected('access_intranet', function () {
+    if (!headers_sent()) {
+        header('Content-Type: application/json');
+        header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+    }
+
+    $campId = (int)($_POST['camp_id'] ?? 0);
+    if (!$campId) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'Camp ID is required.']);
+        return;
+    }
+
+    if (!isset($_FILES['file']) || ($_FILES['file']['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'No CSV file uploaded.']);
+        return;
+    }
+
+    $tmp = $_FILES['file']['tmp_name'] ?? '';
+    if (!$tmp || !is_uploaded_file($tmp)) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'File upload failed.']);
+        return;
+    }
+
+    $db = Database::connect();
+    $campRow = $db->prepare("SELECT id FROM camps WHERE id=?");
+    $campRow->execute([$campId]);
+    if (!$campRow->fetch()) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'Camp not found.']);
+        return;
+    }
+
+    $handle = fopen($tmp, 'r');
+    if (!$handle) {
+        http_response_code(500);
+        echo json_encode(['success' => false, 'message' => 'Could not read uploaded file.']);
+        return;
+    }
+
+    $rawHeaders = fgetcsv($handle);
+    if (!$rawHeaders) {
+        fclose($handle);
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'CSV file is empty or unreadable.']);
+        return;
+    }
+
+    $headers = array_map(fn($h) => strtolower(trim((string)$h)), $rawHeaders);
+    if (!in_array('title', $headers, true)) {
+        fclose($handle);
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => "CSV is missing required column 'title'."]);
+        return;
+    }
+    $colIdx = array_flip($headers);
+
+    $validTypes = ['general', 'meeting', 'meal', 'activity', 'free_time', 'other', 'worship', 'speaker'];
+    $rows = [];
+    $errors = [];
+    $rowNum = 1;
+
+    while (($row = fgetcsv($handle)) !== false) {
+        $rowNum++;
+        if (count($row) === 1 && trim((string)$row[0]) === '') continue;
+
+        $title = trim((string)($row[$colIdx['title']] ?? ''));
+        if ($title === '') {
+            $errors[] = "Row {$rowNum}: title is required — row skipped.";
+            continue;
+        }
+
+        $date = trim((string)($row[$colIdx['date']] ?? ''));
+        if ($date !== '') {
+            if (preg_match('/^(\d{2})\/(\d{2})\/(\d{4})$/', $date, $m)) {
+                $date = "{$m[3]}-{$m[2]}-{$m[1]}";
+            }
+            if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $date)) {
+                $errors[] = "Row {$rowNum}: invalid date '{$date}' (use YYYY-MM-DD or DD/MM/YYYY) — row skipped.";
+                continue;
+            }
+        } else {
+            $date = null;
+        }
+
+        $startTime = trim((string)($row[$colIdx['start_time']] ?? '')) ?: null;
+        $endTime   = trim((string)($row[$colIdx['end_time']] ?? '')) ?: null;
+        $location  = substr(trim((string)($row[$colIdx['location']] ?? '')), 0, 255) ?: null;
+
+        $sessionType = strtolower(trim((string)($row[$colIdx['session_type']] ?? 'general')));
+        if (!in_array($sessionType, $validTypes, true)) $sessionType = 'general';
+
+        $description = trim((string)($row[$colIdx['description']] ?? '')) ?: null;
+
+        $rows[] = [substr($title, 0, 255), $date, $startTime, $endTime, $location, $sessionType, $description];
+    }
+    fclose($handle);
+
+    if (empty($rows) && empty($errors)) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'No data rows found in the CSV.']);
+        return;
+    }
+
+    $db->beginTransaction();
+    try {
+        $db->prepare("DELETE FROM camp_sessions WHERE camp_id=?")->execute([$campId]);
+        $ins = $db->prepare(
+            "INSERT INTO camp_sessions (camp_id,title,date,start_time,end_time,location,session_type,description) VALUES (?,?,?,?,?,?,?,?)"
+        );
+        foreach ($rows as $r) {
+            $ins->execute(array_merge([$campId], $r));
+        }
+        $db->commit();
+    } catch (Exception $e) {
+        $db->rollBack();
+        http_response_code(500);
+        echo json_encode(['success' => false, 'message' => 'Database error: ' . $e->getMessage()]);
+        return;
+    }
+
+    echo json_encode(['success' => true, 'imported' => count($rows), 'errors' => $errors]);
 }));
 
 $router->dispatch();

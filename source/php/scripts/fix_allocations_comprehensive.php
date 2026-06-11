@@ -1,4 +1,5 @@
 <?php
+if (php_sapi_name() !== 'cli') { http_response_code(404); exit; } // CLI-only maintenance script
 // Comprehensive allocation fix.
 // Section 1: Split 8 merged households, fix 4 wrong-site allocations.
 // Section 2: Eric Thomas + Indigo both get their two sites; Jarra → Site 153.

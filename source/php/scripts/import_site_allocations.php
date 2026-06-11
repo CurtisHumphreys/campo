@@ -1,4 +1,5 @@
 <?php
+if (php_sapi_name() !== 'cli') { http_response_code(404); exit; } // CLI-only maintenance script
 // Import site allocations from legacy SQL dump.
 // Matches legacy members → CampOffice households via churchsuite_person_id.
 // Inserts perpetual (non-camp) allocations.

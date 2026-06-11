@@ -1,4 +1,5 @@
 <?php
+if (php_sapi_name() !== 'cli') { http_response_code(404); exit; } // CLI-only maintenance script
 // Diagnostic: cross-reference legacy site allocations vs CampOffice data.
 // Flags:
 //   A) Person in legacy has site X, but their CO household has a different site (or no site).
