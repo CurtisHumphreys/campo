@@ -1092,7 +1092,7 @@ CREATE TABLE `faim_audit_log` (
   KEY `idx_faim_audit_event_type` (`event_type`),
   KEY `idx_faim_audit_thread_id` (`thread_id`),
   KEY `idx_faim_audit_draft_id` (`draft_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=882 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=897 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1977,7 +1977,22 @@ INSERT INTO `faim_audit_log` VALUES
 (878,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-13T12:04:15\", \"repeated_context\": false}','2026-06-12 15:34:52'),
 (879,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-12 15:34:52'),
 (880,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-13T12:04:15\", \"repeated_context\": false}','2026-06-12 16:34:52'),
-(881,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-12 16:34:52');
+(881,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-12 16:34:52'),
+(882,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-13T12:04:15\", \"repeated_context\": false}','2026-06-12 17:34:53'),
+(883,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-12 17:34:53'),
+(884,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-13T12:04:15\", \"repeated_context\": false}','2026-06-12 18:34:53'),
+(885,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-12 18:34:53'),
+(886,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-13T12:04:15\", \"repeated_context\": false}','2026-06-12 19:34:54'),
+(887,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-12 19:34:54'),
+(888,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-13T12:04:15\", \"repeated_context\": false}','2026-06-12 20:34:54'),
+(889,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-12 20:34:54'),
+(890,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-13T12:04:15\", \"repeated_context\": false}','2026-06-12 21:34:54'),
+(891,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-12 21:34:54'),
+(892,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-13T12:04:15\", \"repeated_context\": false}','2026-06-12 22:34:55'),
+(893,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-12 22:34:55'),
+(894,'digest','info',NULL,NULL,NULL,'daily_digest','sent','FAIM digest — 2 for you, 4 promises overdue, 3 follow-ups due','{\"auto_sent\": 0, \"candidates\": 24, \"flags\": 0, \"held\": 2, \"lapsed\": 4, \"overdue\": 3}','2026-06-12 22:34:55'),
+(895,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-13T12:04:15\", \"repeated_context\": false}','2026-06-12 23:00:48'),
+(896,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-12 23:00:48');
 /*!40000 ALTER TABLE `faim_audit_log` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -3244,8 +3259,8 @@ LOCK TABLES `home_adapters` WRITE;
 /*!40000 ALTER TABLE `home_adapters` DISABLE KEYS */;
 set autocommit=0;
 INSERT INTO `home_adapters` VALUES
-('ble','Bluetooth','ble','{\"id\": \"ble\", \"name\": \"Bluetooth\", \"protocol\": \"ble\", \"capabilities\": [], \"discovery\": \"scan\", \"mqtt_prefix\": \"fbhome/ble\"}','running','2026-06-13 02:59:53'),
-('wifi','Wi-Fi','wifi','{\"id\": \"wifi\", \"name\": \"Wi-Fi\", \"protocol\": \"wifi\", \"capabilities\": [\"on_off\"], \"discovery\": \"mdns\", \"mqtt_prefix\": \"fbhome/wifi\"}','running','2026-06-13 02:59:54');
+('ble','Bluetooth','ble','{\"id\": \"ble\", \"name\": \"Bluetooth\", \"protocol\": \"ble\", \"capabilities\": [], \"discovery\": \"scan\", \"mqtt_prefix\": \"fbhome/ble\"}','running','2026-06-06 01:05:35'),
+('wifi','Wi-Fi','wifi','{\"id\": \"wifi\", \"name\": \"Wi-Fi\", \"protocol\": \"wifi\", \"capabilities\": [\"on_off\"], \"discovery\": \"mdns\", \"mqtt_prefix\": \"fbhome/wifi\"}','running','2026-06-06 01:05:35');
 /*!40000 ALTER TABLE `home_adapters` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -4678,7 +4693,7 @@ CREATE TABLE `movies_prepare_jobs` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uq_movies_cache_key` (`cache_key`),
   KEY `idx_movies_status` (`status`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4690,7 +4705,7 @@ LOCK TABLES `movies_prepare_jobs` WRITE;
 set autocommit=0;
 INSERT INTO `movies_prepare_jobs` VALUES
 (7,'GoT/Game.of.Thrones.S01E05.The.Wolf.and.the.Lion.1080p.10bit.BluRay.6CH.x265.HEVC-PSA.mkv',947087613,1780661776,'685d76c7989521bdc1074a7031b191f93f1d358f','done',100,NULL,'2026-06-12 13:47:13','2026-06-12 13:57:20','2026-06-12 13:57:20'),
-(13,'GoT/Game.of.Thrones.S01E03.Lord.Snow.1080p.10bit.BluRay.6CH.x265.HEVC-PSA.mkv',973999488,1781013740,'8bc961ae23857ac46b4b98ca90fd55839166c5bb','done',100,NULL,'2026-06-12 13:57:16','2026-06-12 13:57:52','2026-06-12 13:57:52'),
+(13,'GoT/Game.of.Thrones.S01E03.Lord.Snow.1080p.10bit.BluRay.6CH.x265.HEVC-PSA.mkv',973999488,1781013740,'8bc961ae23857ac46b4b98ca90fd55839166c5bb','done',100,NULL,'2026-06-12 13:57:16','2026-06-12 22:27:01','2026-06-12 22:27:01'),
 (14,'GoT/Game.of.Thrones.S01E04.Cripples.Bastards.and.Broken.Things.1080p.10bit.BluRay.6CH.x265.HEVC-PSA.mkv',932170496,1781049788,'a5e8343a66f36cdf2dc531ac185929e2ec67d8cb','done',100,NULL,'2026-06-12 13:57:18','2026-06-12 13:58:17','2026-06-12 13:58:17');
 /*!40000 ALTER TABLE `movies_prepare_jobs` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -4713,7 +4728,7 @@ CREATE TABLE `movies_watch_progress` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`),
   UNIQUE KEY `uq_movies_progress_user_file` (`username`,`file_key`)
-) ENGINE=InnoDB AUTO_INCREMENT=259 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=544 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4724,7 +4739,7 @@ LOCK TABLES `movies_watch_progress` WRITE;
 /*!40000 ALTER TABLE `movies_watch_progress` DISABLE KEYS */;
 set autocommit=0;
 INSERT INTO `movies_watch_progress` VALUES
-(78,'movies','5ebe654a7d6b35b52171ba64590cf48bdb63c21a','GoT/Game.of.Thrones.S01E03.Lord.Snow.1080p.10bit.BluRay.6CH.x265.HEVC-PSA.mkv',998.98353575567,3434.097,'2026-06-12 14:12:53');
+(261,'movies','5ebe654a7d6b35b52171ba64590cf48bdb63c21a','GoT/Game.of.Thrones.S01E03.Lord.Snow.1080p.10bit.BluRay.6CH.x265.HEVC-PSA.mkv',2301.142263905,3434.097,'2026-06-12 22:51:10');
 /*!40000 ALTER TABLE `movies_watch_progress` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -13189,4 +13204,4 @@ commit;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2026-06-13  3:00:01
+-- Dump completed on 2026-06-13  8:30:50
