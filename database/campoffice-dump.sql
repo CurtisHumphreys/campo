@@ -816,7 +816,7 @@ CREATE TABLE `dashboard_apps` (
   `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`),
   UNIQUE KEY `app_key` (`app_key`)
-) ENGINE=InnoDB AUTO_INCREMENT=104 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=105 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -857,7 +857,8 @@ INSERT INTO `dashboard_apps` VALUES
 (100,'live-poll','SLIDEA','Self-hosted live audience polling PWA with QR join links, presenter controls, realtime This-or-That results, uploaded images, and final scoring snapshots.','/apps/live-poll/','public','ready','Running','local-node',NULL,'admin','node','[\"polling\",\"presentations\",\"realtime\",\"pwa\"]','{\"shell\": {\"open_mode\": \"tab\", \"pinned\": true, \"icon\": \"SL\"}, \"service\": {\"type\": \"systemd-user\", \"name\": \"forgebox-live-poll.service\", \"port\": 3100}, \"teardown\": {\"app_key\": \"live-poll\", \"web_paths\": [\"/apps/live-poll\"], \"api_paths\": [], \"db_tables\": [], \"source_paths\": [\"/home/admin/live-poll-pwa\"]}, \"port\": 3100}','2026-05-20 00:09:59','2026-05-20 11:13:32'),
 (101,'planner','Planner','Monday-style task planner with table and kanban views, priorities, due dates, and drag-and-drop ordering.','/apps/planner/','public','ready','Running',NULL,NULL,NULL,NULL,'[productivity,tasks]','{teardown:{app_key:planner,db_tables:[pf_todo_list,pf_planner_settings],web_paths:[/apps/planner]}}','2026-05-28 10:26:03','2026-05-28 10:26:03'),
 (102,'agent-manager','Agent Manager','Agentic integration follow-up manager — tracks partner threads, drafts outreach, and syncs progress from Google Sheets.','/apps/agent-manager/','public','ready','Running',NULL,NULL,NULL,NULL,'[\"integrations\",\"crm\",\"automation\"]','{\"teardown\":{\"app_key\":\"agent-manager\",\"web_paths\":[\"\\/apps\\/agent-manager\"],\"source_paths\":[\"\\/opt\\/forgebox\\/apps\\/agent-manager\"]}}','2026-05-28 11:42:53','2026-05-28 11:42:53'),
-(103,'rate-limit','Rate Limits','Live Claude API rate limit monitor — samples remaining requests and token budgets in real time.','/apps/rate-limit/','public','ready','Running',NULL,NULL,NULL,NULL,'[\"tools\",\"api\",\"monitoring\"]','{\"widget\":{\"url\":\"\\/apps\\/rate-limit\\/widget.php\",\"w\":360,\"h\":300},\"teardown\":{\"app_key\":\"rate-limit\",\"web_paths\":[\"\\/apps\\/rate-limit\",\"\\/api\\/rate-limit\"]}}','2026-05-28 15:04:38','2026-05-28 15:20:27');
+(103,'rate-limit','Rate Limits','Live Claude API rate limit monitor — samples remaining requests and token budgets in real time.','/apps/rate-limit/','public','ready','Running',NULL,NULL,NULL,NULL,'[\"tools\",\"api\",\"monitoring\"]','{\"widget\":{\"url\":\"\\/apps\\/rate-limit\\/widget.php\",\"w\":360,\"h\":300},\"teardown\":{\"app_key\":\"rate-limit\",\"web_paths\":[\"\\/apps\\/rate-limit\",\"\\/api\\/rate-limit\"]}}','2026-05-28 15:04:38','2026-05-28 15:20:27'),
+(104,'movies','Movies','Browse the movies USB drive and stream films to your phone — MKV files are prepared automatically for iPhone playback.','/apps/movies/','public','ready','Running','registry',NULL,NULL,NULL,'[\"media\",\"video\",\"streaming\"]','{\"teardown\":{\"app_key\":\"movies\",\"web_paths\":[\"/apps/movies\"],\"api_paths\":[\"/api/movies\"],\"db_tables\":[\"movies_prepare_jobs\"],\"source_paths\":[\"/opt/forgebox/apps/movies\"],\"cache_paths\":[\"/var/cache/forgebox/movies\"],\"system_units\":[\"forgebox-movies-prep.service\"],\"nginx_locations\":[\"/media/movies/\",\"/media/movies-cache/ (snippets/forgebox-movies.conf in nix + nix-public)\"],\"fstab_entries\":[\"LABEL=movies /mnt/movies\"]}}','2026-06-12 22:25:27','2026-06-12 22:25:27');
 /*!40000 ALTER TABLE `dashboard_apps` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -879,7 +880,7 @@ CREATE TABLE `dashboard_users` (
   `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -893,7 +894,8 @@ INSERT INTO `dashboard_users` VALUES
 (4,'admin','$2y$12$lGuncYIj7XtrIbwkFK6P9.Pywz/MEwqD0aF/zkaxW1x1MIb1ImH7q',NULL,'admin','2026-03-31 22:34:56','2026-04-26 01:58:54'),
 (5,'playwright-test','$2y$12$nwe0bmS3o3QPkZ0S39We5uL35nip489tLvJ207uJetOXlxJHi9rPK','Playwright Test','viewer','2026-04-04 15:55:10','2026-04-04 15:55:10'),
 (6,'pwtest','$2y$12$EpkyqWDtszDbcVnJUx4gfu/2BfOSDUt6Rm56LI2UlHHiwkyxUA7Uy',NULL,'admin','2026-04-06 07:58:58','2026-06-01 18:01:32'),
-(8,'toby','$2y$12$Uwv39o8.E1U03X9zU9RXHuQCTPhG1p20Hpma3ru5wCKA9Y3randXG','Toby','maintainer','2026-05-18 12:29:53','2026-05-18 12:29:53');
+(8,'toby','$2y$12$Uwv39o8.E1U03X9zU9RXHuQCTPhG1p20Hpma3ru5wCKA9Y3randXG','Toby','maintainer','2026-05-18 12:29:53','2026-05-18 12:29:53'),
+(10,'movies','$2y$12$PGsRZ4K1pcefDu8F9Ej4kO08czuHYhz/UWFf64sH5mJnfv6blKd8m',NULL,'admin','2026-06-12 22:38:16','2026-06-12 22:38:16');
 /*!40000 ALTER TABLE `dashboard_users` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -1090,7 +1092,7 @@ CREATE TABLE `faim_audit_log` (
   KEY `idx_faim_audit_event_type` (`event_type`),
   KEY `idx_faim_audit_thread_id` (`thread_id`),
   KEY `idx_faim_audit_draft_id` (`draft_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=827 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=882 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1920,7 +1922,62 @@ INSERT INTO `faim_audit_log` VALUES
 (823,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-13T12:04:15\", \"repeated_context\": false}','2026-06-11 15:34:20'),
 (824,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-11 15:34:20'),
 (825,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-13T12:04:15\", \"repeated_context\": false}','2026-06-11 16:34:21'),
-(826,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-11 16:34:21');
+(826,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-11 16:34:21'),
+(827,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-13T12:04:15\", \"repeated_context\": false}','2026-06-11 17:34:21'),
+(828,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-11 17:34:21'),
+(829,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-13T12:04:15\", \"repeated_context\": false}','2026-06-11 18:34:21'),
+(830,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-11 18:34:21'),
+(831,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-13T12:04:15\", \"repeated_context\": false}','2026-06-11 19:34:22'),
+(832,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-11 19:34:22'),
+(833,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-13T12:04:15\", \"repeated_context\": false}','2026-06-11 20:34:22'),
+(834,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-11 20:34:22'),
+(835,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-13T12:04:15\", \"repeated_context\": false}','2026-06-11 21:34:23'),
+(836,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-11 21:34:23'),
+(837,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-13T12:04:15\", \"repeated_context\": false}','2026-06-11 22:34:23'),
+(838,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-11 22:34:23'),
+(839,'digest','info',NULL,NULL,NULL,'daily_digest','sent','FAIM digest — 2 for you, 4 promises overdue, 3 follow-ups due','{\"auto_sent\": 1, \"candidates\": 18, \"flags\": 0, \"held\": 2, \"lapsed\": 4, \"overdue\": 3}','2026-06-11 22:34:23'),
+(840,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-13T12:04:15\", \"repeated_context\": false}','2026-06-11 23:34:24'),
+(841,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-11 23:34:24'),
+(842,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-13T12:04:15\", \"repeated_context\": false}','2026-06-12 00:34:24'),
+(843,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-12 00:34:24'),
+(844,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-13T12:04:15\", \"repeated_context\": false}','2026-06-12 01:34:24'),
+(845,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-12 01:34:24'),
+(846,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-13T12:04:15\", \"repeated_context\": false}','2026-06-12 02:34:25'),
+(847,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-12 02:34:25'),
+(848,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-13T12:04:15\", \"repeated_context\": false}','2026-06-12 03:34:25'),
+(849,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-12 03:34:25'),
+(850,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-13T12:04:15\", \"repeated_context\": false}','2026-06-12 04:34:25'),
+(851,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-12 04:34:25'),
+(852,'notification','info',NULL,NULL,NULL,'email_ping','sent','contact_found: Tyro redirected you','{\"kind\": \"contact_found\"}','2026-06-12 05:34:26'),
+(853,'notification','info',NULL,NULL,NULL,'deliver_notification','skipped','contact_found: Tyro redirected you','{\"kind\": \"contact_found\", \"notification_id\": 50}','2026-06-12 05:34:26'),
+(854,'engagement','info',4,NULL,'Tyro','classify_inbound','redirect','integrationsupport@tyro.com',NULL,'2026-06-12 05:34:26'),
+(855,'notification','info',NULL,NULL,NULL,'email_ping','sent','contact_found: Alternate contacts for Tyro','{\"kind\": \"contact_found\"}','2026-06-12 05:34:48'),
+(856,'notification','info',NULL,NULL,NULL,'deliver_notification','skipped','contact_found: Alternate contacts for Tyro','{\"kind\": \"contact_found\", \"notification_id\": 51}','2026-06-12 05:34:48'),
+(857,'engagement','info',4,NULL,'Tyro','discover_contacts','found','breinke@tyro.com, unsubscribe@tyro.com, rstorkey@tyro.com, curtis.humphreys@news.com.au, invites@tyropaymentsltd.onmicrosoft.com','{\"count\": 5, \"reason\": \"redirect\"}','2026-06-12 05:34:48'),
+(858,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-13T12:04:15\", \"repeated_context\": false}','2026-06-12 05:34:48'),
+(859,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-12 05:34:48'),
+(860,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-13T12:04:15\", \"repeated_context\": false}','2026-06-12 06:34:49'),
+(861,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-12 06:34:49'),
+(862,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-13T12:04:15\", \"repeated_context\": false}','2026-06-12 07:34:49'),
+(863,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-12 07:34:49'),
+(864,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-13T12:04:15\", \"repeated_context\": false}','2026-06-12 08:34:49'),
+(865,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-12 08:34:49'),
+(866,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-13T12:04:15\", \"repeated_context\": false}','2026-06-12 09:34:50'),
+(867,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-12 09:34:50'),
+(868,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-13T12:04:15\", \"repeated_context\": false}','2026-06-12 10:34:50'),
+(869,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-12 10:34:50'),
+(870,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-13T12:04:15\", \"repeated_context\": false}','2026-06-12 11:34:51'),
+(871,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-12 11:34:51'),
+(872,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-13T12:04:15\", \"repeated_context\": false}','2026-06-12 12:34:51'),
+(873,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-12 12:34:51'),
+(874,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-13T12:04:15\", \"repeated_context\": false}','2026-06-12 13:34:51'),
+(875,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-12 13:34:51'),
+(876,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-13T12:04:15\", \"repeated_context\": false}','2026-06-12 14:34:52'),
+(877,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-12 14:34:52'),
+(878,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-13T12:04:15\", \"repeated_context\": false}','2026-06-12 15:34:52'),
+(879,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-12 15:34:52'),
+(880,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-13T12:04:15\", \"repeated_context\": false}','2026-06-12 16:34:52'),
+(881,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-12 16:34:52');
 /*!40000 ALTER TABLE `faim_audit_log` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -2080,7 +2137,7 @@ CREATE TABLE `faim_contact_candidates` (
   UNIQUE KEY `uq_cand` (`thread_id`,`email`),
   KEY `idx_cand_thread` (`thread_id`,`status`),
   CONSTRAINT `fk_cand_thread` FOREIGN KEY (`thread_id`) REFERENCES `integration_threads` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2091,7 +2148,7 @@ LOCK TABLES `faim_contact_candidates` WRITE;
 /*!40000 ALTER TABLE `faim_contact_candidates` DISABLE KEYS */;
 set autocommit=0;
 INSERT INTO `faim_contact_candidates` VALUES
-(1,4,'cs@tyro.com',NULL,'redirect',6,'suggested','2026-06-01 08:48:19','2026-06-02 00:10:34'),
+(1,4,'cs@tyro.com',NULL,'redirect',15,'suggested','2026-06-01 08:48:19','2026-06-12 05:34:48'),
 (2,1,'kelly.hammond@ingenico.com','Kelly HAMMOND','header-cc',15,'suggested','2026-06-01 08:48:23','2026-06-11 00:33:31'),
 (3,1,'smd@ingenico.com','Ingenico (AU) Service Management & Delivery','header-to',15,'suggested','2026-06-01 08:48:23','2026-06-11 00:33:31'),
 (4,1,'pacific@ingenico.com',NULL,'body',3,'suggested','2026-06-01 08:48:23','2026-06-01 08:48:23'),
@@ -2108,7 +2165,13 @@ INSERT INTO `faim_contact_candidates` VALUES
 (15,2,'akki.bali@ingenico.com','Akshit BALI','header-to',2,'suggested','2026-06-01 08:48:25','2026-06-01 08:48:25'),
 (16,2,'dlcmdigitalbankingsupport@bsp.com.fj','DL CM Digital Banking Support','header-cc',1,'suggested','2026-06-01 08:48:25','2026-06-01 08:48:25'),
 (17,2,'jonathan.vonhagen@ingenico.com','Jonathan VON HAGEN','header-from',1,'suggested','2026-06-01 08:48:25','2026-06-01 08:48:25'),
-(19,1,'nischal.karmacharya@ingenico.com','Nischal KARMACHARYA','redirect',3,'suggested','2026-06-11 00:33:13','2026-06-11 00:33:31');
+(19,1,'nischal.karmacharya@ingenico.com','Nischal KARMACHARYA','redirect',3,'suggested','2026-06-11 00:33:13','2026-06-11 00:33:31'),
+(20,4,'integrationsupport@tyro.com',NULL,'redirect',3,'suggested','2026-06-12 05:34:26','2026-06-12 05:34:26'),
+(21,4,'breinke@tyro.com','Bella Reinke','header-cc',42,'suggested','2026-06-12 05:34:48','2026-06-12 05:34:48'),
+(22,4,'unsubscribe@tyro.com',NULL,'body',11,'suggested','2026-06-12 05:34:48','2026-06-12 05:34:48'),
+(23,4,'rstorkey@tyro.com','Rhys Storkey','header-from',1,'suggested','2026-06-12 05:34:48','2026-06-12 05:34:48'),
+(24,4,'curtis.humphreys@news.com.au','curtis.humphreys@news.com.au','header-to',1,'suggested','2026-06-12 05:34:48','2026-06-12 05:34:48'),
+(25,4,'invites@tyropaymentsltd.onmicrosoft.com','Microsoft Invitations on behalf of Tyro Payments','header-from',1,'suggested','2026-06-12 05:34:48','2026-06-12 05:34:48');
 /*!40000 ALTER TABLE `faim_contact_candidates` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -2204,7 +2267,7 @@ CREATE TABLE `faim_notifications` (
   PRIMARY KEY (`id`),
   KEY `idx_faim_notifications_created_at` (`created_at`),
   KEY `idx_faim_notifications_kind` (`kind`)
-) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2261,7 +2324,9 @@ INSERT INTO `faim_notifications` VALUES
 (46,'email_sent','Sent email to Ingenico','FAIM sent draft #30 to Ingenico.\nReason: manual approval.','2026-06-09 02:24:54',NULL,'skipped',NULL,NULL),
 (47,'contact_found','Ingenico redirected you','Ingenico\'s reply points to nischal.karmacharya@ingenico.com. Promote it in the dashboard to chase there.','2026-06-11 00:33:13',NULL,'skipped',NULL,NULL),
 (48,'draft_ready','Draft ready for OPAY','FAIM prepared a followup due draft for OPAY.','2026-06-11 02:33:57',NULL,'skipped',NULL,NULL),
-(49,'email_auto_sent','Auto-sent email to OPAY','FAIM auto-sent draft #31 to OPAY.\nSubject: OPAY OPay Nigeria follow-up\nReason: final nudge after 8 unanswered attempts; no new commitments, no decisions required from Curtis, escalation path already established in prior messages.','2026-06-11 02:34:15',NULL,'skipped',NULL,NULL);
+(49,'email_auto_sent','Auto-sent email to OPAY','FAIM auto-sent draft #31 to OPAY.\nSubject: OPAY OPay Nigeria follow-up\nReason: final nudge after 8 unanswered attempts; no new commitments, no decisions required from Curtis, escalation path already established in prior messages.','2026-06-11 02:34:15',NULL,'skipped',NULL,NULL),
+(50,'contact_found','Tyro redirected you','Tyro\'s reply points to integrationsupport@tyro.com. Promote it in the dashboard to chase there.','2026-06-12 05:34:26',NULL,'skipped',NULL,NULL),
+(51,'contact_found','Alternate contacts for Tyro','FAIM found 5 alternate contact(s) for Tyro you could chase: breinke@tyro.com, unsubscribe@tyro.com, rstorkey@tyro.com, curtis.humphreys@news.com.au, invites@tyropaymentsltd.onmicrosoft.com. Open the dashboard to promote one to the chaser.','2026-06-12 05:34:48',NULL,'skipped',NULL,NULL);
 /*!40000 ALTER TABLE `faim_notifications` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -3179,8 +3244,8 @@ LOCK TABLES `home_adapters` WRITE;
 /*!40000 ALTER TABLE `home_adapters` DISABLE KEYS */;
 set autocommit=0;
 INSERT INTO `home_adapters` VALUES
-('ble','Bluetooth','ble','{\"id\": \"ble\", \"name\": \"Bluetooth\", \"protocol\": \"ble\", \"capabilities\": [], \"discovery\": \"scan\", \"mqtt_prefix\": \"fbhome/ble\"}','running','2026-06-12 02:59:57'),
-('wifi','Wi-Fi','wifi','{\"id\": \"wifi\", \"name\": \"Wi-Fi\", \"protocol\": \"wifi\", \"capabilities\": [\"on_off\"], \"discovery\": \"mdns\", \"mqtt_prefix\": \"fbhome/wifi\"}','running','2026-06-12 02:59:58');
+('ble','Bluetooth','ble','{\"id\": \"ble\", \"name\": \"Bluetooth\", \"protocol\": \"ble\", \"capabilities\": [], \"discovery\": \"scan\", \"mqtt_prefix\": \"fbhome/ble\"}','running','2026-06-13 02:59:53'),
+('wifi','Wi-Fi','wifi','{\"id\": \"wifi\", \"name\": \"Wi-Fi\", \"protocol\": \"wifi\", \"capabilities\": [\"on_off\"], \"discovery\": \"mdns\", \"mqtt_prefix\": \"fbhome/wifi\"}','running','2026-06-13 02:59:54');
 /*!40000 ALTER TABLE `home_adapters` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -3653,7 +3718,7 @@ INSERT INTO `integration_threads` VALUES
 (1,'Ingenico','Brooke.PERRY@ingenico.com',14,'Workstream: Ingenico POSgate\nStatus: Sent\nTask: Follow up with Ingenico AU Service Management & Delivery team for SDK/dev tools access after signed agreement\nContact: Ingenico AU Service Management & Delivery Team / Brooke Perry\nContact details: Copied into Brooke Perry email / Brooke.PERRY@ingenico.com\nNotes: Signed POSgate agreement was confirmed received by Brooke on 20/05. Brooke advised Ingenico AU Service Management & Delivery would provide SDK, dev tools and support through accreditation. Follow-up prepared because no SDK/dev tools access has arrived after several days.\nNext action: Send follow-up email and keep Brooke/Dwayne copied\nPriority: High','2026-06-09 02:24:54','2026-06-11 02:24:54',0,0,NULL,NULL,'2026-05-28 01:26:52','2026-06-11 00:33:31','2026-05-28 02:02:38','2efe0bb1c91a1ec85712d6ea31570a371c523e4428702289493c4522312615f0','2efe0bb1c91a1ec85712d6ea31570a371c523e4428702289493c4522312615f0',NULL,'0',15,14,'Ingenico POSgate','Sent','Send follow-up email and keep Brooke/Dwayne copied','High','2026-05-28 02:25:23','','active','redirect',NULL,'c0f31e09fcf2043cf811bc72d00db251606068c46e71f5cb5421d831aa85cc7b',NULL,NULL,'a9abfe418beec4de51f2fadcb6c793c72b74a67a9aa5f72025f70f35e33218c4','2026-05-28 09:55:23',NULL,NULL,NULL),
 (2,'BSP Fiji','digitalbankingsupport@bsp.com.fj',5,'Workstream: BSP Fiji Escalation\nStatus: Sent\nTask: Send second follow-up to BSP Fiji and CC general enquiries address\nContact: BSP Fiji\nContact details: digitalbankingsupport@bsp.com.fj / bula@bsp.com.fj\nNotes: Second follow-up sent to digitalbankingsupport@bsp.com.fj with bula@bsp.com.fj CC’d. Email noted POS Forge is progressing Ingenico POSgate onboarding and needs BSP Fiji-specific requirements for supporting merchants using BSP EFTPOS terminals. Asked to be routed to Merchant Services, EFTPOS integrations, acquiring or technical team.\nNext action: Wait for BSP Fiji response; if no reply, call +679 321 4300 or submit online enquiry form\nPriority: High','2026-06-01 01:10:14','2026-06-03 01:10:14',0,0,NULL,NULL,'2026-05-28 01:26:52','2026-06-02 06:08:13','2026-06-01 21:59:10','52418593b59903283b21c07cddd455b41603c01808d92fd526d700d88dd044b4','52418593b59903283b21c07cddd455b41603c01808d92fd526d700d88dd044b4','2026-06-02 00:17:19','1136980884',6,5,'BSP Fiji Escalation','Sent','Wait for BSP Fiji response; if no reply, call +679 321 4300 or submit online enquiry form','High','2026-05-28 02:25:23','bula@bsp.com.fj','active','real',NULL,'52418593b59903283b21c07cddd455b41603c01808d92fd526d700d88dd044b4',NULL,NULL,'d9b62288c47eb9b50e1dcf3ab7b3a401252ba9097445387ba8bd1d717ae0a32f','2026-05-28 09:55:23',NULL,NULL,NULL),
 (3,'OPAY','ng-support@opay-inc.com',2,'Workstream: OPay Nigeria\nStatus: Sent\nTask: Follow up on initial OPay Nigeria integration enquiry for POS Forge\nContact: OPay Nigeria\nContact details: ng-support@opay-inc.com\nNotes: Initial enquiry was sent on 19/05 for POS Forge launch in Nigeria and West Africa. Follow-up prepared to request routing to merchant integrations, API support or partnerships contact.\nNext action: Send follow-up email\nPriority: High','2026-06-11 02:34:15','2026-06-13 02:34:15',1,2,48,'2026-06-11 12:04:15','2026-05-28 01:26:52','2026-06-11 03:34:16',NULL,'ed5ef147213e0162559953efbe73b4030490d66b30d9c281dccbddf32040b3a9','b2fa6476119dc4558b3ae167fc804c8320a75a4c8b16f4b8da40ccddf07886c4','2026-06-11 02:33:57','883369431',3,2,'OPay Nigeria','Sent','Send follow-up email','High','2026-05-28 02:25:23','','active',NULL,NULL,'ed5ef147213e0162559953efbe73b4030490d66b30d9c281dccbddf32040b3a9',NULL,NULL,NULL,NULL,NULL,NULL,NULL),
-(4,'Tyro','integrationsupport@tyro.com',5,'Workstream: Tyro Partnerships\nStatus: Confirmed\nTask: Tyro POS Integration support followed up with Partnerships team\nContact: Tyro / Omer Mohiuddin / Partnerships Team\nContact details: Ticket POSI-9660 / integrationsupport@tyro.com\nNotes: Omer Mohiuddin confirmed he has followed up with the Tyro Partnerships team again and asked them to reach out to Curtis. This suggests the enquiry is being routed from POS Integration support to the partnership/onboarding pathway.\nNext action: Wait for Tyro Partnerships team to contact Curtis\nPriority: High','2026-06-02 00:01:27','2026-06-04 00:01:27',0,0,NULL,NULL,'2026-05-28 01:26:52','2026-06-05 05:41:42','2026-06-02 05:07:21','83bfa69dbd4bb6947518164eb43c3dc8af78e89b79034aea2d555535593aa094','83bfa69dbd4bb6947518164eb43c3dc8af78e89b79034aea2d555535593aa094','2026-06-02 05:21:40','60968157',6,5,'Tyro Partnerships','Confirmed','Wait for Tyro Partnerships team to contact Curtis','High','2026-05-28 02:25:23','','active','real',NULL,'d395b25744b58063d4d9ffd82bc08c443ffa86f57e8aa39fac2259c63a07d115',NULL,NULL,'cad0054eac144b8b36f0597c3e35c3b308437b234aa93f393cde81b86adc5747','2026-05-28 09:55:23',NULL,NULL,NULL);
+(4,'Tyro','integrationsupport@tyro.com',5,'Workstream: Tyro Partnerships\nStatus: Confirmed\nTask: Tyro POS Integration support followed up with Partnerships team\nContact: Tyro / Omer Mohiuddin / Partnerships Team\nContact details: Ticket POSI-9660 / integrationsupport@tyro.com\nNotes: Omer Mohiuddin confirmed he has followed up with the Tyro Partnerships team again and asked them to reach out to Curtis. This suggests the enquiry is being routed from POS Integration support to the partnership/onboarding pathway.\nNext action: Wait for Tyro Partnerships team to contact Curtis\nPriority: High','2026-06-02 00:01:27','2026-06-04 00:01:27',0,0,NULL,NULL,'2026-05-28 01:26:52','2026-06-12 05:34:48','2026-06-02 05:07:21','83bfa69dbd4bb6947518164eb43c3dc8af78e89b79034aea2d555535593aa094','83bfa69dbd4bb6947518164eb43c3dc8af78e89b79034aea2d555535593aa094','2026-06-02 05:21:40','60968157',6,5,'Tyro Partnerships','Confirmed','Wait for Tyro Partnerships team to contact Curtis','High','2026-05-28 02:25:23','','active','redirect',NULL,'7394e65999a50dee43c27f08bfbf878b1599269a7e7afba728052be739712253',NULL,NULL,'cad0054eac144b8b36f0597c3e35c3b308437b234aa93f393cde81b86adc5747','2026-05-28 09:55:23',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `integration_threads` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -4066,7 +4131,7 @@ CREATE TABLE `jarvis_messages` (
   PRIMARY KEY (`id`),
   KEY `idx_session` (`session_id`,`created_at`),
   CONSTRAINT `jarvis_messages_ibfk_1` FOREIGN KEY (`session_id`) REFERENCES `jarvis_sessions` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=135 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=137 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4210,7 +4275,9 @@ INSERT INTO `jarvis_messages` VALUES
 (131,'5d38bcf8-7628-4bba-a84a-9284b4b26d0d','user','You are the Forgebox Integration Agent.\nWrite a professional, succinct technical follow-up email for a POS integration.\nDo not claim work has been completed unless the context says so.\nAsk for the next specific blocker or confirmation needed.\nUse Curtis as the sender/sign-off.\nDo not include a subject line, markdown heading, warning, note, or bracket placeholder.\nReturn only the plain-text email body.\n\nContext:\nPartner: OPAY\nStage: 2\nContact: ng-support@opay-inc.com\nNotes: Workstream: OPay Nigeria\nStatus: Sent\nTask: Follow up on initial OPay Nigeria integration enquiry for POS Forge\nContact: OPay Nigeria\nContact details: ng-support@opay-inc.com\nNotes: Initial enquiry was sent on 19/05 for POS Forge launch in Nigeria and West Africa. Follow-up prepared to request routing to merchant integrations, API support or partnerships contact.\nNext action: Send follow-up email\nPriority: High\n\nLatest email context:\n- Direction: outbound\n  Subject: OPAY OPay Nigeria follow-up\n  From: Curtis - DataForge <curtis@dataforge.co.nz>\n  To: ng-support@opay-inc.com\n  Date: Tue, 09 Jun 2026 11:14:06 +0930\n  Body: Dear OPay Nigeria Team, This is a brief note ahead of 12 June, the date referenced in my previous message. We have not received a response to our enquiry since 19 May, across seven outreach attempts to this address. If ng-support is not the correct channel for merchant integration or partnership enquiries, a simple redirect is all we need to move forward. Absent a reply by 12 June, we will proceed via OPay\'s developer portal and LinkedIn to identify the right team. Kind regards, Curtis DataForge curtis@dataforge.co.nz\n- Direction: outbound\n  Subject: OPAY OPay Nigeria follow-up\n  From: Curtis - DataForge <curtis@dataforge.co.nz>\n  To: ng-support@opay-inc.com\n  Date: Sun, 07 Jun 2026 11:12:59 +0930\n  Body: Dear OPay Nigeria Team, I\'m writing ahead of the 12 June date referenced in my previous message. This is our sixth outreach since 19 May and we have not yet received a response. We remain keen to move forward. If ng-support is not the correct channel for merchant integration or partnership enquiries, a simple redirect — a contact name, email address, or portal link — is all we need. If we have not heard back by 12 June, we will proceed with outreach via OPay\'s developer portal and LinkedIn to identify the right team. Kind regards, Curtis DataForge curtis@dataforge.co.nz --- *Ready to send to ng-support@opay-inc.com. If no reply by 12 June, escalate via developer portal and LinkedIn as previously flagged.*\n- Direction: outbound\n  Subject: OPAY OPay Nigeria follow-up\n  From: Curtis - DataForge <curtis@dataforge.co.nz>\n  To: ng-support@opay-inc.com\n  Date: Fri, 05 Jun 2026 11:11:24 +0930\n  Body: Dear OPay Nigeria Team, I\'m writing once more to follow up on our POS integration enquiry, now outstanding since 19 May. This is our fifth message to this address with no response received. We appreciate that support queues can be high-volume. If ng-support is not the correct intake channel for merchant integration or partnership enquiries, a simple redirect — a team name, email address, or portal link — is all we need to move forward. If we have not heard back by 12 June, we will pursue alternative contact routes including OPay\'s developer portal and LinkedIn to find the appropriate team. Kind regards, Curtis DataForge curtis@dataforge.co.nz --- **Next action:** Send to ng-support@opay-inc.com. If no reply by 12 June, escalate via developer portal or LinkedIn.',NULL,NULL,NULL,'2026-06-11 12:03:32'),
 (132,'5d38bcf8-7628-4bba-a84a-9284b4b26d0d','assistant','**Draft follow-up email — OPay Nigeria (12 June deadline)**\n\nDear OPay Nigeria Team,\n\nThis is a brief final note ahead of tomorrow, 12 June — the date referenced in our previous message.\n\nWe have now made eight outreach attempts to this address since 19 May with no response. We remain genuinely interested in exploring a POS integration partnership for the Nigerian and West African market.\n\nIf ng-support is not the correct channel for merchant integration or partnership enquiries, please redirect us to the right contact — a name, email address, or portal link is all we need.\n\nAbsent a reply by end of day 12 June, we will proceed via OPay\'s developer portal and LinkedIn to identify the appropriate team directly.\n\nKind regards,\nCurtis\nDataForge\ncurtis@dataforge.co.nz\n\n---\n*Ready to send today. Tomorrow: escalate via developer portal and LinkedIn as previously flagged.*','[\"general_qa\"]',NULL,25609,'2026-06-11 12:03:57'),
 (133,'2d3fbf63-8d40-4a30-ba5e-0b49bd3e3063','user','You classify an outbound B2B integration follow-up email that an automated agent wants to send on the user\'s behalf (the user/sender is Curtis).\nDecide one category and whether Curtis must review it before it is sent.\n\nCategories:\n- routine_followup: a polite chase/nudge on a non-response, or a simple status check. No new commitments, nothing needing Curtis\'s own decision.\n- needs_partner_decision: asks the partner a question or requests action FROM the partner, but nothing requires Curtis\'s input to send.\n- needs_user_input: cannot be safely sent without a fact, decision, or approval that only Curtis can provide.\n- critical: touches commercial, pricing, legal, contractual, or financial commitments.\n\nReturn ONLY a compact JSON object, no prose:\n{\"category\":\"...\",\"needs_user_input\":true|false,\"confidence\":0.0-1.0,\"reason\":\"short phrase\"}\n\nSUBJECT: OPAY OPay Nigeria follow-up\n\nDRAFT:\nDear OPay Nigeria Team,\n\nThis is a brief final note ahead of tomorrow, 12 June — the date referenced in our previous message.\n\nWe have now made eight outreach attempts to this address since 19 May with no response. We remain genuinely interested in exploring a POS integration partnership for the Nigerian and West African market.\n\nIf ng-support is not the correct channel for merchant integration or partnership enquiries, please redirect us to the right contact — a name, email address, or portal link is all we need.\n\nAbsent a reply by end of day 12 June, we will proceed via OPay\'s developer portal and LinkedIn to identify the appropriate team directly.\n\nKind regards,\nCurtis\nDataForge\ncurtis@dataforge.co.nz\n\n---\n*Ready to send today. Tomorrow: escalate via developer portal and LinkedIn as previously flagged.*\n\nTHREAD CONTEXT:\nPartner: OPAY\nStage: 2\nContact: ng-support@opay-inc.com\nNotes: Workstream: OPay Nigeria\nStatus: Sent\nTask: Follow up on initial OPay Nigeria integration enquiry for POS Forge\nContact: OPay Nigeria\nContact details: ng-support@opay-inc.com\nNotes: Initial enquiry was sent on 19/05 for POS Forge launch in Nigeria and West Africa. Follow-up prepared to request routing to merchant integrations, API support or partnerships contact.\nNext action: Send follow-up email\nPriority: High\n\nLatest email context:\n- Direction: outbound\n  Subject: OPAY OPay Nigeria follow-up\n  From: Curtis - DataForge <curtis@dataforge.co.nz>\n  To: ng-support@opay-inc.com\n  Date: Tue, 09 Jun 2026 11:14:06 +0930\n  Body: Dear OPay Nigeria Team, This is a brief note ahead of 12 June, the date referenced in my previous message. We have not received a response to our enquiry since 19 May, across seven outreach attempts to this address. If ng-support is not the correct channel for merchant integration or partnership enquiries, a simple redirect is all we need to move forward. Absent a reply by 12 June, we will proceed via OPay\'s developer portal and LinkedIn to identify the right team. Kind regards, Curtis DataForge curtis@dataforge.co.nz\n- Direction: outbound\n  Subject: OPAY OPay Nigeria follow-up\n  From: Curtis - DataForge <curtis@dataforge.co.nz>\n  To: ng-support@opay-inc.com\n  Date: Sun, 07 Jun 2026 11:12:59 +0930\n  Body: Dear OPay Nigeria Team, I\'m writing ahead of the 12 June date referenced in my previous messa',NULL,NULL,NULL,'2026-06-11 12:03:57'),
-(134,'2d3fbf63-8d40-4a30-ba5e-0b49bd3e3063','assistant','```json\n{\"category\":\"routine_followup\",\"needs_user_input\":false,\"confidence\":0.92,\"reason\":\"final nudge after 8 unanswered attempts; no new commitments, no decisions required from Curtis, escalation path already established in prior messages\"}\n```','[\"general_qa\"]',NULL,17245,'2026-06-11 12:04:15');
+(134,'2d3fbf63-8d40-4a30-ba5e-0b49bd3e3063','assistant','```json\n{\"category\":\"routine_followup\",\"needs_user_input\":false,\"confidence\":0.92,\"reason\":\"final nudge after 8 unanswered attempts; no new commitments, no decisions required from Curtis, escalation path already established in prior messages\"}\n```','[\"general_qa\"]',NULL,17245,'2026-06-11 12:04:15'),
+(135,'4c3b732b-9cfd-4ffb-9fa2-9a6ab05fa861','user','From the email below, extract any concrete commitment the SENDER (the partner, not us) made to do something, with its timeframe.\nExamples: \"the agreement will be provided in the next couple of days\", \"we\'ll send the SDK access by Friday\", \"someone will reach out next week\".\nFor each, give the partner\'s own short quote and resolve the timeframe to an absolute date using the REFERENCE DATE.\nIgnore vague intentions with no timeframe. Return ONLY a JSON array (max 4), no prose:\n[{\"quote\":\"...\",\"due\":\"YYYY-MM-DD or null\"}]\nIf there are no commitments, return [].\n\nREFERENCE DATE: 2026-06-12\n\nFROM: Integration Team <integrationsupport@tyro.com>\nSUBJECT: POS Forge - Welcome Pack\n\nEMAIL:\nHi Team, Tyro’s Integration Support team is here to provide support to POS and PMS developers integrating with Tyro, we can guide you through the project from scoping to development, certification, and go-live into production. Tyro has a mandatory certification process to ensure your integration product is production-ready and complies with payment scheme requirements. A POS or PMS integration must not be used in production without first being certified by Tyro. This process consists of a set of certification tests that ensure your product meets our criteria for completeness, reliability, user experience, and any payment scheme or other regulatory criteria that may apply. It also allows us to onboard your POS/PMS integration, providing details of the software product and instructions that our support team can use to support our customers using your integration product post-certification and go-live. We would like to welcome you to Tyro and look forward to supporting you through the Partner Integration Process, your Partner Welcome Pack has been sent via Sharepoint in a seperate email We have provided some useful links and generated two Merchant IDs with any Terminals IDs to assist with your build and testing listed below. MID = 2267, 2268 TIDs = Any number starting from 1 Developer Documentation iClient browser-based SDK = Browser-based JavaScript library (iClient)<https://docs.integrated-eftpos.tyro.com/integrated-eftpos/iclient> Please reach out to the Integration Support Team @ integrationsupport@tyro.com<mailto:integrationsupport@tyro.com> with any questions or concerns. Kind regards, Integration support Team E integrationsupport@tyro.com A 18/55 Market St, Sydney NSW 2000 [C:\\Users\\rgeorge\\Downloads\\Tyro_LogoSuite_21Feb2019\\Small Use Logo\\RGB\\PNG\\TYRO_Logo_SmallUse',NULL,NULL,NULL,'2026-06-12 15:04:26'),
+(136,'4c3b732b-9cfd-4ffb-9fa2-9a6ab05fa861','assistant','[]','[\"general_qa\"]',NULL,19903,'2026-06-12 15:04:46');
 /*!40000 ALTER TABLE `jarvis_messages` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -4435,6 +4502,7 @@ INSERT INTO `jarvis_sessions` VALUES
 ('4112fa58-bbd3-471e-98a7-91bfcda43598','2026-06-02 09:22:29','2026-06-02 09:23:01',2,'You are the Forgebox Integration Agent.\nWrite a professional, succinct technical follow-up email for a POS integration.\n'),
 ('41fe6448-036d-420c-b1a1-ddbad21e41d1','2026-06-07 11:12:43','2026-06-07 11:12:58',2,'You classify an outbound B2B integration follow-up email that an automated agent wants to send on the user\'s behalf (the'),
 ('4aaba269-0a97-465a-91b5-15705783eb4c','2026-06-02 10:50:07','2026-06-02 10:50:32',2,'You are the Forgebox Integration Agent.\nWrite a professional, succinct technical follow-up email for a POS integration.\n'),
+('4c3b732b-9cfd-4ffb-9fa2-9a6ab05fa861','2026-06-12 15:04:26','2026-06-12 15:04:46',2,'From the email below, extract any concrete commitment the SENDER (the partner, not us) made to do something, with its ti'),
 ('4e14b360-0a07-4c4c-aaf1-346ef3ddd2dd','2026-06-02 10:49:52','2026-06-02 10:50:07',2,'From the email below, extract any concrete commitment the SENDER (the partner, not us) made to do something, with its ti'),
 ('4ecd04b5-1eb0-4d5f-805d-0b9ab39d917c','2026-06-01 10:42:53','2026-06-01 10:43:23',2,'You are the Forgebox Integration Agent.\nWrite a professional, succinct technical follow-up email for a POS integration.\n'),
 ('52e78589-f5aa-4934-823e-d300c1c19e15','2026-06-02 14:51:09','2026-06-02 14:51:40',2,'You are the Forgebox Integration Agent.\nWrite a professional, succinct technical follow-up email for a POS integration.\n'),
@@ -4585,6 +4653,79 @@ LOCK TABLES `meeting_sessions` WRITE;
 /*!40000 ALTER TABLE `meeting_sessions` DISABLE KEYS */;
 set autocommit=0;
 /*!40000 ALTER TABLE `meeting_sessions` ENABLE KEYS */;
+UNLOCK TABLES;
+commit;
+
+--
+-- Table structure for table `movies_prepare_jobs`
+--
+
+DROP TABLE IF EXISTS `movies_prepare_jobs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `movies_prepare_jobs` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `source_path` varchar(1024) NOT NULL,
+  `source_size` bigint(20) unsigned NOT NULL,
+  `source_mtime` int(10) unsigned NOT NULL,
+  `cache_key` char(40) NOT NULL,
+  `status` enum('queued','running','done','error') NOT NULL DEFAULT 'queued',
+  `progress_pct` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `error_msg` varchar(500) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `last_played_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_movies_cache_key` (`cache_key`),
+  KEY `idx_movies_status` (`status`)
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `movies_prepare_jobs`
+--
+
+LOCK TABLES `movies_prepare_jobs` WRITE;
+/*!40000 ALTER TABLE `movies_prepare_jobs` DISABLE KEYS */;
+set autocommit=0;
+INSERT INTO `movies_prepare_jobs` VALUES
+(7,'GoT/Game.of.Thrones.S01E05.The.Wolf.and.the.Lion.1080p.10bit.BluRay.6CH.x265.HEVC-PSA.mkv',947087613,1780661776,'685d76c7989521bdc1074a7031b191f93f1d358f','done',100,NULL,'2026-06-12 13:47:13','2026-06-12 13:57:20','2026-06-12 13:57:20'),
+(13,'GoT/Game.of.Thrones.S01E03.Lord.Snow.1080p.10bit.BluRay.6CH.x265.HEVC-PSA.mkv',973999488,1781013740,'8bc961ae23857ac46b4b98ca90fd55839166c5bb','done',100,NULL,'2026-06-12 13:57:16','2026-06-12 13:57:52','2026-06-12 13:57:52'),
+(14,'GoT/Game.of.Thrones.S01E04.Cripples.Bastards.and.Broken.Things.1080p.10bit.BluRay.6CH.x265.HEVC-PSA.mkv',932170496,1781049788,'a5e8343a66f36cdf2dc531ac185929e2ec67d8cb','done',100,NULL,'2026-06-12 13:57:18','2026-06-12 13:58:17','2026-06-12 13:58:17');
+/*!40000 ALTER TABLE `movies_prepare_jobs` ENABLE KEYS */;
+UNLOCK TABLES;
+commit;
+
+--
+-- Table structure for table `movies_watch_progress`
+--
+
+DROP TABLE IF EXISTS `movies_watch_progress`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `movies_watch_progress` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(100) NOT NULL,
+  `file_key` char(40) NOT NULL,
+  `source_path` varchar(1024) NOT NULL,
+  `position_seconds` double NOT NULL DEFAULT 0,
+  `duration_seconds` double DEFAULT NULL,
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_movies_progress_user_file` (`username`,`file_key`)
+) ENGINE=InnoDB AUTO_INCREMENT=259 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `movies_watch_progress`
+--
+
+LOCK TABLES `movies_watch_progress` WRITE;
+/*!40000 ALTER TABLE `movies_watch_progress` DISABLE KEYS */;
+set autocommit=0;
+INSERT INTO `movies_watch_progress` VALUES
+(78,'movies','5ebe654a7d6b35b52171ba64590cf48bdb63c21a','GoT/Game.of.Thrones.S01E03.Lord.Snow.1080p.10bit.BluRay.6CH.x265.HEVC-PSA.mkv',998.98353575567,3434.097,'2026-06-12 14:12:53');
+/*!40000 ALTER TABLE `movies_watch_progress` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
 
@@ -5596,7 +5737,7 @@ CREATE TABLE `whatsapp_messages` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uq_msg` (`message_id`,`chat_jid`),
   KEY `idx_wa_account` (`wa_account`)
-) ENGINE=InnoDB AUTO_INCREMENT=7326 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7459 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -12897,7 +13038,140 @@ INSERT INTO `whatsapp_messages` VALUES
 (7322,'3AB3CB0C651C61E11502','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'Only $100k\n\nhttps://www.instagram.com/reel/DZZ_lirjMcj/?igsh=cmU3ejA2MGd3MnB2',NULL,'extendedTextMessage',1781185414,'2026-06-11 13:43:34',NULL,NULL,NULL),
 (7323,'3EB00031A005242F2AB6E2','120363346032343642@g.us',NULL,'Regan','61466848838:16@s.whatsapp.net','Me',1,'ha wowzers! That\'s a whole lotta ram',NULL,'conversation',1781185933,'2026-06-11 13:52:14',NULL,NULL,NULL),
 (7324,'3AB49B179BD5635F0641','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'I’d but it for Dwayne if I had the money 🤭',NULL,'conversation',1781185959,'2026-06-11 13:52:39',NULL,NULL,NULL),
-(7325,'3A26DCE01E5E5ACA6B01','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,NULL,NULL,'messageContextInfo',1781185971,'2026-06-11 13:52:51',NULL,NULL,NULL);
+(7325,'3A26DCE01E5E5ACA6B01','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,NULL,NULL,'messageContextInfo',1781185971,'2026-06-11 13:52:51',NULL,NULL,NULL),
+(7326,'3EB0257C02C3C2C83C8721','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,NULL,NULL,'messageContextInfo',1781205800,'2026-06-11 19:23:21',NULL,'😂','3AB49B179BD5635F0641'),
+(7327,'3EB0400F25851C08FDC1D5','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,NULL,NULL,'messageContextInfo',1781205807,'2026-06-11 19:23:27',NULL,'😂','3A2DFE2725F93B596EB0'),
+(7328,'3EB05AC0A7203A81B86EDB','51956420726959@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'hey if you\'re at the yard today don\'t forget the vacuum ;)',NULL,'conversation',1781216317,'2026-06-11 22:18:38',NULL,NULL,NULL),
+(7329,'3BBC0E88D9739F19C9A7','120363424431003607@g.us',NULL,'Ben Campbell','121066638844004@lid','Ben Campbell',0,'Hey fells, if anyone is up for an “manlunch” today in the CBD, gimme 👍',NULL,'senderKeyDistributionMessage',1781218671,'2026-06-11 22:57:52',NULL,NULL,NULL),
+(7330,'AC635A686B345D4B99CC04E736B03369','120363424431003607@g.us',NULL,'Ben Campbell','98067088969766@lid','Jacob Riggs',0,NULL,NULL,'senderKeyDistributionMessage',1781218740,'2026-06-11 22:59:00',NULL,'👍','3BBC0E88D9739F19C9A7'),
+(7331,'3EB0473E634C70010B013C','120363346032343642@g.us',NULL,'Regan','61466848838:16@s.whatsapp.net','Me',1,'Morning all',NULL,'conversation',1781223805,'2026-06-12 00:23:25',NULL,NULL,NULL),
+(7332,'3EB0AB5FF69A92EECA363C','120363400908812783@g.us',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'Morning all',NULL,'senderKeyDistributionMessage',1781223918,'2026-06-12 00:25:18',NULL,NULL,NULL),
+(7333,'3EB024C176AD465102F7C1','120363400908812783@g.us',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'Let me know when the $$ drops',NULL,'conversation',1781223929,'2026-06-12 00:25:29',NULL,NULL,NULL),
+(7334,'3A723C6E28D9534D2C9B','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,'Hello!',NULL,'conversation',1781224363,'2026-06-12 00:32:43',NULL,NULL,NULL),
+(7335,'3EB0FA6DD214897F006818','120363346032343642@g.us',NULL,'Regan','61466848838:16@s.whatsapp.net','Me',1,'How\'s the ingenico integration build coming?',NULL,'conversation',1781224575,'2026-06-12 00:36:15',NULL,NULL,NULL),
+(7336,'3ADCDA9AB2143AED9E01','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,'They got back to me yesterday with no integration options or rest api for our stack.',NULL,'conversation',1781225022,'2026-06-12 00:43:42',NULL,NULL,NULL),
+(7337,'3A194B881BDA1AA58DBC','120363400908812783@g.us',NULL,'Curtis','144221143048242@lid','Dwayne Baird',0,'Hello! Payment confirmed for the first half. Kelly will organise resouring it asap. Lets gooo!',NULL,'conversation',1781225079,'2026-06-12 00:44:40',NULL,NULL,NULL),
+(7338,'3EB08EDFD3C072771B4F2C','120363400908812783@g.us',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'Nice!',NULL,'conversation',1781226092,'2026-06-12 01:01:32',NULL,NULL,NULL),
+(7339,'3EB0C9CDE5850CC40C3823','120363400908812783@g.us',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'WOOOOO!!!!!!',NULL,'conversation',1781226094,'2026-06-12 01:01:34',NULL,NULL,NULL),
+(7340,'3EB043B053425FACA5EFB2','120363346032343642@g.us',NULL,'Regan','61466848838:16@s.whatsapp.net','Me',1,'Oh I saw a whole list of files for you to download in a seperate email?',NULL,'conversation',1781226111,'2026-06-12 01:01:52',NULL,NULL,NULL),
+(7341,'3EB0D9ECAF641F57A72B09','120363400908812783@g.us',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'Can we book a meeting for monday to discuss how we get started',NULL,'conversation',1781227328,'2026-06-12 01:22:09',NULL,NULL,NULL),
+(7342,'3EB0DB0FFA0A28391C76D5','120363346032343642@g.us',NULL,'Regan','61466848838:16@s.whatsapp.net','Me',1,'I just checked the email, they only sent it to me!!!!',NULL,'conversation',1781227417,'2026-06-12 01:23:38',NULL,NULL,NULL),
+(7343,'3EB097532170E0DEA0871B','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,NULL,NULL,'messageContextInfo',1781228171,'2026-06-12 01:36:11',NULL,'🫩','3EB0DB0FFA0A28391C76D5'),
+(7344,'3A4E95C8F69037A18C54','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,'No I saw that one! I replied and got this reply from them:','image','imageMessage',1781229678,'2026-06-12 02:01:19',NULL,NULL,NULL),
+(7345,'3A4C9E8C1048287853FB','120363346032343642@g.us',NULL,'Regan','61466848838:16@s.whatsapp.net','Me',1,'What the heck!',NULL,'conversation',1781229723,'2026-06-12 02:02:04',NULL,NULL,NULL),
+(7346,'3ADF6FE420B12D492347','120363346032343642@g.us',NULL,'Regan','61466848838:16@s.whatsapp.net','Me',1,'So where does this leave us',NULL,'conversation',1781229734,'2026-06-12 02:02:15',NULL,NULL,NULL),
+(7347,'3ADE1EE3C29124EFE793','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,'I’ll try vanilla rig in the Java sdk',NULL,'conversation',1781229737,'2026-06-12 02:02:17',NULL,NULL,NULL),
+(7348,'3A30B1BC8A756DFC06FE','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,'posgate.lib',NULL,'conversation',1781229764,'2026-06-12 02:02:45',NULL,NULL,NULL),
+(7349,'3EB0AE07DD517FDB40716B','51956420726959@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'Vanza is ready for us to do phase 1 of testing, i\'ve sent you an email',NULL,'conversation',1781230209,'2026-06-12 02:10:10',NULL,NULL,NULL),
+(7350,'3EB045CC1460F22DA36BA3','51956420726959@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'We\'ll also need to get a reasonable USB 3 to attach to the back of your forgebox as external backup storage',NULL,'conversation',1781231114,'2026-06-12 02:25:14',NULL,NULL,NULL),
+(7351,'3EB0675470834A90762B07','231335629164614@lid',NULL,'Regan','61466848838:16@s.whatsapp.net','Me',1,'%MyU:T|!Q37vl7*d',NULL,'extendedTextMessage',1781231803,'2026-06-12 02:36:43',NULL,NULL,NULL),
+(7352,'3EB09C566CA26E780ABD56','231335629164614@lid',NULL,'Regan','61466848838:16@s.whatsapp.net','Me',1,'rmmofficesupplies.com.au - > Eu;|je~XMoZ+h46Y',NULL,'extendedTextMessage',1781231848,'2026-06-12 02:37:28',NULL,NULL,NULL),
+(7353,'3EB0A3A4D4968A30C052BC','231335629164614@lid',NULL,'Regan','61466848838:16@s.whatsapp.net','Me',1,'rmmcarpetcleaning.com.au -> 0Y+i!A0Yes)($pt|',NULL,'extendedTextMessage',1781231887,'2026-06-12 02:38:07',NULL,NULL,NULL),
+(7354,'3EB05E9F4D5D7A11F9930A','231335629164614@lid',NULL,'Regan','61466848838:16@s.whatsapp.net','Me',1,'MvbPANZRysq7NqYunjEfcMwfuYLVBizHbT9ePxE824682c0a',NULL,'extendedTextMessage',1781232484,'2026-06-12 02:48:05',NULL,NULL,NULL),
+(7355,'AC959DCF9B6B2893B8330186DF6D0377','51956420726959@lid',NULL,'Curtis','51956420726959@lid','Tom Covers',0,NULL,NULL,'messageContextInfo',1781232909,'2026-06-12 02:55:10',NULL,'😮','3EB0AE07DD517FDB40716B'),
+(7356,'AC1CB61AB56F7D2E1E2F06659DB74A2B','51956420726959@lid',NULL,'Curtis','51956420726959@lid','Tom Covers',0,'Yep! How big?',NULL,'conversation',1781232942,'2026-06-12 02:55:43',NULL,NULL,NULL),
+(7357,'AC2BF8833BB87BD0C3E4F9B4850DA59B','51956420726959@lid',NULL,'Curtis','51956420726959@lid','Tom Covers',0,'As in back up',NULL,'conversation',1781232948,'2026-06-12 02:55:49',NULL,NULL,NULL),
+(7358,'3EB04B6D0B9E432624F35D','51956420726959@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'doesn\'t need to be anything massive at the moment, but just a quality one',NULL,'conversation',1781232975,'2026-06-12 02:56:16',NULL,NULL,NULL),
+(7359,'3EB0253FC9378A4204A3B1','51956420726959@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'like 128GB usb 3',NULL,'conversation',1781232995,'2026-06-12 02:56:35',NULL,NULL,NULL),
+(7360,'3EB0EBB709198A270C4927','51956420726959@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'I can send some examples. Or you get a 1TB passport. they\'re pretty cheap these days',NULL,'conversation',1781233027,'2026-06-12 02:57:07',NULL,NULL,NULL),
+(7361,'3EB016751FD9AE50B48BE6','51956420726959@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'and nothing chinese haha',NULL,'conversation',1781233127,'2026-06-12 02:58:47',NULL,NULL,NULL),
+(7362,'3EB00B74CE6F4ED3D037CC','51956420726959@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'https://www.centrecom.com.au/verbatim-storengo-1tb-usb-32-gen-1-portable-ssd?gad_source=1&gad_campaignid=18852978173&gbraid=0AAAAADrCcHovU9Am9fdQDOAEHAP4XS07_&gclid=CjwKCAjwuanRBhBSEiwAY5y6Vy16u8CLHwzqwr4ZztrRuz7QTPv8EypKkChW-lsxdZ8C3U4dedIy0xoC2OIQAvD_BwE',NULL,'extendedTextMessage',1781233132,'2026-06-12 02:58:52',NULL,NULL,NULL),
+(7363,'3EB0822D0D93FF588422F7','231335629164614@lid',NULL,'Regan','61466848838:16@s.whatsapp.net','Me',1,'Or, for now, just start with any usb 3 stick you\'ve got lying around, it\'s not a big issue at the moment',NULL,'extendedTextMessage',1781233232,'2026-06-12 03:00:32',NULL,NULL,NULL),
+(7364,'3EB05F60CCF02C7CCF85DA','231335629164614@lid',NULL,'Regan','61466848838:16@s.whatsapp.net','Me',1,'Info@rmmofficesupplies.com.au\nrmmo!pass1\n\ninfo@rmmindustriesaustralia.com.au\nrmmi!pass1\n\ninfo@rmmcarpetcleaning.com.au\nrmmc!pass1',NULL,'extendedTextMessage',1781233425,'2026-06-12 03:03:45',NULL,NULL,NULL),
+(7365,'3EB0DA7781E25887277951','231335629164614@lid',NULL,'Regan','61466848838:16@s.whatsapp.net','Me',1,'rmmc!pass1',NULL,'extendedTextMessage',1781233652,'2026-06-12 03:07:32',NULL,NULL,NULL),
+(7366,'3EB00544FB4659BDAFFB1B','231335629164614@lid',NULL,'Regan','61466848838:16@s.whatsapp.net','Me',1,'Rmmc!pass1',NULL,'extendedTextMessage',1781233667,'2026-06-12 03:07:48',NULL,NULL,NULL),
+(7367,'3EB0B0C991364701BA599E','51956420726959@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'Oh man!!! just testing the big dog voice assistant in the OS linked into Vanza with your last months worth of work from asocra as the base to run off.',NULL,'conversation',1781236167,'2026-06-12 03:49:27',NULL,NULL,NULL),
+(7368,'3EB0B62DF8AAC7534FCC31','51956420726959@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'Checkout the chat log: big dog ›\nGot it, sir. You want Jackson\'s schedule for the week.\n── ForgeBox: 1 tool, 7 results ──\nbig dog ›\nJackson\'s got a public holiday on Monday, sir. Then a few jobs earlier in the week that are already done. For today, he\'s got a drain inspection at Causeway Cafe in Victor Harbor from 7 to 11, then a TMV replacement at Monarto Safari Resort from 11 to 1. He\'s got the public holiday on Monday, and the rest of the week\'s mostly wrapped up.\nyou ›\nMonday?\nbig dog ›\nThat\'s the public holiday, sir. No job details or customer attached, just the whole day blocked as a holiday.\nyou ›\nWhen\'s\nyou ›\nWhere\'s Jesse at now?\nbig dog ›\nLet me check Jesse\'s current job.\n── ForgeBox: 1 tool, 1 result ──\nbig dog ›\nJesse\'s on a water main diversion and replacement at Ramsay Place in Noarlunga Centre, sir. Started at 6:30 this morning, due to finish around 11. If you need more details on the job, let me know.\nyou ›\nAny open jobs for the council?\nbig dog ›\nLet me check the open jobs for City Of Onkaparinga.\n── ForgeBox: 1 tool, 30 results ──\nbig dog ›\nThere are 30 open jobs for City Of Onkaparinga, sir. Most are scheduled, a few awaiting parts. The top ones include a stolen backflow at a public toilet, and several blocked drains and leaks. Want me to pull up any specific one?\nyou ›\nWhat hours did the boys do yesterday?\nbig dog ›\nLet me check yesterday\'s timesheets.\n── ForgeBox: 1 tool, 8 results ──\nbig dog ›\nYesterday\'s timesheets are in, sir. Jackson had a late one finishing up J4538 around midnight, and some earlier jobs. Daniel had a long shift on J4359, from 4:30pm right through till after midnight. Tom popped in for about an hour overnight on J4148 with Jackson. Let me know if you want the full breakdown.',NULL,'conversation',1781236173,'2026-06-12 03:49:34',NULL,NULL,NULL),
+(7369,'3EB0ECD134FDD96C525CB7','51956420726959@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'very fast response to a whole set of very different questions, it worked real well and fully integrates and understands what Vanza has in it!',NULL,'conversation',1781236232,'2026-06-12 03:50:32',NULL,NULL,NULL),
+(7370,'3A62B9A872EA7FE300AC','143958747394076@lid',NULL,'Curtis','143958747394076@lid','Peter Goodrich',0,'To get back on track. \n\nHad tried to navigate to this through decks but wasn’t able to get to a page as your image shows. \n\nI could give you a quick call later if it suited?',NULL,'extendedTextMessage',1781236873,'2026-06-12 04:01:13','3EB04F9268C974E52C6B25',NULL,NULL),
+(7371,'3EB0D45932725EE3044910','143958747394076@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'sure thing',NULL,'conversation',1781236889,'2026-06-12 04:01:30',NULL,NULL,NULL),
+(7372,'3EB0FB52E4A34FDF82E2BC','143958747394076@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'it\'s just on the main decks page',NULL,'conversation',1781236910,'2026-06-12 04:01:50',NULL,NULL,NULL),
+(7373,'3EB06656CD1C08AB21221F','143958747394076@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'so if you click the word decks in the left hand menu, it\'s on the page that comes up on the right, that would list out all your presentations',NULL,'conversation',1781236930,'2026-06-12 04:02:10',NULL,NULL,NULL),
+(7374,'3EB0F57997DD9B6D797ACC','143958747394076@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'Alos if you find it easier to build in google slides or ppt you can build there an import in afterwards, whatever is easiest. Also you\'ve got access to the AI builder if you want to auto generate a deck through AI',NULL,'conversation',1781236959,'2026-06-12 04:02:40',NULL,NULL,NULL),
+(7375,'3EB0025D8E0C92A02BB264','42803711197291@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'Sorry Stacy just on another call at the moment.',NULL,'conversation',1781238121,'2026-06-12 04:22:01',NULL,NULL,NULL),
+(7376,'3EB03963CC876FFF45822B','42803711197291@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'Will call back shortly',NULL,'conversation',1781238123,'2026-06-12 04:22:03',NULL,NULL,NULL),
+(7377,'3A477816CF0CEF70F5CB','42803711197291@lid',NULL,'Curtis','42803711197291@lid','Stacy',0,'No worries I’m sending an email. I’m just about to head off so it can wait 😊',NULL,'conversation',1781238172,'2026-06-12 04:22:52',NULL,NULL,NULL),
+(7378,'3ACB2F47B82D191E9022','120363346032343642@g.us',NULL,'Regan','61466848838:16@s.whatsapp.net','Me',1,'👍',NULL,'conversation',1781238903,'2026-06-12 04:35:03',NULL,NULL,NULL),
+(7379,'3EB0D02FCE617177533583','42803711197291@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,NULL,'image','imageMessage',1781240236,'2026-06-12 04:57:16',NULL,NULL,NULL),
+(7380,'3EB057328DE5725CA49248','42803711197291@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'this was the feature requests button i was talking about',NULL,'conversation',1781240240,'2026-06-12 04:57:20',NULL,NULL,NULL),
+(7381,'3EB0F91B58751D40E345EC','42803711197291@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'i\'ve given you full admin access now so you should be able to see it',NULL,'conversation',1781240246,'2026-06-12 04:57:27',NULL,NULL,NULL),
+(7382,'3EB0D6E21546068606E92A','42803711197291@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'I\'ll go create the site fee update inside of members now',NULL,'conversation',1781240260,'2026-06-12 04:57:40',NULL,NULL,NULL),
+(7383,'3A7AFAF7EBE8DD52C425','42803711197291@lid',NULL,'Curtis','42803711197291@lid','Stacy',0,'No worries thanks I’ll have a look over the weekend 👍',NULL,'conversation',1781241078,'2026-06-12 05:11:18',NULL,NULL,NULL),
+(7384,'AC046FF392EA0A4BCB5421A75E00A74A','61403505790-1587861828@g.us',NULL,'Cameron','195549894570056@lid','Jonny Welch',0,'G\'day All\n\nWe have Danny\'s funeral on Saturday 20th June at 1 pm \n\n\nPlease thumbs up or down this message if you\'re able to help out',NULL,'conversation',1781241876,'2026-06-12 05:24:37',NULL,NULL,NULL),
+(7385,'3ACEB0D539DECB44433D','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'🤔\nhttps://x.com/kradleai/status/2064907897373642912?s=48&t=KpffsLLG8DP3wA7EpdXrLg',NULL,'extendedTextMessage',1781242177,'2026-06-12 05:29:37',NULL,NULL,NULL),
+(7386,'3EB0D3EE569268C517542D','120363346032343642@g.us',NULL,'Regan','61466848838:16@s.whatsapp.net','Me',1,'Would love to know the test conditions for this',NULL,'conversation',1781242935,'2026-06-12 05:42:15',NULL,NULL,NULL),
+(7387,'3EB0BC3E84A29DF18024A5','120363346032343642@g.us',NULL,'Regan','61466848838:16@s.whatsapp.net','Me',1,'you know... for some context so i can remove my own bias',NULL,'conversation',1781242948,'2026-06-12 05:42:28',NULL,NULL,NULL),
+(7388,'3EB052822AAF7275644FE2','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'heheheheheheehehehehehe',NULL,'conversation',1781243033,'2026-06-12 05:43:53',NULL,NULL,NULL),
+(7389,'3EB0760310A6412EF6A220','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'if i hit factory wifi reset, does that mean i can change how it looks when i see what wifi\'s are available?  I need to change it from chuck so they both show up.','image','imageMessage',1781243441,'2026-06-12 05:50:41',NULL,NULL,NULL),
+(7390,'3EB0D7E9D7C082B1F7378B','42803711197291@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'You as well. The new feature is in now when you\'re ready',NULL,'conversation',1781243506,'2026-06-12 05:51:46',NULL,NULL,NULL),
+(7391,'3EB01905EDDEC8F9BD0AF2','42803711197291@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,NULL,'image','imageMessage',1781243509,'2026-06-12 05:51:49',NULL,NULL,NULL),
+(7392,'ACF541496E06E9DA1C6411A021430099','50732220870663@lid',NULL,'Curtis','50732220870663@lid','Jo',0,'Just at the playground. Let me know what time i need to pick up!',NULL,'conversation',1781244602,'2026-06-12 06:10:03',NULL,NULL,NULL),
+(7393,'3AA59794F0437A9FAE91','61403505790-1587861828@g.us',NULL,'Cameron','101657715167265@lid','David Provis',0,NULL,NULL,'reactionMessage',1781245817,'2026-06-12 06:30:17',NULL,'👍','AC046FF392EA0A4BCB5421A75E00A74A'),
+(7394,'AC67BFB45E44FF8FE51CBB66E6DAEBFE','61403505790-1587861828@g.us',NULL,'Cameron','195549894570056@lid','Jonny Welch',0,'Thanks David\n\nAll I know so far is the usual:\nChoruses\nSlideshow\nLivestream (public at this stage)\n\nPr Chas/Uno appear to be organising, I\'ll keep you as up to date as I am.',NULL,'conversation',1781246309,'2026-06-12 06:38:30',NULL,NULL,NULL),
+(7395,'3EB0D61F231C8E9E8F5636','120363346032343642@g.us',NULL,'Regan','61466848838:16@s.whatsapp.net','Me',1,'no that will justs reset it so it\'s findable from Wifi search again',NULL,'conversation',1781246703,'2026-06-12 06:45:03',NULL,NULL,NULL),
+(7396,'3EB03DF7924AE3A0775163','120363346032343642@g.us',NULL,'Regan','61466848838:16@s.whatsapp.net','Me',1,'but still call it forgebox',NULL,'conversation',1781246706,'2026-06-12 06:45:07',NULL,NULL,NULL),
+(7397,'3EB046E7AF363B71D511F9','120363346032343642@g.us',NULL,'Regan','61466848838:16@s.whatsapp.net','Me',1,'*But it\'ll still come up as forgebox',NULL,'conversation',1781246713,'2026-06-12 06:45:13',NULL,NULL,NULL),
+(7398,'3A05D8FB24E6C9701075','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'Ergh',NULL,'conversation',1781246733,'2026-06-12 06:45:33',NULL,NULL,NULL),
+(7399,'3EB03CCCBB1902033981AA','120363346032343642@g.us',NULL,'Regan','61466848838:16@s.whatsapp.net','Me',1,'just ask Claude to do it in the app builder',NULL,'conversation',1781246753,'2026-06-12 06:45:54',NULL,NULL,NULL),
+(7400,'3EB0559C25D3B42EF4E5C0','120363346032343642@g.us',NULL,'Regan','61466848838:16@s.whatsapp.net','Me',1,'full access with paramiko, ssh password etc',NULL,'conversation',1781246762,'2026-06-12 06:46:02',NULL,NULL,NULL),
+(7401,'3EB06A046BEF4BED57A6FC','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,'So they both show up as forgebox on the router side?',NULL,'conversation',1781247010,'2026-06-12 06:50:10',NULL,NULL,NULL),
+(7402,'3EB0546421282B82344D13','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'yes, well only one shows up, it said it was chuck but it actually only activated orion',NULL,'conversation',1781247045,'2026-06-12 06:50:45',NULL,NULL,NULL),
+(7403,'3EB037252A42F7BD184E25','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,'Fair warning, that name runs the entire networking, messing with it may brick the box.',NULL,'conversation',1781247113,'2026-06-12 06:51:53',NULL,NULL,NULL),
+(7404,'3EB09936B0C5776F3361B1','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'ok, maybe i\'ll just connect them via ethernet to the network then. way more stable anyways and they sit right next to it',NULL,'conversation',1781247200,'2026-06-12 06:53:20',NULL,NULL,NULL),
+(7405,'3A3CE436CA40843699EA','120363400908812783@g.us',NULL,'Curtis','73053132329042@lid','Kelly',0,'Wohoo yes sounds good',NULL,'senderKeyDistributionMessage',1781247514,'2026-06-12 06:58:34',NULL,NULL,NULL),
+(7406,'AC33E6943DF439811BAABF629EF0BA5F','51956420726959@lid',NULL,'Curtis','51956420726959@lid','Tom Covers',0,'How can i upload a pdf to the chat so big dog can help me with it?',NULL,'conversation',1781251092,'2026-06-12 07:58:12',NULL,NULL,NULL),
+(7407,'ACDC6A3D9298E1EB3447520AB9E51B99','51956420726959@lid',NULL,'Curtis','51956420726959@lid','Tom Covers',0,'Like read it or understand it etc',NULL,'conversation',1781251106,'2026-06-12 07:58:27',NULL,NULL,NULL),
+(7408,'AC301A7ED8EF65DE68CB81C0CA7DCCCD','120363042147644587@g.us',NULL,'Sam','64020866449656@lid','Brendan',0,'@215049599754483 you ok for sunday? Or are you away?',NULL,'extendedTextMessage',1781252553,'2026-06-12 08:22:33',NULL,NULL,NULL),
+(7409,'3BE5F3C7EA19151EB260','120363042147644587@g.us',NULL,'Sam','215049599754483@lid','Sam',0,'yeah i’m around on sunday.',NULL,'senderKeyDistributionMessage',1781252627,'2026-06-12 08:23:47',NULL,NULL,NULL),
+(7410,'AC37A1EAA15D9C8B4C5596F1B7643AFA','120363042147644587@g.us',NULL,'Sam','64020866449656@lid','Brendan',0,NULL,NULL,'reactionMessage',1781252643,'2026-06-12 08:24:03',NULL,'😂','3BE5F3C7EA19151EB260'),
+(7411,'AC027A03F96DB73D98223C749566C519','120363042147644587@g.us',NULL,'Sam','64020866449656@lid','Brendan',0,NULL,NULL,'reactionMessage',1781252645,'2026-06-12 08:24:05',NULL,'❤️','3BE5F3C7EA19151EB260'),
+(7412,'3EB0AE5BC013E067C8938A','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,'It\'s ok, I can always reload them worst case scenerio haha',NULL,'conversation',1781253920,'2026-06-12 08:45:20',NULL,NULL,NULL),
+(7413,'3EB09CAE1650CD76A4B5CA','120363346032343642@g.us',NULL,'Regan','61466848838:16@s.whatsapp.net','Me',1,'but can you reload them with all the software he\'s built on them ;)',NULL,'conversation',1781259843,'2026-06-12 10:24:03',NULL,NULL,NULL),
+(7414,'3EB07BCFC2D060A2723DD9','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,'I can do anything, just need to get access to the broken unit, that would require posting it to me.',NULL,'conversation',1781259877,'2026-06-12 10:24:37',NULL,NULL,NULL),
+(7415,'3EB0B1F6A6EF9C89D9ACEE','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,'Worst-case',NULL,'conversation',1781259887,'2026-06-12 10:24:48',NULL,NULL,NULL),
+(7416,'3A31A064C62CA90EE1BB','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,'Boys boys! I’ve learnt my lesson. I have means and ways around the issue 😌',NULL,'conversation',1781259918,'2026-06-12 10:25:18',NULL,NULL,NULL),
+(7417,'3EB0778FCE62BFE9E8ADF2','120363346032343642@g.us',NULL,'Regan','144221143048242@lid','Dwayne Baird',0,'lol what',NULL,'conversation',1781259939,'2026-06-12 10:25:40',NULL,NULL,NULL),
+(7418,'3A77C768BEA5234DB93F','120363400149665337@g.us',NULL,'Jo','171648435097801@lid','Emily',0,NULL,'video','videoMessage',1781263476,'2026-06-12 11:24:36',NULL,NULL,NULL),
+(7419,'3EB069A041188FE37C21AF','143958747394076@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'I\'ve added the 2 videos into your deck',NULL,'conversation',1781264139,'2026-06-12 11:35:39',NULL,NULL,NULL),
+(7420,'3EB07BAD95AC150ED4A07E','120363346032343642@g.us',NULL,'Regan','61466848838:16@s.whatsapp.net','Me',1,'raise your hand if you don\'t trust his means or his ways',NULL,'conversation',1781264199,'2026-06-12 11:36:39',NULL,NULL,NULL),
+(7421,'3EB08D3EB6C22B0D7F8100','120363346032343642@g.us',NULL,'Regan','61466848838:16@s.whatsapp.net','Me',1,NULL,'video','videoMessage',1781264215,'2026-06-12 11:36:55',NULL,NULL,NULL),
+(7422,'3A1FAF12FF1A56708EC0','120363346032343642@g.us',NULL,'Regan','231335629164614@lid','Regan',0,NULL,NULL,'reactionMessage',1781264289,'2026-06-12 11:38:09',NULL,'🤨','3EB08D3EB6C22B0D7F8100'),
+(7423,'3EB0B360E8B8F8B3661F9A','51956420726959@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'Currently you can\'t',NULL,'conversation',1781264329,'2026-06-12 11:38:50',NULL,NULL,NULL),
+(7424,'3EB0263F6C46880321ADA0','51956420726959@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'But we\'ve got the power of an AI Developer on our hands. So lets ask it to build it in!',NULL,'conversation',1781264348,'2026-06-12 11:39:09',NULL,NULL,NULL),
+(7425,'3EB0E5A15BB8651740CAD1','51956420726959@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'building it now',NULL,'conversation',1781264523,'2026-06-12 11:42:03',NULL,NULL,NULL),
+(7426,'3EB053744591DC74054095','231335629164614@lid',NULL,'Regan','61466848838:16@s.whatsapp.net','Me',1,'Haha, you\'re being so cryptic with your solvel ;)',NULL,'extendedTextMessage',1781264543,'2026-06-12 11:42:23',NULL,NULL,NULL),
+(7427,'3EB0DE728F0F64F8CA36','231335629164614@lid',NULL,'Regan','61466848838:16@s.whatsapp.net','Me',1,NULL,NULL,'protocolMessage',1781264551,'2026-06-12 11:42:31',NULL,NULL,NULL),
+(7428,'ACF7CFB69A3A39FB729DAD3BCDF91FDF','51956420726959@lid',NULL,'Curtis','51956420726959@lid','Tom Covers',0,'Haha legend! Cheers',NULL,'conversation',1781264653,'2026-06-12 11:44:14',NULL,NULL,NULL),
+(7429,'4A72311C376E79A101C9','143958747394076@lid',NULL,'Curtis','143958747394076@lid','Peter Goodrich',0,'Thanks mate. \nWasn’t sure if I added the first video or you did. \nWhat should I be able to click on here to get back in to the presentation?','image','imageMessage',1781264780,'2026-06-12 11:46:20',NULL,NULL,NULL),
+(7430,'3EB0F9FA5877D7C9FE33EC','143958747394076@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'The pen icon',NULL,'conversation',1781264902,'2026-06-12 11:48:22',NULL,NULL,NULL),
+(7431,'3EB0D6416984049FF5D209','143958747394076@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'But as i said, you can build it in here, slide by slide, or you can click generate with AI and create the whole foundation for the presentation, a theme to work from etc. OR you can use powerpoint/google slides and import after, depends what your most comfortable creating decks in.',NULL,'conversation',1781264978,'2026-06-12 11:49:38',NULL,NULL,NULL),
+(7432,'3ACD1E13B9A99965A26A','231335629164614@lid',NULL,'Regan','231335629164614@lid','Regan',0,'Meh, I’m just going to connect via Ethernet cables. Not that complicated 🤷🏼‍♂️',NULL,'conversation',1781265156,'2026-06-12 11:52:36',NULL,NULL,NULL),
+(7433,'ACCC4912D0CCFBB8DA65BA93081FFD4D','120363400149665337@g.us',NULL,'Jo','174998509637808@lid','Sally',0,'😃 Another one!! Your tongue, Hazel has found another \'spot\' to put it in. Still will b a \'cute smile\'.🥰',NULL,'conversation',1781265173,'2026-06-12 11:52:53',NULL,NULL,NULL),
+(7434,'3A7C078D082678F2ECB5','143958747394076@lid',NULL,'Curtis','143958747394076@lid','Peter Goodrich',0,'I’d like to create within slidea. \n\nIf I go back to,\nHome,\nGenerate with AI\n\n..is that how I would create a few other slides which would be still images?\n\nOr do I do it through the deck and my existing presentation?',NULL,'conversation',1781265213,'2026-06-12 11:53:33',NULL,NULL,NULL),
+(7435,'ACA82B7B1081EBF35AE42E200631AAB2','120363400149665337@g.us',NULL,'Jo','50732220870663@lid','Jo',0,NULL,NULL,'reactionMessage',1781265215,'2026-06-12 11:53:35',NULL,'❤️','3A77C768BEA5234DB93F'),
+(7436,'3EB0C0FC6253D47779868A','51956420726959@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'when you upload the document would you like it to ingest it then wait for your question or ingest it and then give you a quick summary?',NULL,'conversation',1781265519,'2026-06-12 11:58:39',NULL,NULL,NULL),
+(7437,'ACA5BDCCFCA388E1170139F8BA69CA00','51956420726959@lid',NULL,'Curtis','51956420726959@lid','Tom Covers',0,'Ingest and wait for questions first',NULL,'conversation',1781265635,'2026-06-12 12:00:35',NULL,NULL,NULL),
+(7438,'ACD1C6F0DEBD08B7F285BCE61D3DFAAD','51956420726959@lid',NULL,'Curtis','51956420726959@lid','Tom Covers',0,'So annoying when chat goes wild with it with a summary 😅',NULL,'conversation',1781265647,'2026-06-12 12:00:47',NULL,NULL,NULL),
+(7439,'3EB0C42285CAC0E170F75F','51956420726959@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'Agreed, that was the suggestion it gave and i\'m thinkin... nah',NULL,'conversation',1781265852,'2026-06-12 12:04:12',NULL,NULL,NULL),
+(7440,'3EB0F8E85401535DE824DE','51956420726959@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'we\'re aligned',NULL,'conversation',1781265855,'2026-06-12 12:04:15',NULL,NULL,NULL),
+(7441,'3EB016BEC31D4E0B7FCF9E','143958747394076@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'if you generate with AI it\'ll create actual, editable slides',NULL,'conversation',1781265996,'2026-06-12 12:06:36',NULL,NULL,NULL),
+(7442,'3EB0A5E5380AFE77195C5E','143958747394076@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'but no images',NULL,'conversation',1781266000,'2026-06-12 12:06:40',NULL,NULL,NULL),
+(7443,'3EB0EE10B3359D1040121D','143958747394076@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'you can upload your images to the decks afterwards if you have them',NULL,'conversation',1781266013,'2026-06-12 12:06:53',NULL,NULL,NULL),
+(7444,'3EB0B66E24EA3C4CE52399','51956420726959@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'OK refresh the OS page and you\'ll see an upload button next to send',NULL,'conversation',1781266074,'2026-06-12 12:07:54',NULL,NULL,NULL),
+(7445,'3EB0D3BA40D6D153D1D2D2','51956420726959@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,NULL,'image','imageMessage',1781266086,'2026-06-12 12:08:06',NULL,NULL,NULL),
+(7446,'3EB016184EE2A30B28E7B8','51956420726959@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'Then give it a crack',NULL,'conversation',1781266109,'2026-06-12 12:08:29',NULL,NULL,NULL),
+(7447,'3EB0DFAA5FB0307EE6D1EF','51956420726959@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'It may take a minute to upload and index the file as it\'s not just uploading it but committing your files to a memory bank it can quickly recall and work with.',NULL,'conversation',1781266210,'2026-06-12 12:10:11',NULL,NULL,NULL),
+(7448,'3EB0EE346508606FB58897','51956420726959@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,'you can also use the document upload app on the OS desktop now,  upload files directly or click the library button to see the uploaded files, delete them etc.',NULL,'conversation',1781267320,'2026-06-12 12:28:40',NULL,NULL,NULL),
+(7449,'3EB061117C9568F96BA974','51956420726959@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,NULL,'image','imageMessage',1781267329,'2026-06-12 12:28:50',NULL,NULL,NULL),
+(7450,'3EB0303DFF233020C19382','51956420726959@lid',NULL,'Curtis','61466848838:16@s.whatsapp.net','Me',1,NULL,'image','imageMessage',1781267339,'2026-06-12 12:29:00',NULL,NULL,NULL),
+(7451,'AC47F72E843E16F6C16E85B7BE186C24','51956420726959@lid',NULL,'Curtis','51956420726959@lid','Tom Covers',0,NULL,NULL,'messageContextInfo',1781275537,'2026-06-12 14:45:38',NULL,'❤️','3EB0D3BA40D6D153D1D2D2'),
+(7452,'AC5576B97E56C694E703E1DD30829AAA','51956420726959@lid',NULL,'Curtis','51956420726959@lid','Tom Covers',0,NULL,NULL,'messageContextInfo',1781275544,'2026-06-12 14:45:45',NULL,'😂','3EB0F8E85401535DE824DE'),
+(7453,'AC64DADDF26F782E8B2AA78CC9246977','51956420726959@lid',NULL,'Curtis','51956420726959@lid','Tom Covers',0,NULL,NULL,'messageContextInfo',1781275572,'2026-06-12 14:46:12',NULL,'❤️','3EB0DFAA5FB0307EE6D1EF'),
+(7454,'AC9EB5BADA73F284468536592F2BC14D','51956420726959@lid',NULL,'Curtis','51956420726959@lid','Tom Covers',0,NULL,NULL,'messageContextInfo',1781275595,'2026-06-12 14:46:35',NULL,'👍','3EB0EE346508606FB58897'),
+(7455,'ACD047702821A95C2A88B15C3D2513A7','51956420726959@lid',NULL,'Curtis','51956420726959@lid','Tom Covers',0,NULL,NULL,'messageContextInfo',1781275609,'2026-06-12 14:46:49',NULL,'❤️','3EB0303DFF233020C19382'),
+(7456,'AC3A3156221B28321EAA8B76DAB03FF6','51956420726959@lid',NULL,'Curtis','51956420726959@lid','Tom Covers',0,'Yesh i did find that actually! And i tried to upload something but wasnt sure if was right',NULL,'conversation',1781275633,'2026-06-12 14:47:13',NULL,NULL,NULL),
+(7457,'AC3F0E8A364B3171F7C8F47F3A406614','51956420726959@lid',NULL,'Curtis','51956420726959@lid','Tom Covers',0,'Thanks heaps ledge, this is fun, cant want to become iron man',NULL,'conversation',1781275648,'2026-06-12 14:47:28',NULL,NULL,NULL),
+(7458,'AC6EDDF0DFC30E2CB3293B0B39B51403','51956420726959@lid',NULL,'Curtis','51956420726959@lid','Tom Covers',0,'Wait*',NULL,'conversation',1781275651,'2026-06-12 14:47:31',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `whatsapp_messages` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -12915,4 +13189,4 @@ commit;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2026-06-12  3:00:02
+-- Dump completed on 2026-06-13  3:00:01

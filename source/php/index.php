@@ -5195,4 +5195,290 @@ $router->post('/api/intranet/sessions/import', $protected('access_intranet', fun
     echo json_encode(['success' => true, 'imported' => count($rows), 'errors' => $errors]);
 }));
 
+// ── Member-level site fee management (Members page modal + list badge) ───────
+
+// GET /api/member/site-fee — household allocation(s) + fee due date + change history
+$router->get('/api/member/site-fee', $protected('access_operations', function () {
+    $memberId = isset($_GET['member_id']) ? (int)$_GET['member_id'] : 0;
+    if (!$memberId) { http_response_code(400); echo json_encode(['error' => 'member_id required']); return; }
+    $db = Database::connect();
+
+    $m = $db->prepare("SELECT id, household_id FROM members WHERE id=? LIMIT 1");
+    $m->execute([$memberId]);
+    $member = $m->fetch();
+    if (!$member) { http_response_code(404); echo json_encode(['error' => 'Member not found']); return; }
+
+    $hid = $member['household_id'] ? (int)$member['household_id'] : null;
+    if (!$hid) { echo json_encode(['household' => null, 'allocations' => [], 'history' => []]); return; }
+
+    $h = $db->prepare("SELECT id, name FROM households WHERE id=? LIMIT 1");
+    $h->execute([$hid]);
+    $household = $h->fetch() ?: null;
+
+    $sa = $db->prepare("
+        SELECT sa.id AS allocation_id, sa.site_fee_expires,
+               s.id AS site_id, s.site_number, s.site_type
+        FROM site_allocations sa
+        JOIN sites s ON s.id = sa.site_id
+        WHERE sa.household_id = ?
+        ORDER BY CAST(s.site_number AS UNSIGNED), s.site_number
+    ");
+    $sa->execute([$hid]);
+    $allocations = $sa->fetchAll();
+
+    $today        = date('Y-m-d');
+    $sixMonthsAgo = date('Y-m-d', strtotime('-6 months'));
+    foreach ($allocations as &$a) {
+        $a['allocation_id'] = (int)$a['allocation_id'];
+        $a['site_id']       = (int)$a['site_id'];
+        $exp = $a['site_fee_expires'];
+        if ($exp === null)              $a['fee_expiry_status'] = 'unknown';
+        elseif ($exp >= $today)         $a['fee_expiry_status'] = 'current';
+        elseif ($exp >= $sixMonthsAgo)  $a['fee_expiry_status'] = 'overdue';
+        else                            $a['fee_expiry_status'] = 'overdue_6m';
+    }
+    unset($a);
+
+    $hist = $db->prepare("
+        SELECT changed_by, old_date, new_date, source, created_at
+        FROM site_fee_change_log
+        WHERE household_id = ?
+        ORDER BY id DESC
+        LIMIT 10
+    ");
+    $hist->execute([$hid]);
+
+    echo json_encode([
+        'household'   => $household,
+        'allocations' => $allocations,
+        'history'     => $hist->fetchAll(),
+    ]);
+}));
+
+// POST /api/site-allocation/fee-expiry?id= — set/clear site_fee_expires with audit log
+$router->post('/api/site-allocation/fee-expiry', $protected('access_operations', function () use ($requireId) {
+    $id   = $requireId(); if ($id === null) return;
+    $data = json_decode(file_get_contents('php://input'), true) ?: [];
+    $db   = Database::connect();
+
+    $newDate = $data['site_fee_expires'] ?? null;
+    if ($newDate === '') $newDate = null;
+    if ($newDate !== null) {
+        $d = DateTime::createFromFormat('Y-m-d', (string)$newDate);
+        if (!$d || $d->format('Y-m-d') !== $newDate) {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'message' => 'Invalid date — expected YYYY-MM-DD.']);
+            return;
+        }
+    }
+
+    $cur = $db->prepare("SELECT id, household_id, site_fee_expires FROM site_allocations WHERE id=? LIMIT 1");
+    $cur->execute([$id]);
+    $alloc = $cur->fetch();
+    if (!$alloc) { http_response_code(404); echo json_encode(['success' => false, 'message' => 'Allocation not found']); return; }
+
+    $db->beginTransaction();
+    try {
+        $db->prepare("UPDATE site_allocations SET site_fee_expires=? WHERE id=?")->execute([$newDate, $id]);
+        $db->prepare("
+            INSERT INTO site_fee_change_log (allocation_id, household_id, member_id, changed_by, old_date, new_date, source)
+            VALUES (?,?,?,?,?,?, 'member_modal')
+        ")->execute([
+            $id,
+            (int)$alloc['household_id'],
+            !empty($data['member_id']) ? (int)$data['member_id'] : null,
+            $_SESSION['username'] ?? 'unknown',
+            $alloc['site_fee_expires'],
+            $newDate,
+        ]);
+        $db->commit();
+        echo json_encode(['success' => true, 'site_fee_expires' => $newDate]);
+    } catch (Exception $e) {
+        $db->rollBack();
+        http_response_code(500);
+        echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+    }
+}));
+
+// GET /api/members — site join fixed to canonical members.household_id chain; adds site_fee_expires
+$router->get('/api/members', $protected('access_operations', function () {
+    $db      = Database::connect();
+    $search  = trim($_GET['search'] ?? '');
+    $type    = trim($_GET['type'] ?? '');
+    $page    = max(1, (int)($_GET['page'] ?? 1));
+    $perPage = min(5000, max(1, (int)($_GET['per_page'] ?? 25)));
+    $offset  = ($page - 1) * $perPage;
+
+    $where = []; $params = [];
+    if ($search !== '') {
+        $t = '%' . $search . '%';
+        $where[]  = '(m.first_name LIKE ? OR m.last_name LIKE ? OR m.mobile LIKE ? OR m.email LIKE ? OR h.name LIKE ?)';
+        $params = array_merge($params, [$t, $t, $t, $t, $t]);
+    }
+    if ($type !== '') {
+        $where[]  = 'm.member_type = ?';
+        $params[] = $type;
+    }
+    $wClause = $where ? 'WHERE ' . implode(' AND ', $where) : '';
+
+    $countStmt = $db->prepare("SELECT COUNT(*) FROM members m LEFT JOIN households h ON h.id = m.household_id $wClause");
+    $countStmt->execute($params);
+    $total = (int)$countStmt->fetchColumn();
+
+    $stmt = $db->prepare("
+        SELECT m.*, h.name AS household_name,
+            hs.site_numbers, hs.site_fee_expires, hs.allocation_count
+        FROM members m
+        LEFT JOIN households h ON h.id = m.household_id
+        LEFT JOIN (
+            SELECT sa.household_id,
+                GROUP_CONCAT(DISTINCT s.site_number ORDER BY s.site_number SEPARATOR ', ') AS site_numbers,
+                MIN(sa.site_fee_expires) AS site_fee_expires,
+                COUNT(sa.id) AS allocation_count
+            FROM site_allocations sa
+            JOIN sites s ON s.id = sa.site_id
+            GROUP BY sa.household_id
+        ) hs ON hs.household_id = m.household_id
+        $wClause
+        ORDER BY m.last_name, m.first_name
+        LIMIT $perPage OFFSET $offset
+    ");
+    $stmt->execute($params);
+    echo json_encode(['members' => $stmt->fetchAll(PDO::FETCH_ASSOC), 'total' => $total]);
+}));
+
+// POST /api/payments — adds site_fee_change_log entry when a payment extends the due date
+$router->post('/api/payments', $protected('access_operations', function () {
+    $data = json_decode(file_get_contents('php://input'), true) ?: [];
+    $db   = Database::connect();
+    $db->beginTransaction();
+    try {
+        $hid            = (int)($data['household_id']    ?? 0);
+        $campId         = (int)($data['camp_id']         ?? 0);
+        $campFee        = (float)($data['camp_fee']      ?? 0);
+        $siteFee        = (float)($data['site_fee']      ?? 0);
+        $otherAmount    = (float)($data['other_amount']  ?? 0);
+        $prepaidApplied = (float)($data['prepaid_applied'] ?? 0);
+        $siteFeeMonths  = (int)($data['site_fee_months']   ?? 0);
+        $total          = round($campFee + $siteFee + $otherAmount - $prepaidApplied, 2);
+        $tenders        = is_array($data['tenders'] ?? null) ? $data['tenders'] : [];
+        $tEft = 0.0; $tCash = 0.0; $tBank = 0.0;
+        foreach ($tenders as $t) {
+            $amt = (float)($t['amount'] ?? 0);
+            switch (strtolower($t['method'] ?? '')) {
+                case 'eftpos': $tEft  += $amt; break;
+                case 'cash':   $tCash += $amt; break;
+                case 'bank':   $tBank += $amt; break;
+            }
+        }
+        $payDate   = !empty($data['payment_date'])   ? $data['payment_date']   : date('Y-m-d H:i:s');
+        $arrDate   = !empty($data['arrival_date'])    ? $data['arrival_date']   : null;
+        $depDate   = !empty($data['departure_date'])  ? $data['departure_date'] : null;
+        $headcount = isset($data['headcount']) && $data['headcount'] !== '' ? (int)$data['headcount'] : null;
+
+        $stmt = $db->prepare("
+            INSERT INTO payments
+                (household_id, camp_id, payment_date, camp_fee, site_fee, prepaid_applied,
+                 other_amount, total, headcount, notes, arrival_date, departure_date,
+                 tender_eftpos, tender_cash, tender_bank)
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+        ");
+        $stmt->execute([
+            $hid, $campId, $payDate, $campFee, $siteFee, $prepaidApplied,
+            $otherAmount, $total, $headcount, trim($data['notes'] ?? ''),
+            $arrDate, $depDate, $tEft, $tCash, $tBank,
+        ]);
+        $paymentId = (int)$db->lastInsertId();
+
+        if ($tenders) {
+            $ts = $db->prepare("INSERT INTO payment_tenders (payment_id, method, amount, reference) VALUES (?,?,?,?)");
+            foreach ($tenders as $t) {
+                $amt = (float)($t['amount'] ?? 0);
+                if ($amt != 0) $ts->execute([$paymentId, strtolower($t['method'] ?? 'other'), $amt, trim($t['reference'] ?? '')]);
+            }
+        }
+
+        if ($prepaidApplied > 0 && !empty($data['prepayment_ids']) && is_array($data['prepayment_ids'])) {
+            $remaining = $prepaidApplied;
+            $preStmt   = $db->prepare("SELECT id, amount FROM prepayments WHERE id=? AND household_id=? AND amount>0 LIMIT 1");
+            $upStmt    = $db->prepare("UPDATE prepayments SET amount=? WHERE id=?");
+            $allocStmt = $db->prepare("INSERT INTO payment_prepayment_allocations (payment_id, prepayment_id, amount_applied) VALUES (?,?,?)");
+            foreach ($data['prepayment_ids'] as $pid) {
+                if ($remaining <= 0) break;
+                $preStmt->execute([(int)$pid, $hid]);
+                $pre = $preStmt->fetch();
+                if (!$pre) continue;
+                $apply  = min((float)$pre['amount'], $remaining);
+                $upStmt->execute([round((float)$pre['amount'] - $apply, 2), (int)$pre['id']]);
+                $allocStmt->execute([$paymentId, (int)$pre['id'], $apply]);
+                $remaining = round($remaining - $apply, 2);
+            }
+        }
+
+        // Extend site_fee_expires (perpetual allocation — no camp_id)
+        if ($siteFee > 0 && $siteFeeMonths > 0 && !($data['is_refund'] ?? false)) {
+            $expStmt = $db->prepare("SELECT id, site_fee_expires FROM site_allocations WHERE household_id=? LIMIT 1");
+            $expStmt->execute([$hid]);
+            $row     = $expStmt->fetch(PDO::FETCH_ASSOC);
+            if ($row) {
+                $today   = date('Y-m-d');
+                $current = $row['site_fee_expires'];
+                $base    = ($current && $current >= $today) ? $current : $today;
+                $newExp  = date('Y-m-d', strtotime("+{$siteFeeMonths} months", strtotime($base)));
+                $db->prepare("UPDATE site_allocations SET site_fee_expires=? WHERE household_id=?")
+                   ->execute([$newExp, $hid]);
+                $db->prepare("
+                    INSERT INTO site_fee_change_log (allocation_id, household_id, member_id, changed_by, old_date, new_date, source)
+                    VALUES (?,?,NULL,?,?,?, 'payment')
+                ")->execute([(int)$row['id'], $hid, $_SESSION['username'] ?? 'unknown', $current, $newExp]);
+            }
+        }
+
+        $db->commit();
+        echo json_encode(['success' => true, 'id' => $paymentId]);
+    } catch (Exception $e) {
+        $db->rollBack();
+        http_response_code(500);
+        echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+    }
+}));
+
+// ── POST /api/feature-requests — emails the notify address on each new request ─
+$router->post('/api/feature-requests', $protected('access_operations', function () {
+    $data = json_decode(file_get_contents('php://input'), true) ?: [];
+    $title = trim($data['title'] ?? '');
+    if ($title === '') { http_response_code(400); echo json_encode(['message' => 'Title required']); return; }
+    $db = Database::connect();
+    $submitter   = $_SESSION['username'] ?? 'unknown';
+    $type        = in_array($data['type'] ?? '', ['feature', 'bug']) ? $data['type'] : 'feature';
+    $description = trim($data['description'] ?? '');
+    $db->prepare("INSERT INTO feature_requests (type, title, description, submitter) VALUES (?,?,?,?)")
+       ->execute([$type, $title, $description, $submitter]);
+    $newId = (int)$db->lastInsertId();
+    $db->prepare("UPDATE feature_requests SET sort_order = ? WHERE id = ?")->execute([$newId, $newId]);
+
+    // Notification email — must never block or fail the request creation
+    try {
+        $toStmt = $db->prepare("SELECT setting_value FROM app_settings WHERE setting_key = 'feature_request_notify_email'");
+        $toStmt->execute();
+        $notifyTo = trim((string)$toStmt->fetchColumn());
+        if ($notifyTo !== '') {
+            $config    = CampoMailer::configFromDb($db, $_SERVER);
+            $typeLabel = $type === 'bug' ? 'Bug report' : 'Feature request';
+            $subject   = "[Camp Office] New {$typeLabel}: {$title}";
+            $body      = "A new {$typeLabel} was submitted on the Feature Requests page.\n\n"
+                       . "Type:        " . ucfirst($type) . "\n"
+                       . "Title:       {$title}\n"
+                       . "Submitted by: {$submitter}\n\n"
+                       . ($description !== '' ? "Description:\n{$description}\n\n" : '')
+                       . "View it here: " . ($config['app_base_url'] ?? '') . "/feature-requests\n";
+            CampoMailer::sendTextWithConfig($notifyTo, $subject, $body, $config);
+        }
+    } catch (Throwable $e) {
+        error_log('Feature request notify email failed: ' . $e->getMessage());
+    }
+
+    echo json_encode(['success' => true, 'id' => $newId]);
+}));
+
 $router->dispatch();

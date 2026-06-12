@@ -68,6 +68,7 @@ export const members = {
   deleteAll:   ()       => post('/members/delete-all'),
   merge:       (id, d)  => post(`/member/merge?id=${id}`, d),
   history:     (id)     => get('/member/history', { id }),
+  siteFee:     (id)     => get('/member/site-fee', { member_id: id }),
 }
 
 // ── Households ───────────────────────────────────────────────────────────────
@@ -109,6 +110,7 @@ export const siteAllocations = {
   create: (d)       => post('/site-allocations', d),
   update: (id, d)   => post(`/site-allocation/update?id=${id}`, d),
   delete: (id)      => post(`/site-allocation/delete?id=${id}`),
+  setFeeExpiry: (id, d) => post(`/site-allocation/fee-expiry?id=${id}`, d),
 }
 
 // ── Payments ─────────────────────────────────────────────────────────────────

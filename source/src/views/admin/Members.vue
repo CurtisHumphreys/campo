@@ -71,11 +71,20 @@
               <td class="px-2 py-1.5">
                 <input v-model="filters.site" type="text" placeholder="Site…" class="w-full text-xs" />
               </td>
+              <td class="px-2 py-1.5">
+                <select v-model="filters.fee" class="w-full text-xs">
+                  <option value="">All</option>
+                  <option value="current">Fee OK</option>
+                  <option value="overdue">Overdue</option>
+                  <option value="unknown">Not set</option>
+                  <option value="none">No site</option>
+                </select>
+              </td>
             </tr>
           </thead>
           <tbody>
             <tr v-if="!sortedMembers.length">
-              <td colspan="7" class="px-4 py-8 text-center text-ink-500 italic">
+              <td colspan="8" class="px-4 py-8 text-center text-ink-500 italic">
                 No members match the current filters.
               </td>
             </tr>
@@ -94,6 +103,10 @@
                 <span :class="typeBadge(m.member_type)" class="capitalize">{{ m.member_type }}</span>
               </td>
               <td class="px-3 py-2.5 text-ink-400 whitespace-nowrap">{{ m.site_numbers || '—' }}</td>
+              <td class="px-3 py-2.5 whitespace-nowrap">
+                <span v-if="memberFeeStatus(m) === 'none'" class="text-ink-600">—</span>
+                <span v-else :class="feeBadge(memberFeeStatus(m))">{{ feeLabel(memberFeeStatus(m), m.site_fee_expires) }}</span>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -209,12 +222,47 @@
           <textarea v-model="form.notes" rows="2" class="resize-none" />
         </div>
 
-        <!-- Read-only site allocation info -->
-        <div v-if="editing && editing.site_numbers">
-          <label class="field-label">Current Site(s)</label>
-          <p class="text-sm text-ink-300 bg-surface-700 rounded-lg px-3 py-2">{{ editing.site_numbers }}</p>
-        </div>
       </form>
+
+      <!-- Site & Site Fee panel -->
+      <div v-if="editing" class="mt-5 border-t border-ink-700 pt-4">
+        <p class="field-label mb-2">Site &amp; Site Fee</p>
+        <div v-if="siteFeeLoading" class="text-xs text-ink-500">Loading…</div>
+        <template v-else-if="siteFeeInfo && siteFeeInfo.allocations.length">
+          <div v-for="a in siteFeeInfo.allocations" :key="a.allocation_id"
+            class="rounded-lg bg-surface-700 px-3 py-2.5 space-y-2 mb-2">
+            <div class="flex items-center gap-2">
+              <span class="font-medium text-ink-100">Site {{ a.site_number }}</span>
+              <span class="text-xs text-ink-500 capitalize">{{ a.site_type }}</span>
+              <span class="ml-auto" :class="feeBadge(a.fee_expiry_status)">
+                {{ feeLabel(a.fee_expiry_status, a.site_fee_expires) }}
+              </span>
+            </div>
+            <div class="flex items-center gap-2">
+              <label class="text-xs text-ink-500 whitespace-nowrap">Fee next due</label>
+              <input v-model="a.site_fee_expires" type="date" class="flex-1 text-sm" />
+              <button type="button" @click="saveFeeExpiry(a)" :disabled="feeSaving"
+                class="btn btn-primary btn-sm flex-none">
+                {{ feeSaving ? 'Saving…' : 'Save' }}
+              </button>
+            </div>
+          </div>
+          <div v-if="siteFeeInfo.history.length" class="mt-2">
+            <button type="button" @click="showFeeHistory = !showFeeHistory"
+              class="text-xs text-ink-500 hover:text-ink-300 transition-colors">
+              {{ showFeeHistory ? '▾' : '▸' }} Change history ({{ siteFeeInfo.history.length }})
+            </button>
+            <div v-if="showFeeHistory" class="mt-1.5 space-y-1">
+              <p v-for="(h, i) in siteFeeInfo.history" :key="i" class="text-xs text-ink-500">
+                {{ fmtDate(h.created_at) }} — {{ h.old_date ? fmtDate(h.old_date) : 'not set' }} →
+                {{ h.new_date ? fmtDate(h.new_date) : 'not set' }} by {{ h.changed_by }}
+                <span class="text-ink-600">({{ h.source === 'payment' ? 'payment' : 'manual edit' }})</span>
+              </p>
+            </div>
+          </div>
+        </template>
+        <p v-else class="text-xs text-ink-500 italic">No site allocated to this member's household</p>
+      </div>
 
       <!-- ChurchSuite Household panel -->
       <div v-if="editing" class="mt-5 border-t border-ink-700 pt-4">
@@ -267,7 +315,7 @@ const editing    = ref(null)
 const members    = ref([])
 const households = ref([])
 
-const filters = ref({ name: '', household: '', mobile: '', email: '', type: '', site: '' })
+const filters = ref({ name: '', household: '', mobile: '', email: '', type: '', site: '', fee: '' })
 const sortKey = ref('fullName')
 const sortDir = ref('asc')
 
@@ -306,6 +354,76 @@ onBeforeUnmount(() => {
 const csHousehold        = ref(null)
 const csHouseholdLoading = ref(false)
 
+const siteFeeInfo    = ref(null)
+const siteFeeLoading = ref(false)
+const feeSaving      = ref(false)
+const showFeeHistory = ref(false)
+
+function memberFeeStatus(m) {
+  if (!m.allocation_count) return 'none'
+  const exp = m.site_fee_expires
+  if (!exp) return 'unknown'
+  const today = new Date().toISOString().slice(0, 10)
+  const sixMonthsAgo = new Date(Date.now() - 182 * 86400000).toISOString().slice(0, 10)
+  if (exp >= today) return 'current'
+  if (exp >= sixMonthsAgo) return 'overdue'
+  return 'overdue_6m'
+}
+
+function feeBadge(st) {
+  if (st === 'current')    return 'badge bg-emerald-500/20 text-emerald-400'
+  if (st === 'overdue')    return 'badge bg-amber-500/20 text-amber-400'
+  if (st === 'overdue_6m') return 'badge bg-red-500/20 text-red-400'
+  return 'badge bg-surface-600 text-ink-600'
+}
+
+function feeLabel(st, exp) {
+  if (st === 'unknown' || !exp) return 'Not set'
+  const d = new Date(exp + 'T00:00:00')
+  if (st === 'current') {
+    return 'Due ' + d.toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' })
+  }
+  const days = Math.round((Date.now() - d.getTime()) / 86400000)
+  return `${days}d overdue`
+}
+
+function fmtDate(d) {
+  return d ? new Date(d.includes('T') || d.includes(' ') ? d.replace(' ', 'T') : d + 'T00:00:00')
+    .toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }) : ''
+}
+
+async function loadSiteFee(memberId) {
+  siteFeeLoading.value = true
+  try { siteFeeInfo.value = await api.members.siteFee(memberId) }
+  catch { siteFeeInfo.value = null }
+  finally { siteFeeLoading.value = false }
+}
+
+async function saveFeeExpiry(a) {
+  feeSaving.value = true
+  try {
+    await api.siteAllocations.setFeeExpiry(a.allocation_id, {
+      site_fee_expires: a.site_fee_expires || null,
+      member_id: editing.value?.id || null,
+    })
+    toast?.add('Site fee due date updated', 'success')
+    await loadSiteFee(editing.value.id)
+    // Reflect the change on every list row in the same household
+    const hid = editing.value.household_id
+    if (hid && siteFeeInfo.value) {
+      const dates = siteFeeInfo.value.allocations.map(x => x.site_fee_expires).filter(Boolean).sort()
+      const minDate = dates[0] || null
+      members.value.forEach(m => {
+        if (m.household_id === hid) m.site_fee_expires = minDate
+      })
+    }
+  } catch (e) {
+    toast?.add(e?.data?.message || 'Failed to update due date', 'error')
+  } finally {
+    feeSaving.value = false
+  }
+}
+
 const columns = [
   { key: 'fullName',       label: 'Name' },
   { key: 'household_name', label: 'Household' },
@@ -313,6 +431,7 @@ const columns = [
   { key: 'email',          label: 'Email' },
   { key: 'member_type',    label: 'Type' },
   { key: 'site_numbers',   label: 'Site(s)' },
+  { key: 'site_fee_expires', label: 'Site Fee Due' },
 ]
 
 const blank = () => ({
@@ -364,6 +483,10 @@ const filteredMembers = computed(() => {
     if (f.email && !(m.email || '').toLowerCase().includes(f.email.toLowerCase())) return false
     if (f.type && m.member_type !== f.type) return false
     if (f.site && !(m.site_numbers || '').toLowerCase().includes(f.site.toLowerCase())) return false
+    if (f.fee) {
+      const st = memberFeeStatus(m)
+      if (f.fee === 'overdue' ? !(st === 'overdue' || st === 'overdue_6m') : st !== f.fee) return false
+    }
     return true
   })
 })
@@ -415,6 +538,9 @@ async function openEdit(m) {
   renameHouseholdLast.value  = ''
   renameHouseholdFirst.value = ''
   showModal.value = true
+  siteFeeInfo.value = null
+  showFeeHistory.value = false
+  loadSiteFee(m.id)
   csHouseholdLoading.value = true
   try {
     const res = await api.get('/member/cs-household', { member_id: m.id })
