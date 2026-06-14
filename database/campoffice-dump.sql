@@ -1092,7 +1092,7 @@ CREATE TABLE `faim_audit_log` (
   KEY `idx_faim_audit_event_type` (`event_type`),
   KEY `idx_faim_audit_thread_id` (`thread_id`),
   KEY `idx_faim_audit_draft_id` (`draft_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=939 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=956 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2034,7 +2034,24 @@ INSERT INTO `faim_audit_log` VALUES
 (935,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-15T12:31:32\", \"repeated_context\": false}','2026-06-13 16:01:37'),
 (936,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-13 16:01:37'),
 (937,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-15T12:31:32\", \"repeated_context\": false}','2026-06-13 17:01:38'),
-(938,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-13 17:01:38');
+(938,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-13 17:01:38'),
+(939,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-15T12:31:32\", \"repeated_context\": false}','2026-06-13 18:01:38'),
+(940,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-13 18:01:38'),
+(941,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-15T12:31:32\", \"repeated_context\": false}','2026-06-13 19:01:39'),
+(942,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-13 19:01:39'),
+(943,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-15T12:31:32\", \"repeated_context\": false}','2026-06-13 20:01:39'),
+(944,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-13 20:01:39'),
+(945,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-15T12:31:32\", \"repeated_context\": false}','2026-06-13 21:01:39'),
+(946,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-13 21:01:39'),
+(947,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-15T12:31:32\", \"repeated_context\": false}','2026-06-13 22:01:40'),
+(948,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-13 22:01:40'),
+(949,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-15T12:31:32\", \"repeated_context\": false}','2026-06-13 23:01:40'),
+(950,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-13 23:01:40'),
+(951,'digest','info',NULL,NULL,NULL,'daily_digest','sent','FAIM digest — 2 for you, 4 promises overdue, 3 follow-ups due','{\"auto_sent\": 1, \"candidates\": 24, \"flags\": 0, \"held\": 2, \"lapsed\": 4, \"overdue\": 3}','2026-06-13 23:01:41'),
+(952,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-15T12:31:32\", \"repeated_context\": false}','2026-06-14 00:01:41'),
+(953,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-14 00:01:41'),
+(954,'poll','info',3,NULL,'OPAY','evaluate_thread','skipped','No new inbound email or due follow-up requiring a draft.','{\"already_drafted_due\": false, \"cadence_ok\": false, \"due\": false, \"latest_email_at\": null, \"new_email\": false, \"next_follow_up\": \"2026-06-15T12:31:32\", \"repeated_context\": false}','2026-06-05 15:35:36'),
+(955,'poll','info',NULL,NULL,NULL,'run_poll_cycle','ok','Created 0 drafts; auto-sent 0; held 0; skipped 1.','{\"auto_sent\": 0, \"created\": 0, \"held\": 0, \"skipped\": 1}','2026-06-05 15:35:36');
 /*!40000 ALTER TABLE `faim_audit_log` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -3304,8 +3321,8 @@ LOCK TABLES `home_adapters` WRITE;
 /*!40000 ALTER TABLE `home_adapters` DISABLE KEYS */;
 set autocommit=0;
 INSERT INTO `home_adapters` VALUES
-('ble','Bluetooth','ble','{\"id\": \"ble\", \"name\": \"Bluetooth\", \"protocol\": \"ble\", \"capabilities\": [], \"discovery\": \"scan\", \"mqtt_prefix\": \"fbhome/ble\"}','running','2026-06-14 02:59:55'),
-('wifi','Wi-Fi','wifi','{\"id\": \"wifi\", \"name\": \"Wi-Fi\", \"protocol\": \"wifi\", \"capabilities\": [\"on_off\"], \"discovery\": \"mdns\", \"mqtt_prefix\": \"fbhome/wifi\"}','running','2026-06-14 02:59:56');
+('ble','Bluetooth','ble','{\"id\": \"ble\", \"name\": \"Bluetooth\", \"protocol\": \"ble\", \"capabilities\": [], \"discovery\": \"scan\", \"mqtt_prefix\": \"fbhome/ble\"}','running','2026-06-06 01:05:41'),
+('wifi','Wi-Fi','wifi','{\"id\": \"wifi\", \"name\": \"Wi-Fi\", \"protocol\": \"wifi\", \"capabilities\": [\"on_off\"], \"discovery\": \"mdns\", \"mqtt_prefix\": \"fbhome/wifi\"}','running','2026-06-06 01:05:42');
 /*!40000 ALTER TABLE `home_adapters` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -4821,7 +4838,7 @@ CREATE TABLE `movies_watch_progress` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`),
   UNIQUE KEY `uq_movies_progress_user_file` (`username`,`file_key`)
-) ENGINE=InnoDB AUTO_INCREMENT=1726 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1727 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4832,7 +4849,7 @@ LOCK TABLES `movies_watch_progress` WRITE;
 /*!40000 ALTER TABLE `movies_watch_progress` DISABLE KEYS */;
 set autocommit=0;
 INSERT INTO `movies_watch_progress` VALUES
-(1315,'movies','674266e885c1d4d9ca6b84f1d20bae6a471f809a','Catch Me If You Can 2002 REMASTERED 1080p BluRay HEVC x265 5.1 BONE.mkv',2070.8507134482,8443.497,'2026-06-13 15:10:45');
+(1315,'movies','674266e885c1d4d9ca6b84f1d20bae6a471f809a','Catch Me If You Can 2002 REMASTERED 1080p BluRay HEVC x265 5.1 BONE.mkv',2060.8507134482,8443.497,'2026-06-13 23:40:13');
 /*!40000 ALTER TABLE `movies_watch_progress` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -5846,7 +5863,7 @@ CREATE TABLE `whatsapp_messages` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uq_msg` (`message_id`,`chat_jid`),
   KEY `idx_wa_account` (`wa_account`)
-) ENGINE=InnoDB AUTO_INCREMENT=7696 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7716 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -13517,7 +13534,27 @@ INSERT INTO `whatsapp_messages` VALUES
 (7692,'3A9E4FB7C01A2820F55F','143958747394076@lid',NULL,'Peter Goodrich','143958747394076@lid','Peter Goodrich',0,'Should be good now.',NULL,'extendedTextMessage',1781345539,'2026-06-13 10:12:19','3EB0D187CE5682951B1A48',NULL,NULL),
 (7693,'ACF64A52BDE51D158777C6252756C369','51956420726959@lid',NULL,'Curtis','51956420726959@lid','Tom Covers',0,'En route',NULL,'conversation',1781346901,'2026-06-13 10:35:01',NULL,NULL,NULL),
 (7694,'3EB005715999E25B242895','143958747394076@lid',NULL,'Peter Goodrich','61466848838:16@s.whatsapp.net','Me',1,'Done',NULL,'conversation',1781347079,'2026-06-13 10:38:01',NULL,NULL,NULL),
-(7695,'AC8A7BA7AD39B227E0F20EABAF86DAA6','61403505790-1587861828@g.us',NULL,'Cameron','115139567186165@lid','Cameron',0,'Reminders for Sunday 14th June \n\nSound: @isaac G\nAV: @198973470036073 \n\n\nPlease note that if you are able to make your turn to respond with a 👍🏻 or unable to make your turn reply with a 👎🏻 or a 😢 to the message sent ASAP.',NULL,'senderKeyDistributionMessage',1781356463,'2026-06-13 13:14:24',NULL,NULL,NULL);
+(7695,'AC8A7BA7AD39B227E0F20EABAF86DAA6','61403505790-1587861828@g.us',NULL,'Cameron','115139567186165@lid','Cameron',0,'Reminders for Sunday 14th June \n\nSound: @isaac G\nAV: @198973470036073 \n\n\nPlease note that if you are able to make your turn to respond with a 👍🏻 or unable to make your turn reply with a 👎🏻 or a 😢 to the message sent ASAP.',NULL,'senderKeyDistributionMessage',1781356463,'2026-06-13 13:14:24',NULL,NULL,NULL),
+(7696,'3A8AA6D22D1B5423DBEA','143958747394076@lid',NULL,'Peter Goodrich','143958747394076@lid','Peter Goodrich',0,'I’m sorry I have to keep coming back to you on things. \n\nHindsight maybe I should have prewarned you I am working off an iPad. \n\nIn Deck, \nI click Present,\nIt takes me to ‘1. Why Hebrews.’\n(This part may be my fault as I pressed reset Presentation, earlier.)\n\nThe issue faced with this is the video for this slide and slide four don’t play when clicked, and be it my fault or not is it possible to get that simple ‘Hebrews’ slide back to fist spot. \n\nSorry to bother your Sunday morning.',NULL,'conversation',1781394448,'2026-06-13 23:47:28',NULL,NULL,NULL),
+(7697,'3AE94A864EA8C054173F','143958747394076@lid',NULL,'Peter Goodrich','61466848838:16@s.whatsapp.net','Me',1,'Do you not own a pc lol',NULL,'conversation',1781394818,'2026-06-13 23:53:39',NULL,NULL,NULL),
+(7698,'3A807A2F3EB3436068EF','143958747394076@lid',NULL,'Peter Goodrich','143958747394076@lid','Peter Goodrich',0,'I’ll steal Angie’s and try.',NULL,'conversation',1781394861,'2026-06-13 23:54:21',NULL,NULL,NULL),
+(7699,'3AE8C026B335A01ED326','143958747394076@lid',NULL,'Peter Goodrich','61466848838:16@s.whatsapp.net','Me',1,'Ha no all good',NULL,'conversation',1781395089,'2026-06-13 23:58:10',NULL,NULL,NULL),
+(7700,'3AB5BDF4A651B840621A','143958747394076@lid',NULL,'Peter Goodrich','61466848838:16@s.whatsapp.net','Me',1,'I’ve moved it to spot 1 and reformatted again',NULL,'conversation',1781395099,'2026-06-13 23:58:19',NULL,NULL,NULL),
+(7701,'3AD0442FF8BD6B2CD81F','143958747394076@lid',NULL,'Peter Goodrich','61466848838:16@s.whatsapp.net','Me',1,'As for the video not playing I’ll look at that',NULL,'conversation',1781395113,'2026-06-13 23:58:33',NULL,NULL,NULL),
+(7702,'3A1406B6C3A2E1E89407','143958747394076@lid',NULL,'Peter Goodrich','143958747394076@lid','Peter Goodrich',0,'Got it loaded on her laptop. \nLooks amazing on a larger screen. \nI won’t touch anything as I can see you’re editing atm.',NULL,'conversation',1781395199,'2026-06-13 23:59:59',NULL,NULL,NULL),
+(7703,'3AEB00DA496689B35B65','143958747394076@lid',NULL,'Peter Goodrich','61466848838:16@s.whatsapp.net','Me',1,'I’ll step out so you can do anything else you want',NULL,'conversation',1781395259,'2026-06-14 00:01:00',NULL,NULL,NULL),
+(7704,'3A98D3C68E6CE9EC17B8','143958747394076@lid',NULL,'Peter Goodrich','61466848838:16@s.whatsapp.net','Me',1,'All yours',NULL,'conversation',1781395278,'2026-06-14 00:01:18',NULL,NULL,NULL),
+(7705,'3A7B07262043B3CDD27A','143958747394076@lid',NULL,'Peter Goodrich','143958747394076@lid','Peter Goodrich',0,NULL,NULL,'messageContextInfo',1781395302,'2026-06-14 00:01:42',NULL,'🙏🏿','3AEB00DA496689B35B65'),
+(7706,'3AD699D7ECEFF2FA1EDB','143958747394076@lid',NULL,'Peter Goodrich','143958747394076@lid','Peter Goodrich',0,'Reckon I should be alright taking my iPad up or would you feel more confident if I stole my wife’s laptop?',NULL,'conversation',1781395337,'2026-06-14 00:02:18',NULL,NULL,NULL),
+(7707,'3ABB34FC38FCE15DD62D','143958747394076@lid',NULL,'Peter Goodrich','61466848838:16@s.whatsapp.net','Me',1,'The control screen is designed for tablet so that part will be fine',NULL,'conversation',1781395478,'2026-06-14 00:05:38',NULL,NULL,NULL),
+(7708,'3A7D4D82BFA0253D2000','143958747394076@lid',NULL,'Peter Goodrich','61466848838:16@s.whatsapp.net','Me',1,'It’s the editing part for laptop',NULL,'conversation',1781395491,'2026-06-14 00:07:26',NULL,NULL,NULL),
+(7709,'3EB0F37848802E126FB8BE','143958747394076@lid',NULL,'Peter Goodrich','61466848838:16@s.whatsapp.net','Me',1,'Cani jump back into editing',NULL,'conversation',1781395699,'2026-06-14 00:08:48',NULL,NULL,NULL),
+(7710,'3A010EB0256EACD3A384','143958747394076@lid',NULL,'Peter Goodrich','143958747394076@lid','Peter Goodrich',0,'Yep I’ll jump out. \nVid not playing.',NULL,'conversation',1781395719,'2026-06-14 00:08:48',NULL,NULL,NULL),
+(7711,'3EB0EE6E795FD9CA6E91CF','143958747394076@lid',NULL,'Peter Goodrich','61466848838:16@s.whatsapp.net','Me',1,'looks like we found a bug, working on it, should have it sorted soon mate',NULL,'conversation',1781396313,'2026-06-14 00:18:34',NULL,NULL,NULL),
+(7712,'3EB05309259DF3D488E97D','143958747394076@lid',NULL,'Peter Goodrich','61466848838:16@s.whatsapp.net','Me',1,'Nothing like working on a presentation last minute haha',NULL,'conversation',1781396538,'2026-06-14 00:22:18',NULL,NULL,NULL),
+(7713,'3A0F6669AFC22D0286D6','143958747394076@lid',NULL,'Peter Goodrich','143958747394076@lid','Peter Goodrich',0,NULL,NULL,'messageContextInfo',1781396720,'2026-06-14 00:25:20',NULL,'❤️','3EB0EE6E795FD9CA6E91CF'),
+(7714,'3EB0C13811BF5B3F3E6678','143958747394076@lid',NULL,'Peter Goodrich','61466848838:16@s.whatsapp.net','Me',1,'almost done',NULL,'conversation',1781396908,'2026-06-14 00:28:28',NULL,NULL,NULL),
+(7715,'3AE543A63054FD44F964','143958747394076@lid',NULL,'Peter Goodrich','143958747394076@lid','Peter Goodrich',0,'No stress. \nHonestly.',NULL,'conversation',1781396942,'2026-06-14 00:29:03',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `whatsapp_messages` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -13535,4 +13572,4 @@ commit;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2026-06-14  3:00:02
+-- Dump completed on 2026-06-14 10:15:05
